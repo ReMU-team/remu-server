@@ -1,11 +1,11 @@
 # remu-server
 
----
+
 여행 감정 기반 기록 서비스 REMU의 백엔드 서버입니다.
 
 ## 🛠 Tech Stack
 
----
+
 - **Language**: Java 21
 - **Framework**: Spring Boot 3.x
 - **Database**: MySQL, Redis
@@ -14,7 +14,7 @@
 
 ## 🌿Branch Strategy
 
----
+
 ### 📌 Branch Types
 | Branch | Description |
 |------|-----------|
@@ -22,6 +22,7 @@
 | `develop` | 개발 통합 브랜치 |
 | `feature/{이슈번호}-{기능명}` | 기능 개발 브랜치 |
 
+<br>
 
 ### 💡 Branch Naming Convention
 - **형식**: `{type}/{issue-number}-{description}` (전체 소문자, 공백은 `-`로 연결)
@@ -35,6 +36,8 @@ git pull origin develop
 # 이슈 12번인 로그인 기능을 개발할 경우
 git checkout -b feature/12-user-login
 ```
+
+<br>
 
 ### 🚦Branch Rules
 
@@ -55,7 +58,7 @@ git checkout -b feature/12-user-login
 
 ## 📝 Commit Convention
 
----
+
 
 커밋 메시지는 아래 컨벤션을 따릅니다.
 
@@ -74,7 +77,7 @@ git checkout -b feature/12-user-login
 
 ## 🔄 Development Flow
 
----
+
 
 본 프로젝트는 **이슈 기반 개발 흐름**을 따릅니다.
 
@@ -90,7 +93,7 @@ Issue 생성
 
 ## 📂 Project Structure (Domain-based)
 
----
+
 본 프로젝트는 도메인 중심 패키지 구조를 사용합니다.
 ```
 src/main/java/com/remu-server
