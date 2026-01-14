@@ -47,7 +47,9 @@ public class Galaxy extends BaseEntity {
     private LocalDate endDate;
 
     @Enumerated(EnumType.STRING)
-    private GalaxyStatus status;
+    @Builder.Default
+    @Column(name = "status")
+    private GalaxyStatus status = GalaxyStatus.READY;
 
     @Column(columnDefinition = "TEXT")
     private String aiFeedback;
