@@ -2,6 +2,7 @@ package com.remu.domain.galaxy.entity;
 
 import com.remu.domain.emoji.entity.Emoji;
 import com.remu.domain.galaxy.enums.GalaxyStatus;
+import com.remu.domain.resolution.entity.Resolution;
 import com.remu.domain.user.entity.User;
 import com.remu.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -9,6 +10,8 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -44,6 +47,12 @@ public class Galaxy extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "review_emoji_id")
     private Emoji reviewEmoji;
+
+    // 연관관계(컬렉션)
+    // 다짐 카드 리스트
+    @OneToMany(mappedBy = "galaxy", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Resolution> resolutions = new ArrayList<>();
 
     @Column(name = "name")
     private String name;
