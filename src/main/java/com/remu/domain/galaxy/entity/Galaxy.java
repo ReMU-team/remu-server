@@ -29,10 +29,21 @@ public class Galaxy extends BaseEntity {
     @JoinColumn(name = "place_id", nullable = false)
     private Place place;
 
-    // 은하를 상징하는 대표 이모지
+    // 이모지
+    // 1. 은하를 상징하는 대표 이모지
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "emoji_id", nullable = false)
-    private Emoji emoji;
+    @JoinColumn(name = "galaxy_emoji_id", nullable = false)
+    private Emoji galaxyEmoji;
+
+    // 2. 다짐 대표하는 이모지
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "resolution_emoji_id")
+    private Emoji resolutionEmoji;
+
+    // 3. 회고 대표하는 이모지
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "review_emoji_id")
+    private Emoji reviewEmoji;
 
     @Column(name = "name")
     private String name;
