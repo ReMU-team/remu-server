@@ -3,6 +3,7 @@ package com.remu.domain.galaxy.entity;
 import com.remu.domain.emoji.entity.Emoji;
 import com.remu.domain.galaxy.enums.GalaxyStatus;
 import com.remu.domain.resolution.entity.Resolution;
+import com.remu.domain.star.entity.Star;
 import com.remu.domain.user.entity.User;
 import com.remu.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -53,6 +54,11 @@ public class Galaxy extends BaseEntity {
     @OneToMany(mappedBy = "galaxy", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Resolution> resolutions = new ArrayList<>();
+
+    // 별 리스트
+    @OneToMany(mappedBy = "galaxy", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Star> stars = new ArrayList<>();
 
     @Column(name = "name")
     private String name;
