@@ -3,7 +3,6 @@ package com.remu.domain.user.exception.code;
 import com.remu.global.apiPayload.code.BaseErrorCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.http.HttpStatus;
 
 @Getter
