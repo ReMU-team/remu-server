@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface UserControllerDocs {
 
     @Operation(
-            summary = "프로필 생성 & 프로필 설정 API",
+            summary = "프로필 생성 & 프로필 수정 API",
             description = "프로필 사진, 이름, 한 줄 소개를 생성하거나 변경합니다."
     )
     @ApiResponses({
