@@ -30,10 +30,9 @@ public class ResolutionController implements ResolutionControllerDocs{
     @Override
     public ApiResponse<ResolutionResDTO.ResolutionPreviewListDTO> getResolutions(
             @RequestParam Long userId,
-            @PathVariable Long galaxyId,
-            @RequestParam Integer page
+            @PathVariable Long galaxyId
     ) {
-        ResolutionResDTO.ResolutionPreviewListDTO result = resolutionService.findResolutions(userId, galaxyId, page);
+        ResolutionResDTO.ResolutionPreviewListDTO result = resolutionService.findResolutions(userId, galaxyId);
         return ApiResponse.onSuccess(ResolutionSuccessCode.FOUND, result);
     }
 }

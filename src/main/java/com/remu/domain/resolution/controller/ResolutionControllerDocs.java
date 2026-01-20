@@ -31,7 +31,6 @@ public interface ResolutionControllerDocs {
     })
     ApiResponse<ResolutionResDTO.ResolutionPreviewListDTO> getResolutions(
             @RequestParam Long userId,
-            @PathVariable Long galaxyId,
-            @RequestParam Integer page
+            @PathVariable Long galaxyId
     );
 }

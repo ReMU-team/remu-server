@@ -12,6 +12,6 @@ public interface ResolutionService {
 
     // === Query 로직 (조회) ===
     ResolutionResDTO.ResolutionPreviewListDTO findResolutions(
-            Long userId, Long galaxyId, Integer page
+            Long userId, Long galaxyId
     );
 }

@@ -6,6 +6,8 @@ import com.remu.domain.resolution.dto.ResolutionResDTO;
 import com.remu.domain.resolution.entity.Resolution;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public class ResolutionConverter {
 
     /* ---------------------
@@ -38,18 +40,14 @@ public class ResolutionConverter {
      * --------------------- */
 
     public static ResolutionResDTO.ResolutionPreviewListDTO toResolutionPreviewListDTO(
-            Page<Resolution> resolutions
+            List<Resolution> resolutions
     ) {
         return ResolutionResDTO.ResolutionPreviewListDTO.builder()
                 .resolutionList(resolutions.stream()
                         .map(ResolutionConverter::toResolutionPreviewDTO)
                         .toList()
                 )
-                .listSize(resolutions.getSize())
-                .totalPage(resolutions.getTotalPages())
-                .totalElements(resolutions.getTotalElements())
-                .isFirst(resolutions.isFirst())
-                .isLast(resolutions.isLast())
+                .listSize(resolutions.size())
                 .build();
     }
 

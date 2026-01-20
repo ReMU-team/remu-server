@@ -16,6 +16,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 // 추후 시스템 복잡도에 따라 service 클래스 command, query로 구분 예정
 
 @Service
@@ -53,8 +55,7 @@ public class ResolutionServiceImpl implements ResolutionService {
     @Transactional(readOnly = true)
     public ResolutionResDTO.ResolutionPreviewListDTO findResolutions(
             Long userId,
-            Long galaxyId,
-            Integer page
+            Long galaxyId
     ) {
         // 1. galaxy 존재 여부 확인 및 소유권 조회
         Galaxy galaxy = galaxyRepository.findById(galaxyId)
@@ -64,11 +65,8 @@ public class ResolutionServiceImpl implements ResolutionService {
             throw new ResolutionException(GeneralErrorCode.FORBIDDEN);
         }
 
-        // 2. 페이징 설정
-        PageRequest pageRequest = PageRequest.of(page, 5);
-
         // 3. Repository 통한 데이터 조회
-        Page<Resolution> resolutions = resolutionRepository.findAllByGalaxyId(galaxyId, pageRequest);
+        List<Resolution> resolutions = resolutionRepository.findAllByGalaxyId(galaxyId);
 
         // 4. Converter를 이용한 반환
         return ResolutionConverter.toResolutionPreviewListDTO(resolutions);

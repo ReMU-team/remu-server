@@ -20,11 +20,7 @@ public class ResolutionResDTO {
     @Builder
     public record ResolutionPreviewListDTO(
         List<ResolutionPreviewDTO> resolutionList,
-        Integer listSize,
-        Integer totalPage,
-        Long totalElements,
-        Boolean isFirst,
-        Boolean isLast
+        Integer listSize
     ) {}
 
     @Builder
