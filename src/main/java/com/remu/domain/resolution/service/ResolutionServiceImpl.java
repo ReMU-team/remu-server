@@ -10,6 +10,9 @@ import com.remu.domain.resolution.exception.ResolutionException;
 import com.remu.domain.resolution.repository.ResolutionRepository;
 import com.remu.global.apiPayload.code.GeneralErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,7 +37,7 @@ public class ResolutionServiceImpl implements ResolutionService {
 
         // 2. 권한 검증(유저 ID 대조)
         if (!galaxy.getUser().getId().equals(dto.userId())) {
-            throw new ResolutionException(GeneralErrorCode.NOT_FOUND);
+            throw new ResolutionException(GeneralErrorCode.FORBIDDEN);
         }
 
         // 3. DTO -> Entity 변환
@@ -46,4 +49,28 @@ public class ResolutionServiceImpl implements ResolutionService {
     }
 
     // === Query 로직 (조회) ===
+    @Override
+    @Transactional(readOnly = true)
+    public ResolutionResDTO.ResolutionPreviewListDTO findResolutions(
+            Long userId,
+            Long galaxyId,
+            Integer page
+    ) {
+        // 1. galaxy 존재 여부 확인 및 소유권 조회
+        Galaxy galaxy = galaxyRepository.findById(galaxyId)
+                .orElseThrow(() -> new ResolutionException(GeneralErrorCode.NOT_FOUND));
+
+        if (!galaxy.getUser().getId().equals(userId)) {
+            throw new ResolutionException(GeneralErrorCode.FORBIDDEN);
+        }
+
+        // 2. 페이징 설정
+        PageRequest pageRequest = PageRequest.of(page, 5);
+
+        // 3. Repository 통한 데이터 조회
+        Page<Resolution> resolutions = resolutionRepository.findAllByGalaxyId(galaxyId, pageRequest);
+
+        // 4. Converter를 이용한 반환
+        return ResolutionConverter.toResolutionPreviewListDTO(resolutions);
+    }
 }
