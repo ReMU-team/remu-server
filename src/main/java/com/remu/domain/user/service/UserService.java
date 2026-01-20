@@ -5,6 +5,7 @@ import com.remu.domain.user.dto.res.UserResDTO;
 import com.remu.domain.user.entity.User;
 import com.remu.domain.user.exception.UserException;
 import com.remu.domain.user.exception.code.UserErrorCode;
+import com.remu.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
