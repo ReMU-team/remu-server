@@ -16,6 +16,10 @@ import lombok.*;
                 @UniqueConstraint(
                         name = "uk_user_social",
                         columnNames = {"social_type", "social_id"}
+                ),
+                @UniqueConstraint(
+                        name = "uk_user_name",
+                        columnNames = {"name"}
                 )
         }
 )
@@ -42,4 +46,16 @@ public class User extends BaseEntity {
 
     @Column(name = "name", length = 15)
     private String name;
+
+    public void updateName(String name) {
+        this.name = name;
+    }
+
+    public void updateImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public void updateIntroduction(String introduction) {
+        this.introduction = introduction;
+    }
 }
