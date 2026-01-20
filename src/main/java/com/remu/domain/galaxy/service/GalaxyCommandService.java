@@ -1,9 +1,11 @@
 package com.remu.domain.galaxy.service;
 
 import com.remu.domain.emoji.entity.Emoji;
+import com.remu.domain.emoji.enums.EmojiType;
 import com.remu.domain.emoji.exception.EmojiException;
 import com.remu.domain.emoji.exception.code.EmojiErrorCode;
 import com.remu.domain.emoji.repository.EmojiRepository;
+import com.remu.domain.galaxy.converter.GalaxyConverter;
 import com.remu.domain.galaxy.dto.request.GalaxyReqDTO;
 import com.remu.domain.galaxy.dto.response.GalaxyResDTO;
 import com.remu.domain.galaxy.entity.Galaxy;
@@ -45,32 +47,18 @@ public class GalaxyCommandService {
         }
 
 
-        // 3. 대표 이모지 존재 여부 확인
+        // 3. 대표 이모지 존재 여부 확인 & 은하용 이모지 확인
         Emoji isExistedEmoji = emojiRepository.findById(request.emojiId())
                 .orElseThrow(()->new EmojiException(EmojiErrorCode.EMOJI_NOT_FOUND));
+        if (isExistedEmoji.getType() != EmojiType.GALAXY) {
+            throw new EmojiException(EmojiErrorCode.INVALID_EMOJI_TYPE);
+        }
 
         // 4. 은하 생성 및 저장
-        Galaxy galaxy = Galaxy.builder()
-                .name(request.name())
-                .user(user)
-                .place(place)
-                .galaxyEmoji(isExistedEmoji)
-                .startDate(request.startDate())
-                .arrivalDate(request.arrivalDate())
-                .endDate(request.endDate())
-                .status(GalaxyStatus.READY)
-                .build();
-
+        Galaxy galaxy = GalaxyConverter.toGalaxy(request, place, user, isExistedEmoji);
         Galaxy savedGalaxy = galaxyRepository.save(galaxy);
 
-        return new GalaxyResDTO.CreateDTO(
-                savedGalaxy.getId(),
-                savedGalaxy.getName(),
-                savedGalaxy.getStartDate(),
-                savedGalaxy.getArrivalDate(),
-                savedGalaxy.getEndDate(),
-                savedGalaxy.getGalaxyEmoji().getImageUrl() // 이모지 엔티티에서 URL 추출
-        );
+        return GalaxyConverter.toCreateDTO(savedGalaxy);
 
     }
     private void validateTravelDates(LocalDate start, LocalDate arrival, LocalDate end) {
