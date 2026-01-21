@@ -1,5 +1,7 @@
 package com.remu.domain.user.dto.res;
 
+import lombok.Builder;
+
 public class UserResDTO {
     public record NameCheckDTO(
             boolean available,
@@ -21,4 +23,11 @@ public class UserResDTO {
             return new NameCheckDTO(false, "15자 이하로 입력해주세요.");
         }
     }
+
+    @Builder
+    public record ProfileDTO(
+            String imageUrl,
+            String name,
+            String introduction
+    ){}
 }

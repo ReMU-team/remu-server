@@ -21,7 +21,7 @@ public class UserController implements UserControllerDocs{
             Long userId,
             @RequestBody @Valid UserReqDTO.ProfileDTO dto
     ){
-        UserSuccessCode code = UserSuccessCode.USER_FOUND;
+        UserSuccessCode code = UserSuccessCode.USER_PROFILE_CREATED;
         return ApiResponse.onSuccess(code, userService.updateProfile(userId, dto));
     }
 
@@ -32,5 +32,14 @@ public class UserController implements UserControllerDocs{
             Long userId
     ) {
         return userService.checkName(name, userId);
+    }
+
+    @Override
+    @GetMapping("/api/profile")
+    public ApiResponse<UserResDTO.ProfileDTO> getProfile(
+            Long userId
+    ) {
+        UserSuccessCode code = UserSuccessCode.USER_PROFILE_SEARCH;
+        return ApiResponse.onSuccess(code, userService.getProfile(userId));
     }
 }

@@ -1,5 +1,6 @@
 package com.remu.domain.user.service;
 
+import com.remu.domain.user.converter.UserConverter;
 import com.remu.domain.user.dto.req.UserReqDTO;
 import com.remu.domain.user.dto.res.UserResDTO;
 import com.remu.domain.user.entity.User;
@@ -55,7 +56,7 @@ public class UserService {
             return UserResDTO.NameCheckDTO.invalid_long();
         }
 
-        // 4. 유저 검증
+        // 4. 유저 존재 여부 검증 및 조회
         User me = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
@@ -69,6 +70,18 @@ public class UserService {
         // 6. 다른 닉네임과 중복되면 duplicate 반환, 중볻되지 않으면 valid 반환
         return exists
                 ? UserResDTO.NameCheckDTO.duplicate() : UserResDTO.NameCheckDTO.valid();
+    }
+
+    // 프로필 조회
+    public UserResDTO.ProfileDTO getProfile(
+            Long userId
+    ){
+        // 1. 유저 존재 여부 검증 및 조회
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+
+        // 2. 컨버터를 이용한 DTO 반환
+        return UserConverter.toProfileDTO(user);
     }
 
     // 이름 업데이트
