@@ -15,7 +15,11 @@ public enum ResolutionSuccessCode implements BaseSuccessCode {
 
     CREATE(HttpStatus.OK,
             "RESOLUTION200_2",
-                    "성공적으로 다짐을 생성했습니다.");
+                    "성공적으로 다짐을 생성했습니다."),
+
+    UPDATE(HttpStatus.OK,
+            "RESOLUTION200_3",
+            "성공적으로 다짐을 수정했습니다.");
 
     private final HttpStatus status;
     private final String code;

@@ -26,13 +26,25 @@ public class ResolutionController implements ResolutionControllerDocs{
     }
 
     // 다짐 목록 조회
-    @GetMapping("/galaxies/{galaxyId}/resolutions")
     @Override
+    @GetMapping("/galaxies/{galaxyId}/resolutions")
     public ApiResponse<ResolutionResDTO.ResolutionPreviewListDTO> getResolutions(
             @RequestParam Long userId,
             @PathVariable Long galaxyId
     ) {
         ResolutionResDTO.ResolutionPreviewListDTO result = resolutionService.findResolutions(userId, galaxyId);
         return ApiResponse.onSuccess(ResolutionSuccessCode.FOUND, result);
+    }
+
+    // 다짐 수정
+    @PatchMapping("/resolutions/{resolutionId}")
+    @Override
+    public ApiResponse<ResolutionResDTO.UpdateDTO> updateResolution(
+            @RequestParam Long userId,
+            @PathVariable Long resolutionId,
+            @RequestBody ResolutionReqDTO.UpdateDTO dto
+    ) {
+        ResolutionResDTO.UpdateDTO result = resolutionService.update(userId, resolutionId, dto);
+        return ApiResponse.onSuccess(ResolutionSuccessCode.UPDATE, result);
     }
 }

@@ -28,4 +28,8 @@ public class Resolution extends BaseEntity {
 
     @Column(name = "content", columnDefinition = "TEXT")
     private String content;
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
 }

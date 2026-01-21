@@ -60,4 +60,16 @@ public class ResolutionConverter {
                 .createdAt(resolution.getCreatedAt())
                 .build();
     }
+
+    /* ---------------------
+     * [UPDATE] 수정 관련 변환
+     * --------------------- */
+
+    public static ResolutionResDTO.UpdateDTO toUpdateDTO(Resolution resolution) {
+        return ResolutionResDTO.UpdateDTO.builder()
+                .resolutionId(resolution.getId())
+                .content(resolution.getContent())
+                .updatedAt(resolution.getUpdatedAt())
+                .build();
+    }
 }
