@@ -1,4 +1,4 @@
-package com.remu.domain.galaxy.entity;
+package com.remu.domain.place.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,4 +15,6 @@ public class Place {
     private Long id;
 
     // 구글Maps api 에 따른 필드값 적용
+    @Column(name = "google_place_id")
+    private String googlePlaceId;
 }
