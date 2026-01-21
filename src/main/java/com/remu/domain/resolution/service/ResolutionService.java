@@ -16,6 +16,11 @@ public interface ResolutionService {
             ResolutionReqDTO.UpdateDTO dto
     );
 
+    void delete(
+            Long userId,
+            Long resolutionId
+    );
+
     // === Query 로직 (조회) ===
     ResolutionResDTO.ResolutionPreviewListDTO findResolutions(
             Long userId, Long galaxyId

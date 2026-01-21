@@ -70,6 +70,24 @@ public class ResolutionServiceImpl implements ResolutionService {
         return ResolutionConverter.toUpdateDTO(resolution);
     }
 
+    @Override
+    public void delete(
+            Long userId,
+            Long resolutionId
+    ) {
+        // 1. 삭제할 다짐 찾기
+        Resolution resolution = resolutionRepository.findById(resolutionId)
+                .orElseThrow(() -> new ResolutionException(ResolutionErrorCode.NOT_FOUND));
+
+        // 2. 권한 확인
+        if (!resolution.getGalaxy().getUser().getId().equals(userId)) {
+            throw new ResolutionException(GeneralErrorCode.FORBIDDEN);
+        }
+
+        // 3. 데이터 삭제
+        resolutionRepository.delete(resolution);
+    }
+
     // === Query 로직 (조회) ===
     @Override
     @Transactional(readOnly = true)
@@ -78,6 +96,7 @@ public class ResolutionServiceImpl implements ResolutionService {
             Long galaxyId
     ) {
         // 1. galaxy 존재 여부 확인 및 소유권 조회
+
         Galaxy galaxy = galaxyRepository.findById(galaxyId)
                 .orElseThrow(() -> new ResolutionException(GeneralErrorCode.NOT_FOUND));
 

@@ -37,8 +37,8 @@ public class ResolutionController implements ResolutionControllerDocs{
     }
 
     // 다짐 수정
-    @PatchMapping("/resolutions/{resolutionId}")
     @Override
+    @PatchMapping("/resolutions/{resolutionId}")
     public ApiResponse<ResolutionResDTO.UpdateDTO> updateResolution(
             @RequestParam Long userId,
             @PathVariable Long resolutionId,
@@ -47,4 +47,15 @@ public class ResolutionController implements ResolutionControllerDocs{
         ResolutionResDTO.UpdateDTO result = resolutionService.update(userId, resolutionId, dto);
         return ApiResponse.onSuccess(ResolutionSuccessCode.UPDATE, result);
     }
+
+    // 다짐 삭제
+    @DeleteMapping("/resolutions/{resolutionId}")
+    public ApiResponse<Long> deleteResolution(
+            @RequestParam Long userId,
+            @PathVariable Long resolutionId
+    ) {
+        resolutionService.delete(userId, resolutionId);
+        return ApiResponse.onSuccess(ResolutionSuccessCode.DELETE, resolutionId);
+    }
+
 }
