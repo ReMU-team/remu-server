@@ -3,6 +3,8 @@ package com.remu.domain.user.dto.res;
 import lombok.Builder;
 
 public class UserResDTO {
+
+    // 닉네임 사용 가능 여부에 대한 응답 결과
     public record NameCheckDTO(
             boolean available,
             String message
@@ -24,6 +26,7 @@ public class UserResDTO {
         }
     }
 
+    // 프로필 조회에 대한 응답 결과
     @Builder
     public record ProfileDTO(
             String imageUrl,
