@@ -20,11 +20,17 @@ public class UserService {
     @Transactional
     public Void updateProfile(Long userId, UserReqDTO.ProfileDTO dto){
 
+        // 1. 유저 존재 여부 검증
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
+        // 2. 닉네임 업데이트
         updateName(user, dto.name());
+
+        // 3. 한 줄 소개 업데이트
         updateIntroduction(user, dto.introduction());
+
+        // 4. 프로필 이미지 업데이트
         updateImageUrl(user, dto.imageUrl());
 
         return null;
@@ -33,12 +39,15 @@ public class UserService {
     // 사용 가능한 닉네임인지 검증
     public UserResDTO.NameCheckDTO checkName(String rawName, Long userId) {
 
+        // 1. 닉네임 값 null 확인
         if (rawName == null || rawName.isBlank()) {
             return UserResDTO.NameCheckDTO.invalid_short();
         }
 
+        // 2. 닉네임 공백 제거
         String name = rawName.trim();
 
+        // 3. 닉네임 2 ~ 15자 확인
         if (name.length() < 2) {
             return UserResDTO.NameCheckDTO.invalid_short();
         }
@@ -46,15 +55,18 @@ public class UserService {
             return UserResDTO.NameCheckDTO.invalid_long();
         }
 
+        // 4. 유저 검증
         User me = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
+        // 5. 현재 사용자의 닉네임과 동일할 때 valid 반환
         if (name.equals(me.getName())) {
             return UserResDTO.NameCheckDTO.valid();
         }
 
         boolean exists = userRepository.existsByName(name);
 
+        // 6. 다른 닉네임과 중복되면 duplicate 반환, 중볻되지 않으면 valid 반환
         return exists
                 ? UserResDTO.NameCheckDTO.duplicate() : UserResDTO.NameCheckDTO.valid();
     }
