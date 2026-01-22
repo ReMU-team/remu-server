@@ -7,9 +7,7 @@ import com.remu.domain.resolution.service.ResolutionService;
 import com.remu.global.apiPayload.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,6 +15,7 @@ public class ResolutionController implements ResolutionControllerDocs{
 
     private final ResolutionService resolutionService;
 
+    // 다짐 생성
     @Override
     @PostMapping("/create-resolution")
     public ApiResponse<ResolutionResDTO.CreateDTO> create (
@@ -24,5 +23,16 @@ public class ResolutionController implements ResolutionControllerDocs{
     ) {
         ResolutionResDTO.CreateDTO result = resolutionService.create(dto);
         return ApiResponse.onSuccess(ResolutionSuccessCode.CREATE, result);
+    }
+
+    // 다짐 목록 조회
+    @GetMapping("/galaxies/{galaxyId}/resolutions")
+    @Override
+    public ApiResponse<ResolutionResDTO.ResolutionPreviewListDTO> getResolutions(
+            @RequestParam Long userId,
+            @PathVariable Long galaxyId
+    ) {
+        ResolutionResDTO.ResolutionPreviewListDTO result = resolutionService.findResolutions(userId, galaxyId);
+        return ApiResponse.onSuccess(ResolutionSuccessCode.FOUND, result);
     }
 }

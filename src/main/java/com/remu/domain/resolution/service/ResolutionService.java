@@ -9,4 +9,9 @@ public interface ResolutionService {
     ResolutionResDTO.CreateDTO create(
             ResolutionReqDTO.CreateDTO dto
     );
+
+    // === Query 로직 (조회) ===
+    ResolutionResDTO.ResolutionPreviewListDTO findResolutions(
+            Long userId, Long galaxyId
+    );
 }
