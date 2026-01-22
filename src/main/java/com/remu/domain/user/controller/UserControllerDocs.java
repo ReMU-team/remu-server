@@ -35,4 +35,15 @@ public interface UserControllerDocs {
             @RequestParam(required = false) String name,
             Long userId
     );
+
+    @Operation(
+            summary = "프로필 조회 API",
+            description = "프로필 사진, 이름, 한 줄 소개를 조회합니다."
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
+
+    })
+    ApiResponse<UserResDTO.ProfileDTO> getProfile(Long userId);
 }
