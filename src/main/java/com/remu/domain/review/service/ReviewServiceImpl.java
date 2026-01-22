@@ -1,5 +1,8 @@
 package com.remu.domain.review.service;
 
+import com.remu.domain.galaxy.entity.Galaxy;
+import com.remu.domain.galaxy.exception.GalaxyException;
+import com.remu.domain.galaxy.repository.GalaxyRepository;
 import com.remu.domain.resolution.entity.Resolution;
 import com.remu.domain.resolution.exception.ResolutionException;
 import com.remu.domain.resolution.exception.code.ResolutionErrorCode;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Service
 @Transactional
@@ -25,6 +29,7 @@ public class ReviewServiceImpl implements ReviewService{
 
     private final ReviewRepository reviewRepository;
     private final ResolutionRepository resolutionRepository;
+    private final GalaxyRepository galaxyRepository;
 
     // === Command 로직 (상태 변경) ===
 
@@ -59,5 +64,29 @@ public class ReviewServiceImpl implements ReviewService{
 
         // 이후 저장
         return ReviewConverter.toCreateDTO(reviewRepository.save(review));
+    }
+
+    // === Query 로직 (조회) ===
+    @Override
+    @Transactional(readOnly = true)
+    public ReviewResDTO.ReviewPreviewListDTO getReviewListByGalaxy(
+            Long userId,
+            Long galaxyId
+    ) {
+        // 1. 은하 존재 여부 확인
+        // TODO: 향후 에러 코드 수정 필요
+        Galaxy galaxy = galaxyRepository.findById(galaxyId)
+                .orElseThrow(() -> new GalaxyException(GeneralErrorCode.NOT_FOUND));
+
+        // 2. 본인 확인
+        if (!galaxy.getUser().getId().equals(userId)) {
+            throw new ReviewException(GeneralErrorCode.FORBIDDEN);
+        }
+
+        // 3. 데이터 조회(N+1 문제 방지 코드)
+        List<Review> reviews = reviewRepository.findAllByGalaxyId(galaxyId);
+
+        return ReviewConverter.toReviewPreviewListDTO(reviews);
+
     }
 }

@@ -26,4 +26,14 @@ public class ReviewController implements ReviewControllerDocs {
         return ApiResponse.onSuccess(ReviewSuccessCode.CREATE, result);
     }
 
+    // 리뷰 목록 조회. 이때 은하 내부 모든 회고를 갖고 와야 하기에 galaxy로 접근
+    @Override
+    @GetMapping("/galaxies/{galaxyId}/reviews")
+    public ApiResponse<ReviewResDTO.ReviewPreviewListDTO> getReviews(
+            @RequestParam Long userId,
+            @PathVariable Long galaxyId
+    ) {
+        ReviewResDTO.ReviewPreviewListDTO result = reviewService.getReviewListByGalaxy(userId, galaxyId);
+        return ApiResponse.onSuccess(ReviewSuccessCode.FOUND, result);
+    }
 }

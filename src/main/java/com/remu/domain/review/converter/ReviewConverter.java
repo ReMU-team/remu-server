@@ -5,6 +5,8 @@ import com.remu.domain.review.dto.ReviewReqDTO;
 import com.remu.domain.review.dto.ReviewResDTO;
 import com.remu.domain.review.entity.Review;
 
+import java.util.List;
+
 public class ReviewConverter {
 
     /* ---------------------
@@ -32,6 +34,35 @@ public class ReviewConverter {
                 .resolution(resolution)
                 .content(dto.content())
                 .isResolutionFulfilled(dto.isResolutionFulfilled())
+                .build();
+    }
+
+    /* ---------------------
+     * [READ] 조회 관련 변환
+     * --------------------- */
+
+    public static ReviewResDTO.ReviewPreviewListDTO toReviewPreviewListDTO(
+            List<Review> reviews
+    ) {
+        return ReviewResDTO.ReviewPreviewListDTO.builder()
+                .reviewList(reviews.stream()
+                        .map(ReviewConverter::toReviewPreviewDTO)
+                        .toList()
+                )
+                .listSize(reviews.size())
+                .build();
+    }
+
+    public static ReviewResDTO.ReviewPreviewDTO toReviewPreviewDTO(
+            Review review
+    ) {
+        return ReviewResDTO.ReviewPreviewDTO.builder()
+                .reviewId(review.getId())
+                .resolutionId(review.getResolution().getId())
+                .resolutionContent(review.getResolution().getContent())
+                .reviewContent(review.getContent())
+                .isResolutionFulfilled(review.getIsResolutionFulfilled())
+                .createdAt(review.getCreatedAt())
                 .build();
     }
 }
