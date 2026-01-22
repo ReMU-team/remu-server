@@ -7,12 +7,10 @@ import com.remu.domain.resolution.dto.ResolutionReqDTO;
 import com.remu.domain.resolution.dto.ResolutionResDTO;
 import com.remu.domain.resolution.entity.Resolution;
 import com.remu.domain.resolution.exception.ResolutionException;
+import com.remu.domain.resolution.exception.code.ResolutionErrorCode;
 import com.remu.domain.resolution.repository.ResolutionRepository;
 import com.remu.global.apiPayload.code.GeneralErrorCode;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,6 +46,28 @@ public class ResolutionServiceImpl implements ResolutionService {
         // 4. 저장 및 응답 반환
         Resolution saved = resolutionRepository.save(resolution);
         return ResolutionConverter.toCreateDTO(saved);
+    }
+
+    @Override
+    public ResolutionResDTO.UpdateDTO update(
+            Long userId,
+            Long resolutionId,
+            ResolutionReqDTO.UpdateDTO dto
+    ) {
+
+        // 1. 수정할 다짐 찾기
+        Resolution resolution = resolutionRepository.findById(resolutionId)
+                .orElseThrow(() -> new ResolutionException(ResolutionErrorCode.NOT_FOUND));
+
+        // 2. 권한 확인
+        if (!resolution.getGalaxy().getUser().getId().equals(userId)) {
+            throw new ResolutionException(GeneralErrorCode.FORBIDDEN);
+        }
+
+        // 3. 데이터 수정(엔티티 메서드 호출)
+        resolution.updateContent(dto.content());
+
+        return ResolutionConverter.toUpdateDTO(resolution);
     }
 
     // === Query 로직 (조회) ===

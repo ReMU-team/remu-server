@@ -10,6 +10,12 @@ public interface ResolutionService {
             ResolutionReqDTO.CreateDTO dto
     );
 
+    ResolutionResDTO.UpdateDTO update(
+            Long userId,
+            Long resolutionId,
+            ResolutionReqDTO.UpdateDTO dto
+    );
+
     // === Query 로직 (조회) ===
     ResolutionResDTO.ResolutionPreviewListDTO findResolutions(
             Long userId, Long galaxyId

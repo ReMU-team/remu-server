@@ -17,6 +17,8 @@ public class ResolutionResDTO {
             LocalDateTime createdAt
     ) {}
 
+
+    // 다짐 조회 DTO
     @Builder
     public record ResolutionPreviewListDTO(
         List<ResolutionPreviewDTO> resolutionList,
@@ -28,5 +30,13 @@ public class ResolutionResDTO {
             Long resolutionId,
             String content,
             LocalDateTime createdAt
+    ) {}
+
+    // 다짐 수정 DTO
+    @Builder
+    public record UpdateDTO(
+            Long resolutionId,
+            String content,
+            LocalDateTime updatedAt
     ) {}
 }

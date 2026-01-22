@@ -17,4 +17,9 @@ public class ResolutionReqDTO {
             @Size(max = 100, message = "다짐은 최대 100자까지 가능합니다.")
             String content
     ) {}
+
+    // 다짐 수정 DTO
+    public record UpdateDTO(
+            String content
+    ) {}
 }
