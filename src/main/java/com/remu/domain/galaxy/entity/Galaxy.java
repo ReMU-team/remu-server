@@ -2,6 +2,7 @@ package com.remu.domain.galaxy.entity;
 
 import com.remu.domain.emoji.entity.Emoji;
 import com.remu.domain.galaxy.enums.GalaxyStatus;
+import com.remu.domain.place.entity.Place;
 import com.remu.domain.resolution.entity.Resolution;
 import com.remu.domain.star.entity.Star;
 import com.remu.domain.user.entity.User;
@@ -25,7 +26,7 @@ public class Galaxy extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
