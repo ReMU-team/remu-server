@@ -1,0 +1,29 @@
+package com.remu.domain.review.controller;
+
+import com.remu.domain.review.dto.ReviewReqDTO;
+import com.remu.domain.review.dto.ReviewResDTO;
+import com.remu.domain.review.exception.code.ReviewSuccessCode;
+import com.remu.domain.review.service.ReviewService;
+import com.remu.global.apiPayload.ApiResponse;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequiredArgsConstructor
+public class ReviewController implements ReviewControllerDocs {
+
+    private final ReviewService reviewService;
+
+    @Override
+    @PostMapping("/resolutions/{resolutionId}/reviews")
+    public ApiResponse<ReviewResDTO.CreateDTO> createReview(
+            @RequestParam Long userId,
+            @PathVariable Long resolutionId,
+            @Valid @RequestBody ReviewReqDTO.CreateDTO dto
+    ) {
+        ReviewResDTO.CreateDTO result = reviewService.create(userId, resolutionId, dto);
+        return ApiResponse.onSuccess(ReviewSuccessCode.CREATE, result);
+    }
+
+}
