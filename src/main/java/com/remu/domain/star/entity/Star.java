@@ -1,11 +1,11 @@
 package com.remu.domain.star.entity;
 
-import com.remu.domain.emoji.entity.Emoji;
 import com.remu.domain.galaxy.entity.Galaxy;
 import com.remu.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +27,11 @@ public class Star extends BaseEntity {
     @Column(name = "content", columnDefinition = "TEXT")
     private String content; // 내용
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "color")
-    private Emoji color; // 카드 색상
+    @Column(name = "record_date")
+    private LocalDate recordDate; // 여행 날짜 (사용자가 선택한 날짜)
+
+    @Column(name = "card_color")
+    private String cardColor; // 카드 색상 (String으로 저장)
 
     @Column(name = "image_url")
     private String imageUrl; // 사진
@@ -38,8 +40,10 @@ public class Star extends BaseEntity {
     @JoinColumn(name = "galaxy_id", nullable = false)
     private Galaxy galaxy; // 은하 식별자
 
-    // 별과 이모지의 연관관계 (최대 3개 선택 가능)
-    @OneToMany(mappedBy = "star", cascade = CascadeType.ALL, orphanRemoval = true)
+    // 별과 이모지의 연관관계 -> 단순 문자열 리스트로 변경
+    @ElementCollection
+    @CollectionTable(name = "star_emojis", joinColumns = @JoinColumn(name = "star_id"))
+    @Column(name = "emoji_name")
     @Builder.Default
-    private List<StarEmoji> starEmojiList = new ArrayList<>();
+    private List<String> emojis = new ArrayList<>();
 }

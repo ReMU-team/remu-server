@@ -1,6 +1,5 @@
 package com.remu.domain.star.entity;
 
-import com.remu.domain.emoji.entity.Emoji;
 import com.remu.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;

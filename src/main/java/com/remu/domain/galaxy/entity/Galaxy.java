@@ -1,6 +1,5 @@
 package com.remu.domain.galaxy.entity;
 
-import com.remu.domain.emoji.entity.Emoji;
 import com.remu.domain.galaxy.enums.GalaxyStatus;
 import com.remu.domain.place.entity.Place;
 import com.remu.domain.resolution.entity.Resolution;
