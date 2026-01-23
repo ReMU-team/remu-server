@@ -1,6 +1,5 @@
 package com.remu.domain.user.service;
 
-import com.remu.domain.galaxy.entity.Galaxy;
 import com.remu.domain.galaxy.repository.GalaxyRepository;
 import com.remu.domain.user.converter.UserConverter;
 import com.remu.domain.user.dto.req.UserReqDTO;
@@ -13,14 +12,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
-    private final GalaxyRepository galaxyRepository;
 
     // 프로필 업데이트
     @Transactional
