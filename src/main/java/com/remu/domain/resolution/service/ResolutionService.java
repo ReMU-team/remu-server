@@ -7,8 +7,6 @@ public interface ResolutionService {
 
     // === Command 로직 (상태 변경) ===
     ResolutionResDTO.CreateDTO create(
-            Long userId,
-            Long galaxyId,
             ResolutionReqDTO.CreateDTO dto
     );
 

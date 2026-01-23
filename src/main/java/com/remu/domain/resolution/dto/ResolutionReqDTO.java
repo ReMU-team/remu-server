@@ -10,6 +10,9 @@ public class ResolutionReqDTO {
 
     // 다짐 생성 요청 DTO
     public record CreateDTO(
+            Long userId,
+            Long galaxyId,
+
             @NotBlank(message = "다짐 내용은 필수입니다.")
             @Size(max = 100, message = "다짐은 최대 100자까지 가능합니다.")
             String content

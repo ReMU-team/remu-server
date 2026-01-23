@@ -29,16 +29,14 @@ public class ResolutionServiceImpl implements ResolutionService {
     // === Command 로직 (상태 변경) ===
     @Override
     public ResolutionResDTO.CreateDTO create(
-            Long userId,
-            Long galaxyId,
             ResolutionReqDTO.CreateDTO dto
     ) {
         // 1. 은하 조회
-        Galaxy galaxy = galaxyRepository.findById(galaxyId)
+        Galaxy galaxy = galaxyRepository.findById(dto.galaxyId())
                 .orElseThrow(() -> new ResolutionException(GeneralErrorCode.NOT_FOUND));
 
         // 2. 권한 검증(유저 ID 대조)
-        if (!galaxy.getUser().getId().equals(userId)) {
+        if (!galaxy.getUser().getId().equals(dto.userId())) {
             throw new ResolutionException(GeneralErrorCode.FORBIDDEN);
         }
 
