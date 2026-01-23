@@ -17,11 +17,13 @@ public class ResolutionController implements ResolutionControllerDocs{
 
     // 다짐 생성
     @Override
-    @PostMapping("/create-resolution")
+    @PostMapping("/galaxies/{galaxyId}/resolutions")
     public ApiResponse<ResolutionResDTO.CreateDTO> create (
+            @RequestParam Long userId,
+            @PathVariable Long galaxyId,
             @Valid @RequestBody ResolutionReqDTO.CreateDTO dto
     ) {
-        ResolutionResDTO.CreateDTO result = resolutionService.create(dto);
+        ResolutionResDTO.CreateDTO result = resolutionService.create(userId, galaxyId, dto);
         return ApiResponse.onSuccess(ResolutionSuccessCode.CREATE, result);
     }
 
