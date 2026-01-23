@@ -12,11 +12,12 @@ public enum GalaxySuccessCode implements BaseSuccessCode {
     // 은하 생성 성공
     GALAXY_CREATED(HttpStatus.CREATED, "GALAXY_201", "새로운 은하가 성공적으로 생성되었습니다."),
     // 은하 목록/상세 조회 성공
-    GALAXY_FETCH_SUCCESS(HttpStatus.OK, "GALAXY_200_1", "은하 정보를 성공적으로 불러왔습니다."),
+    GALAXY_GET_SUCCESS(HttpStatus.OK, "GALAXY_200_1", "은하 정보를 성공적으로 불러왔습니다."),
+    GALAXY_LIST_GET_SUCCESS(HttpStatus.OK, "GALAXY_200_2", "은하 목록을 성공적으로 조회했습니다."),
     // 은하 정보 수정 성공
-    GALAXY_UPDATE_SUCCESS(HttpStatus.OK, "GALAXY_200_2", "은하 정보가 성공적으로 수정되었습니다."),
+    GALAXY_UPDATE_SUCCESS(HttpStatus.OK, "GALAXY_200_3", "은하 정보가 성공적으로 수정되었습니다."),
     // 은하 삭제 성공
-    GALAXY_DELETE_SUCCESS(HttpStatus.OK, "GALAXY_200_3", "은하가 성공적으로 삭제되었습니다.");
+    GALAXY_DELETE_SUCCESS(HttpStatus.OK, "GALAXY_200_4", "은하가 성공적으로 삭제되었습니다.");
     ;
 
     private final HttpStatus status;

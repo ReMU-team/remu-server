@@ -50,6 +50,9 @@ public class Galaxy extends BaseEntity {
     @JoinColumn(name = "review_emoji_id")
     private Emoji reviewEmoji;
 
+    @Column(name = "emoji_resource_name", nullable = false)
+    private String emojiResourceName;
+
     // 연관관계(컬렉션)
     // 다짐 카드 리스트
     @OneToMany(mappedBy = "galaxy", cascade = CascadeType.ALL, orphanRemoval = true)
