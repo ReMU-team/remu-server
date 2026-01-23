@@ -30,4 +30,15 @@ public class GalaxyReqDTO {
             String placeName
 
     ){}
+
+    // 은하 정보 수정 요청
+    public record UpdateDTO(
+            String name,
+            String emojiResourceName,
+            LocalDate startDate,
+            LocalDate arrivalDate,
+            LocalDate endDate,
+            String googlePlaceId,
+            String placeName
+    ){}
 }

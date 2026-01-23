@@ -20,4 +20,5 @@ public class Place {
 
     @Column(name = "name")
     private String name;
+
 }

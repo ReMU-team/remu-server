@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
 
 public interface GalaxyControllerDocs {
     // 1. 은하 생성
@@ -22,7 +23,7 @@ public interface GalaxyControllerDocs {
 
     // 2. 은하 상세 조회
     @Operation(
-            summary = "은하 조회하는 API by 요시/김희서",
+            summary = "은하 상세 조회하는 API by 요시/김희서",
             description = "선택된 은하id 기반으로 상세 정보를 불러옵니다."
     )
     @ApiResponses({
@@ -40,6 +41,31 @@ public interface GalaxyControllerDocs {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
     })
-    ApiResponse<GalaxyResDTO.SummaryListDTO> getGalaxyList();
+    ApiResponse<GalaxyResDTO.SummaryListDTO> getGalaxyList(@RequestParam(defaultValue = "0") int page,
+                                                           @RequestParam(defaultValue = "10") int size);
+
+
+    // 4. 은하 삭제
+    @Operation(
+            summary = "은하 삭제하는 API by 요시/김희서",
+            description = "은하를 영구 삭제합니다."
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
+    })
+    ApiResponse<Void> deleteGalaxy(@PathVariable Long galaxyId);
+
+    // 5. 은하 수정
+    @Operation(
+            summary = "은하 수정하는 API by 요시/김희서"
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
+    })
+    ApiResponse<Void> updateGalaxy(
+            @PathVariable Long galaxyId,
+            @RequestBody GalaxyReqDTO.UpdateDTO request);
 
 }

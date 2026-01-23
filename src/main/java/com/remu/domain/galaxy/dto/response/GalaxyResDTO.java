@@ -39,7 +39,11 @@ public class GalaxyResDTO {
 
     // 전체 목록 응답 (리스트를 감싸는 DTO)
     public record SummaryListDTO(
-            List<SummaryDTO> galaxies
+            Long totalCount,      // 사용자가 만든 은하 총 개수
+            List<SummaryDTO> galaxies,
+            Integer currentPage,
+            Boolean hasNext // 다음 페이지 존재 여부
+
     ) {}
 
 

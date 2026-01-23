@@ -8,6 +8,8 @@ import com.remu.domain.galaxy.exception.code.GalaxyErrorCode;
 import com.remu.domain.galaxy.repository.GalaxyRepository;
 import com.remu.domain.user.entity.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,16 +47,18 @@ public class GalaxyQueryService {
 
     //
     @Transactional(readOnly = true)
-    public GalaxyResDTO.SummaryListDTO getGalaxyList(User user) {
+    public GalaxyResDTO.SummaryListDTO getGalaxyList(User user, Pageable pageable) {
         // 1. 해당 유저의 모든 은하 조회
-        List<Galaxy> galaxyList = galaxyRepository.findAllByUserId(user.getId());
-        // 2. 응답 DTO 변환
+        Slice<Galaxy> galaxyList = galaxyRepository.findAllByUserId(user.getId(), pageable);
+        // 2. 전체 개수 조회
+        Long totalCount = galaxyRepository.countByUserId(user.getId());
+        // 3. 응답 DTO 변환
         List<GalaxyResDTO.SummaryDTO> summaryDTOList = galaxyList.stream()
                 .map(galaxy -> {
                     return GalaxyConverter.toSummaryDTO(galaxy);
                 })
                 .toList();
 
-        return new GalaxyResDTO.SummaryListDTO(summaryDTOList);
+        return new GalaxyResDTO.SummaryListDTO(totalCount, summaryDTOList, galaxyList.getNumber(), galaxyList.hasNext());
     }
 }

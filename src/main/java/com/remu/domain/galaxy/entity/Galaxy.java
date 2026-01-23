@@ -20,6 +20,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
+@Setter
 @Table(name = "galaxy")
 public class Galaxy extends BaseEntity {
     @Id
@@ -87,4 +88,12 @@ public class Galaxy extends BaseEntity {
     private LocalDateTime aiAnalyzedAt;
 
 
+    // updateInfo
+    public void updateInfo(String name, String emojiResourceName, LocalDate startDate, LocalDate arrivalDate, LocalDate endDate) {
+        this.name = name;
+        this.emojiResourceName = emojiResourceName;
+        this.startDate = startDate;
+        this.arrivalDate = arrivalDate;
+        this.endDate = endDate;
+    }
 }
