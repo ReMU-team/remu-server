@@ -1,6 +1,5 @@
 package com.remu.domain.user.service;
 
-import com.remu.domain.galaxy.repository.GalaxyRepository;
 import com.remu.domain.user.converter.UserConverter;
 import com.remu.domain.user.dto.req.UserReqDTO;
 import com.remu.domain.user.dto.res.UserResDTO;
