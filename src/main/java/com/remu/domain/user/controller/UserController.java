@@ -42,4 +42,13 @@ public class UserController implements UserControllerDocs{
         UserSuccessCode code = UserSuccessCode.USER_PROFILE_SEARCH;
         return ApiResponse.onSuccess(code, userService.getProfile(userId));
     }
+
+    @Override
+    @DeleteMapping("api/account")
+    public ApiResponse<Void> deleteAccount(
+            Long userId
+    ){
+        UserSuccessCode code = UserSuccessCode.USER_DELETE_ACCOUNT;
+        return ApiResponse.onSuccess(code, userService.deleteAccount(userId));
+    }
 }
