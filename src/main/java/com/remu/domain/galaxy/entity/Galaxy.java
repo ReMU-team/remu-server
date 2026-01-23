@@ -1,6 +1,5 @@
 package com.remu.domain.galaxy.entity;
 
-import com.remu.domain.emoji.entity.Emoji;
 import com.remu.domain.galaxy.enums.GalaxyStatus;
 import com.remu.domain.place.entity.Place;
 import com.remu.domain.resolution.entity.Resolution;
@@ -34,22 +33,6 @@ public class Galaxy extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "place_id", nullable = false)
     private Place place;
-
-    // 이모지
-    // 1. 은하를 상징하는 대표 이모지
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "galaxy_emoji_id", nullable = false)
-    private Emoji galaxyEmoji;
-
-    // 2. 다짐 대표하는 이모지
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "resolution_emoji_id")
-    private Emoji resolutionEmoji;
-
-    // 3. 회고 대표하는 이모지
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "review_emoji_id")
-    private Emoji reviewEmoji;
 
     @Column(name = "emoji_resource_name", nullable = false)
     private String emojiResourceName;
@@ -86,7 +69,6 @@ public class Galaxy extends BaseEntity {
     private String aiFeedback;
 
     private LocalDateTime aiAnalyzedAt;
-
 
     // updateInfo
     public void updateInfo(String name, String emojiResourceName, LocalDate startDate, LocalDate arrivalDate, LocalDate endDate) {

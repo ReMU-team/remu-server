@@ -1,15 +1,9 @@
 package com.remu.domain.galaxy.service;
 
-import com.remu.domain.emoji.entity.Emoji;
-import com.remu.domain.emoji.enums.EmojiType;
-import com.remu.domain.emoji.exception.EmojiException;
-import com.remu.domain.emoji.exception.code.EmojiErrorCode;
-import com.remu.domain.emoji.repository.EmojiRepository;
 import com.remu.domain.galaxy.converter.GalaxyConverter;
 import com.remu.domain.galaxy.dto.request.GalaxyReqDTO;
 import com.remu.domain.galaxy.dto.response.GalaxyResDTO;
 import com.remu.domain.galaxy.entity.Galaxy;
-import com.remu.domain.galaxy.enums.GalaxyStatus;
 import com.remu.domain.galaxy.exception.GalaxyException;
 import com.remu.domain.galaxy.exception.code.GalaxyErrorCode;
 import com.remu.domain.galaxy.repository.GalaxyRepository;
@@ -27,12 +21,10 @@ import java.time.LocalDate;
 public class GalaxyCommandService {
     private final GalaxyRepository galaxyRepository;
     private final PlaceRepository placeRepository;
-    private final EmojiRepository emojiRepository;
-
     /*
     1. 은하 생성
      */
-    public GalaxyResDTO.CreateDTO createGalaxy(GalaxyReqDTO.CreateDTO request, User user) {
+    public GalaxyResDTO.CreateDTO createGalaxy(GalaxyReqDTO.GalaxyCreateDTO request, User user) {
         // TODO 은하 개수 검증
 
         // 1) 날짜 논리 검증 (Start <= Arrival <= End)
@@ -49,16 +41,8 @@ public class GalaxyCommandService {
                 ));
 
 
-
-        // 3) 대표 이모지 존재 여부 확인 & 은하용 이모지 확인
-        Emoji isExistedEmoji = emojiRepository.findById(request.emojiId())
-                .orElseThrow(()->new EmojiException(EmojiErrorCode.EMOJI_NOT_FOUND));
-        if (isExistedEmoji.getType() != EmojiType.GALAXY) {
-            throw new EmojiException(EmojiErrorCode.INVALID_EMOJI_TYPE);
-        }
-
-        // 4) 은하 생성 및 저장
-        Galaxy galaxy = GalaxyConverter.toGalaxy(request, place, user, isExistedEmoji);
+        // 3) 은하 생성 및 저장
+        Galaxy galaxy = GalaxyConverter.toGalaxy(request, place, user);
         Galaxy savedGalaxy = galaxyRepository.save(galaxy);
 
         return GalaxyConverter.toCreateDTO(savedGalaxy);
@@ -93,7 +77,7 @@ public class GalaxyCommandService {
     3. 은하 수정
      */
     @Transactional
-    public void updateGalaxy(Long galaxyId, GalaxyReqDTO.UpdateDTO request, User user) {
+    public void updateGalaxy(Long galaxyId, GalaxyReqDTO.GalaxyUpdateDTO request, User user) {
         // 1) 수정할 은하 조회 및 권한 체크
         Galaxy galaxy = galaxyRepository.findById(galaxyId).orElseThrow(()->new GalaxyException(
                 GalaxyErrorCode.GALAXY_NOT_FOUND));

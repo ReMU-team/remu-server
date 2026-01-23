@@ -19,7 +19,7 @@ public interface GalaxyControllerDocs {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
     })
-    ApiResponse<GalaxyResDTO.CreateDTO> createGalaxy(@RequestBody @Valid GalaxyReqDTO.CreateDTO request);
+    ApiResponse<GalaxyResDTO.CreateDTO> createGalaxy(@RequestBody @Valid GalaxyReqDTO.GalaxyCreateDTO request);
 
     // 2. 은하 상세 조회
     @Operation(
@@ -66,6 +66,6 @@ public interface GalaxyControllerDocs {
     })
     ApiResponse<Void> updateGalaxy(
             @PathVariable Long galaxyId,
-            @RequestBody GalaxyReqDTO.UpdateDTO request);
+            @RequestBody GalaxyReqDTO.GalaxyUpdateDTO request);
 
 }

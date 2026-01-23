@@ -13,8 +13,7 @@ public class GalaxyResDTO {
             String name,
             LocalDate startDate,
             LocalDate arrivalDate,
-            LocalDate endDate,
-            String emojiUrl
+            LocalDate endDate
     ){}
 
     // 상세 조회

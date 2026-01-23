@@ -23,7 +23,7 @@ public class GalaxyController implements GalaxyControllerDocs {
     // TODO 인증된 User 객체 넣기 @AuthenticationPrincipal
     @PostMapping("/galaxies")
     public ApiResponse<GalaxyResDTO.CreateDTO> createGalaxy(
-            @RequestBody @Valid GalaxyReqDTO.CreateDTO request) {
+            @RequestBody @Valid GalaxyReqDTO.GalaxyCreateDTO request) {
 
         return ApiResponse.onSuccess(GalaxySuccessCode.GALAXY_CREATED, galaxyCommandService.createGalaxy(request, getMockUser()));
     }
@@ -61,9 +61,9 @@ public class GalaxyController implements GalaxyControllerDocs {
     @PatchMapping("/galaxies/{galaxyId}")
     public ApiResponse<Void> updateGalaxy(
             @PathVariable Long galaxyId,
-            @RequestBody GalaxyReqDTO.UpdateDTO request
+            @RequestBody GalaxyReqDTO.GalaxyUpdateDTO request
     ){
-        galaxyCommandService.updateGalaxy(galaxyId,request, getMockUser());
+        galaxyCommandService.updateGalaxy(galaxyId, request, getMockUser());
         return ApiResponse.onSuccess(GalaxySuccessCode.GALAXY_UPDATE_SUCCESS, null);
     }
 
