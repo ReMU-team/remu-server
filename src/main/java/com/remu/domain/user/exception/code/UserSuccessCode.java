@@ -14,7 +14,13 @@ public enum UserSuccessCode implements BaseSuccessCode {
             "유저 프로필을 성공적으로 생성/수정했습니다."),
     USER_PROFILE_SEARCH(HttpStatus.OK,
             "USER200_2",
-            "유저 프로필을 성공적으로 조회했습니다.")
+            "유저 프로필을 성공적으로 조회했습니다."),
+    USER_FOUND(HttpStatus.FOUND,
+            "USER302_1",
+            "해당 유저를 찾았습니다."),
+    USER_DELETE_ACCOUNT(HttpStatus.OK,
+            "USER200_3",
+            "회원 탈퇴가 정상적으로 완료하였습니다.")
     ;
 
     private final HttpStatus status;

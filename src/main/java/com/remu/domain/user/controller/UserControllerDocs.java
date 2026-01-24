@@ -46,4 +46,15 @@ public interface UserControllerDocs {
 
     })
     ApiResponse<UserResDTO.ProfileDTO> getProfile(Long userId);
+
+    @Operation(
+            summary = "회원 탈퇴 API",
+            description = "회원 탈퇴를 진행합니다."
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
+
+    })
+    ApiResponse<Void> deleteAccount(Long userId);
 }
