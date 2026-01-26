@@ -17,4 +17,8 @@ public class Place {
     // 구글Maps api 에 따른 필드값 적용
     @Column(name = "google_place_id")
     private String googlePlaceId;
+
+    @Column(name = "name")
+    private String name;
+
 }

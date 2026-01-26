@@ -19,6 +19,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
+@Setter
 @Table(name = "galaxy")
 public class Galaxy extends BaseEntity {
     @Id
@@ -33,21 +34,8 @@ public class Galaxy extends BaseEntity {
     @JoinColumn(name = "place_id", nullable = false)
     private Place place;
 
-    // 이모지
-    // 1. 은하를 상징하는 대표 이모지
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "galaxy_emoji_id", nullable = false)
-    private Emoji galaxyEmoji;
-
-    // 2. 다짐 대표하는 이모지
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "resolution_emoji_id")
-    private Emoji resolutionEmoji;
-
-    // 3. 회고 대표하는 이모지
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "review_emoji_id")
-    private Emoji reviewEmoji;
+    @Column(name = "emoji_resource_name", nullable = false)
+    private String emojiResourceName;
 
     // 연관관계(컬렉션)
     // 다짐 카드 리스트
@@ -82,5 +70,12 @@ public class Galaxy extends BaseEntity {
 
     private LocalDateTime aiAnalyzedAt;
 
-
+    // updateInfo
+    public void updateInfo(String name, String emojiResourceName, LocalDate startDate, LocalDate arrivalDate, LocalDate endDate) {
+        this.name = name;
+        this.emojiResourceName = emojiResourceName;
+        this.startDate = startDate;
+        this.arrivalDate = arrivalDate;
+        this.endDate = endDate;
+    }
 }
