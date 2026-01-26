@@ -56,7 +56,7 @@ public class Star extends BaseEntity {
         this.emojis = emojis;
     }
 
-    // 이미지 URL 업데이트 메서드 (별도 분리)
+    // 이미지 URL 업데이트 메서드
     public void updateImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
     }

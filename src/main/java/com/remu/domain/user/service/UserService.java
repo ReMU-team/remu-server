@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -82,6 +83,21 @@ public class UserService {
 
         // 2. 컨버터를 이용한 DTO 반환
         return UserConverter.toProfileDTO(user);
+    }
+
+    // 회원 탈퇴
+    @Transactional
+    public Void deleteAccount(Long userId) {
+        //TODO 소셜 로그인 구현 후 소셜 로그인 연동 해제 기능 추가
+
+        // 1. 유저 존재 여부 검증 및 조회
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+
+        // 2. 유저 삭제 : CascadeType.ALL 설정으로 연관된 엔티티 데이터 자동으로 삭제
+        userRepository.delete(user);
+
+        return null;
     }
 
     // 이름 업데이트

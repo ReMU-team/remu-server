@@ -44,6 +44,13 @@ public class StarController {
         return ApiResponse.onSuccess(StarSuccessCode.STAR_UPDATED, updatedStarId);
     }
 
+    // 별 삭제
+    @DeleteMapping("/stars/{starId}")
+    public ApiResponse<String> deleteStar(@PathVariable("starId") Long starId) {
+        starService.deleteStar(starId);
+        return ApiResponse.onSuccess(StarSuccessCode.STAR_DELETED, "삭제되었습니다.");
+    }
+
     // 은하별 별 목록 조회
     @GetMapping("/galaxies/{galaxyId}/stars")
     public ApiResponse<List<StarResponseDto.StarPreview>> getStarsByGalaxyId(@PathVariable("galaxyId") Long galaxyId) {

@@ -10,8 +10,6 @@ import com.remu.domain.star.entity.Star;
 import com.remu.domain.star.exception.StarException;
 import com.remu.domain.star.exception.code.StarErrorCode;
 import com.remu.domain.star.repository.StarRepository;
-import com.remu.global.apiPayload.code.GeneralErrorCode;
-import com.remu.global.apiPayload.exception.GeneralException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -81,6 +79,22 @@ public class StarService {
         // Case 3: 둘 다 아니면 기존 이미지 유지 (아무것도 안 함)
 
         return star.getId();
+    }
+
+    // 별 삭제
+    @Transactional
+    public void deleteStar(Long starId) {
+        // 1. 별 조회
+        Star star = starRepository.findById(starId)
+                .orElseThrow(() -> new StarException(StarErrorCode.STAR_NOT_FOUND));
+
+        // 2. 이미지 삭제 (S3)
+        if (star.getImageUrl() != null) {
+            // s3Service.delete(star.getImageUrl());
+        }
+
+        // 3. DB 삭제
+        starRepository.delete(star);
     }
 
     // 은하별 별 목록 조회

@@ -1,9 +1,13 @@
 package com.remu.domain.user.entity;
 
+import com.remu.domain.galaxy.entity.Galaxy;
 import com.remu.domain.user.enums.SocialType;
 import com.remu.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Builder
@@ -46,6 +50,12 @@ public class User extends BaseEntity {
 
     @Column(name = "name", length = 15)
     private String name;
+
+    // 연관 관계
+    // 갤럭시 리스트
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
+    private List<Galaxy> galaxies = new ArrayList<>();
 
     public void updateName(String name) {
         this.name = name;
