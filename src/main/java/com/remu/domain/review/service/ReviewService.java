@@ -11,6 +11,12 @@ public interface ReviewService {
             ReviewReqDTO.CreateDTO dto
     );
 
+    ReviewResDTO.UpdateDTO update(
+            Long userId,
+            Long reviewId,
+            ReviewReqDTO.UpdateDTO dto
+    );
+
     // === Query 로직 (조회) ===
     ReviewResDTO.ReviewPreviewListDTO getReviewListByGalaxy(
             Long userId,

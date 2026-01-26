@@ -65,4 +65,19 @@ public class ReviewConverter {
                 .createdAt(review.getCreatedAt())
                 .build();
     }
+
+    /* ---------------------
+     * [UPDATE] 수정 관련 변환
+     * --------------------- */
+
+    public static ReviewResDTO.UpdateDTO toUpdateDTO(Review review) {
+        return ReviewResDTO.UpdateDTO.builder()
+                .reviewId(review.getId())
+                .resolutionId(review.getResolution().getId())
+                .resolutionContent(review.getResolution().getContent())
+                .reviewContent(review.getContent())
+                .isResolutionFulfilled(review.getIsResolutionFulfilled())
+                .updatedAt(review.getUpdatedAt())
+                .build();
+    }
 }

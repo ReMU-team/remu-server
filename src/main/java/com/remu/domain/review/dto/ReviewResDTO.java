@@ -31,4 +31,14 @@ public class ReviewResDTO {
             Boolean isResolutionFulfilled,
             LocalDateTime createdAt
     ) {}
+
+    @Builder
+    public record UpdateDTO(
+            Long reviewId,
+            Long resolutionId,
+            String resolutionContent,
+            String reviewContent,
+            Boolean isResolutionFulfilled,
+            LocalDateTime updatedAt
+    ) {}
 }
