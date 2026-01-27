@@ -1,6 +1,7 @@
 package com.remu.domain.star.service;
 
 import com.remu.domain.galaxy.entity.Galaxy;
+import com.remu.domain.galaxy.repository.GalaxyRepository;
 import com.remu.domain.star.dto.request.StarCreateRequest;
 import com.remu.domain.star.dto.response.StarResponseDto;
 import com.remu.domain.star.entity.Star;
