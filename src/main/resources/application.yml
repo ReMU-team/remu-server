@@ -4,3 +4,9 @@ spring:
   application:
     name: remu
 
+jwt:
+  token:
+    expiration:
+      access: 14400000
+
+
