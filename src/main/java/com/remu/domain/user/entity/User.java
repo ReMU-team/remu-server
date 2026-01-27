@@ -1,6 +1,7 @@
 package com.remu.domain.user.entity;
 
 import com.remu.domain.galaxy.entity.Galaxy;
+import com.remu.domain.user.enums.Role;
 import com.remu.domain.user.enums.SocialType;
 import com.remu.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -8,6 +9,8 @@ import lombok.*;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.remu.domain.user.enums.Role.USER;
 
 @Entity
 @Builder
@@ -50,6 +53,11 @@ public class User extends BaseEntity {
 
     @Column(name = "name", length = 15)
     private String name;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, length = 20)
+    @Builder.Default
+    private Role role = USER;
 
     // 연관 관계
     // 갤럭시 리스트
