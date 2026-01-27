@@ -66,6 +66,28 @@ public class ReviewServiceImpl implements ReviewService{
         return ReviewConverter.toCreateDTO(reviewRepository.save(review));
     }
 
+    @Override
+    public ReviewResDTO.UpdateDTO update(
+            Long userId,
+            Long reviewId,
+            ReviewReqDTO.UpdateDTO dto
+    ) {
+        // 1. 기존 회고 조회
+        // TODO: 향후 fetch 조인 적용 고려
+        Review review = reviewRepository.findById(reviewId)
+                .orElseThrow(() -> new ReviewException(ReviewErrorCode.NOT_FOUND));
+
+        // 2. 권한 검증
+        if (!review.getResolution().getGalaxy().getUser().getId().equals(userId)) {
+            throw new ReviewException(GeneralErrorCode.FORBIDDEN);
+        }
+
+        // 3. 수정(엔티티 메서드 호출)
+        review.update(dto.content(), dto.isResolutionFulfilled());
+
+        return ReviewConverter.toUpdateDTO(review);
+    }
+
     // === Query 로직 (조회) ===
     @Override
     @Transactional(readOnly = true)

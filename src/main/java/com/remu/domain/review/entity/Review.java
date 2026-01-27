@@ -25,4 +25,9 @@ public class Review extends BaseEntity {
 
     @Column(name = "is_resolution_fulfilled")
     private Boolean isResolutionFulfilled;
+
+    public void update(String content, Boolean isResolutionFulfilled) {
+        this.content = content;
+        this.isResolutionFulfilled = isResolutionFulfilled;
+    }
 }
