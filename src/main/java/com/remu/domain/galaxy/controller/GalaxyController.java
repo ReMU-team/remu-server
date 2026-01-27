@@ -15,13 +15,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/galaxies")
 public class GalaxyController implements GalaxyControllerDocs {
     private final GalaxyCommandService galaxyCommandService;
     private final GalaxyQueryService galaxyQueryService;
 
     // 1. 은하 생성
     // TODO 인증된 User 객체 넣기 @AuthenticationPrincipal
-    @PostMapping("/galaxies")
+    @PostMapping
     public ApiResponse<GalaxyResDTO.CreateDTO> createGalaxy(
             @RequestBody @Valid GalaxyReqDTO.GalaxyCreateDTO request) {
 
@@ -29,7 +30,7 @@ public class GalaxyController implements GalaxyControllerDocs {
     }
 
     // 2. 은하 상세 조회
-    @GetMapping("/galaxies/{galaxyId}")
+    @GetMapping("/{galaxyId}")
     public ApiResponse<GalaxyResDTO.DetailDTO> getGalaxyDetail(
             @PathVariable Long galaxyId) {
 
@@ -38,7 +39,7 @@ public class GalaxyController implements GalaxyControllerDocs {
     }
 
     // 3. 은하 전체 조회
-    @GetMapping("/galaxies")
+    @GetMapping
     public ApiResponse<GalaxyResDTO.SummaryListDTO> getGalaxyList(@RequestParam(defaultValue = "0") int page,
                                                                   @RequestParam(defaultValue = "10") int size){
 
@@ -50,7 +51,7 @@ public class GalaxyController implements GalaxyControllerDocs {
     }
 
     // 4. 은하 삭제
-    @DeleteMapping("/galaxies/{galaxyId}")
+    @DeleteMapping("/{galaxyId}")
     public ApiResponse<Void> deleteGalaxy(@PathVariable Long galaxyId) {
 
         galaxyCommandService.deleteGalaxy(galaxyId, getMockUser());
@@ -58,7 +59,7 @@ public class GalaxyController implements GalaxyControllerDocs {
     }
 
     // 5. 은하 수정
-    @PatchMapping("/galaxies/{galaxyId}")
+    @PatchMapping("/{galaxyId}")
     public ApiResponse<Void> updateGalaxy(
             @PathVariable Long galaxyId,
             @RequestBody GalaxyReqDTO.GalaxyUpdateDTO request

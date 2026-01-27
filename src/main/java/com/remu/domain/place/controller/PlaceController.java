@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/places")
+@RequestMapping("/api/v1/places")
 public class PlaceController {
     private final PlaceQueryService placeQueryService;
 
