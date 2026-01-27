@@ -46,4 +46,18 @@ public class Star extends BaseEntity {
     @Column(name = "emoji_name")
     @Builder.Default
     private List<String> emojis = new ArrayList<>();
+
+    // 수정 메서드
+    public void update(String title, String content, LocalDate recordDate, String cardColor, List<String> emojis) {
+        this.title = title;
+        this.content = content;
+        this.recordDate = recordDate;
+        this.cardColor = cardColor;
+        this.emojis = emojis;
+    }
+
+    // 이미지 URL 업데이트 메서드
+    public void updateImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
 }
