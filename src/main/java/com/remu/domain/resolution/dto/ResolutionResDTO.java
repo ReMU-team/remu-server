@@ -18,6 +18,7 @@ public class ResolutionResDTO {
             LocalDateTime createdAt
     ) {}
 
+    // 다짐 생성 요청 배치 처리
     @Builder
     public record BatchCreateDTO(
             String emojiId,
@@ -35,6 +36,7 @@ public class ResolutionResDTO {
     // 다짐 조회 DTO
     @Builder
     public record ResolutionPreviewListDTO(
+        String emojiId,
         List<ResolutionPreviewDTO> resolutionList,
         Integer listSize
     ) {}

@@ -162,10 +162,13 @@ public class ResolutionServiceImpl implements ResolutionService {
             throw new ResolutionException(GeneralErrorCode.FORBIDDEN);
         }
 
-        // 3. Repository 통한 데이터 조회
+        // 3. 이모지 정보 획득
+        String resolutionEmojiId = galaxy.getResolutionEmojiId();
+
+        // 4. Repository 통한 데이터 조회
         List<Resolution> resolutions = resolutionRepository.findAllByGalaxyId(galaxyId);
 
-        // 4. Converter를 이용한 반환
-        return ResolutionConverter.toResolutionPreviewListDTO(resolutions);
+        // 5. Converter를 이용한 반환
+        return ResolutionConverter.toResolutionPreviewListDTO(resolutions, resolutionEmojiId);
     }
 }

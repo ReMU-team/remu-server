@@ -72,9 +72,10 @@ public class ResolutionConverter {
      * --------------------- */
 
     public static ResolutionResDTO.ResolutionPreviewListDTO toResolutionPreviewListDTO(
-            List<Resolution> resolutions
+            List<Resolution> resolutions, String emojiId
     ) {
         return ResolutionResDTO.ResolutionPreviewListDTO.builder()
+                .emojiId(emojiId)
                 .resolutionList(resolutions.stream()
                         .map(ResolutionConverter::toResolutionPreviewDTO)
                         .toList()
