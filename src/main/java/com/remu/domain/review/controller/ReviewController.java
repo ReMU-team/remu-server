@@ -19,12 +19,23 @@ public class ReviewController implements ReviewControllerDocs {
 
     @Override
     @PostMapping("/resolutions/{resolutionId}/reviews")
-    public ApiResponse<ReviewResDTO.CreateDTO> createReview(
+    public ApiResponse<ReviewResDTO.ReviewCreateDTO> createReview(
             @RequestParam Long userId,
             @PathVariable Long resolutionId,
             @Valid @RequestBody ReviewReqDTO.CreateDTO dto
     ) {
-        ReviewResDTO.CreateDTO result = reviewService.create(userId, resolutionId, dto);
+        ReviewResDTO.ReviewCreateDTO result = reviewService.create(userId, resolutionId, dto);
+        return ApiResponse.onSuccess(ReviewSuccessCode.CREATE, result);
+    }
+
+    @PostMapping("/galaxies/{galaxyId}/reviews/batch")
+    @Override
+    public ApiResponse<ReviewResDTO.ReviewBatchCreateDTO> createReviewBatch(
+            @RequestParam Long userId,
+            @PathVariable Long galaxyId,
+            @Valid @RequestBody ReviewReqDTO.BatchReviewCreateDTO dto
+    ) {
+        ReviewResDTO.ReviewBatchCreateDTO result = reviewService.batchCreate(userId, galaxyId, dto);
         return ApiResponse.onSuccess(ReviewSuccessCode.CREATE, result);
     }
 

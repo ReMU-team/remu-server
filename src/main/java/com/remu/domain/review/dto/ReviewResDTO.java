@@ -7,11 +7,32 @@ import java.util.List;
 
 public class ReviewResDTO {
 
+    // 단일 생성
     @Builder
-    public record CreateDTO(
+    public record ReviewCreateDTO(
             Long resolutionId,
             Long reviewId,
             String content,
+            Boolean isResolutionFulfilled,
+            LocalDateTime createdAt
+    ) {}
+
+    // 배치 생성
+    @Builder
+    public record ReviewBatchCreateDTO(
+            String reviewEmojiId,
+            String resolutionEmojiId,
+            String reflection,
+            List<SingleReviewDTO> reviews
+
+    ) {}
+
+    @Builder
+    public record SingleReviewDTO(
+            Long resolutionId,
+            String resolutionContent,
+            Long reviewId,
+            String reviewContent,
             Boolean isResolutionFulfilled,
             LocalDateTime createdAt
     ) {}

@@ -12,21 +12,35 @@ public interface ReviewControllerDocs {
 
     @Operation(
             summary = "리뷰를 생성하는 API by 매튜/진현준",
-            description = "리뷰를 생성하는 API입니다. 생성 과정에 userId, resolutionId를 통해 유효한 사용자인지 검증합니다."
+            description = "리뷰를 생성하는 API입니다."
     )
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
     })
-    ApiResponse<ReviewResDTO.CreateDTO> createReview(
+    ApiResponse<ReviewResDTO.ReviewCreateDTO> createReview(
             @RequestParam Long userId,
             @PathVariable Long resolutionId,
             @Valid @RequestBody ReviewReqDTO.CreateDTO dto
     );
 
     @Operation(
+            summary = "리뷰 배치 생성 API by 매튜/진현준",
+            description = "리뷰 배치 생성 API입니다."
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
+    })
+    ApiResponse<ReviewResDTO.ReviewBatchCreateDTO> createReviewBatch(
+            @RequestParam Long userId,
+            @PathVariable Long galaxyId,
+            @Valid @RequestBody ReviewReqDTO.BatchReviewCreateDTO dto
+    );
+
+    @Operation(
             summary = "리뷰를 조회하는 API by 매튜/진현준",
-            description = "리뷰를 조회하는 API입니다. 생성 과정에 userId, galaxyId를 통해 유효한 사용자인지 검증합니다."
+            description = "리뷰를 조회하는 API입니다. "
     )
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),

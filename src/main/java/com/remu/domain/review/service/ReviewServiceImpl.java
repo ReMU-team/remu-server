@@ -34,7 +34,7 @@ public class ReviewServiceImpl implements ReviewService{
     // === Command 로직 (상태 변경) ===
 
     @Override
-    public ReviewResDTO.CreateDTO create(
+    public ReviewResDTO.ReviewCreateDTO create(
             Long userId,
             Long resolutionId,
             ReviewReqDTO.CreateDTO dto
@@ -64,6 +64,49 @@ public class ReviewServiceImpl implements ReviewService{
 
         // 이후 저장
         return ReviewConverter.toCreateDTO(reviewRepository.save(review));
+    }
+
+    // 회고 배치 생성
+    @Override
+    public ReviewResDTO.ReviewBatchCreateDTO batchCreate(
+            Long userId,
+            Long galaxyId,
+            ReviewReqDTO.BatchReviewCreateDTO dto
+    ) {
+        // 1. 은하 조회
+
+        Galaxy galaxy = galaxyRepository.findById(galaxyId)
+                .orElseThrow(() -> new ResolutionException(GeneralErrorCode.NOT_FOUND));
+
+        // 2. 권한 검증(유저 ID 대조)
+        if (!galaxy.getUser().getId().equals(userId)) {
+            throw new ResolutionException(GeneralErrorCode.FORBIDDEN);
+        }
+
+        // 3. 여행 후기 및 이모지 저장
+        galaxy.updateReviewEmoji(dto.emojiId());
+        galaxy.updateReflection(dto.reflection());
+
+        // 4. 리스트 순회하며 회고 정보 업데이트
+        List<Review> reviews = dto.reviews().stream()
+                .map(item -> {
+                    // 회고 대상 다짐 조회
+                    Resolution resolution = resolutionRepository.findById(item.resolutionId())
+                            .orElseThrow(() -> new ReviewException(ReviewErrorCode.NOT_FOUND));
+
+                    // 해당 다짐이 이 은하 소속인지 확인
+                    if (! resolution.getGalaxy().getId().equals(galaxyId)) {
+                        throw new ResolutionException(GeneralErrorCode.FORBIDDEN);
+                    }
+
+                    // review 엔티티 생성(Resolution과 1:1 매핑)
+                    return ReviewConverter.toReviewFromBatch(resolution, item);
+                })
+                .toList();
+
+        // 5. 모든 회고 데이터 일괄 저장
+        List<Review> savedReviews = reviewRepository.saveAll(reviews);
+        return ReviewConverter.toBatchCreateResDTO(galaxy, savedReviews);
     }
 
     @Override
