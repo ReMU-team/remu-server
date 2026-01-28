@@ -1,5 +1,6 @@
 package com.remu.domain.review.controller;
 
+import com.remu.domain.resolution.repository.ResolutionRepository;
 import com.remu.domain.review.dto.ReviewReqDTO;
 import com.remu.domain.review.dto.ReviewResDTO;
 import com.remu.domain.review.exception.code.ReviewSuccessCode;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 public class ReviewController implements ReviewControllerDocs {
 
     private final ReviewService reviewService;
+    private final ResolutionRepository resolutionRepository;
 
     @Override
     @PostMapping("/resolutions/{resolutionId}/reviews")
@@ -36,4 +38,17 @@ public class ReviewController implements ReviewControllerDocs {
         ReviewResDTO.ReviewPreviewListDTO result = reviewService.getReviewListByGalaxy(userId, galaxyId);
         return ApiResponse.onSuccess(ReviewSuccessCode.FOUND, result);
     }
+
+    // 리뷰 수정
+    @Override
+    @PatchMapping("/reviews/{reviewId}")
+    public ApiResponse<ReviewResDTO.UpdateDTO> updateReview(
+            @RequestParam Long userId,
+            @PathVariable Long reviewId,
+            @Valid @RequestBody ReviewReqDTO.UpdateDTO dto
+    ) {
+        ReviewResDTO.UpdateDTO result = reviewService.update(userId, reviewId, dto);
+        return ApiResponse.onSuccess(ReviewSuccessCode.UPDATE, result);
+    }
+
 }
