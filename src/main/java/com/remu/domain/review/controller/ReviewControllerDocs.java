@@ -65,4 +65,18 @@ public interface ReviewControllerDocs {
             @PathVariable Long reviewId,
             @Valid @RequestBody ReviewReqDTO.UpdateDTO dto
     );
+
+    @Operation(
+            summary = "리뷰 배치 수정 API by 매튜/진현준",
+            description = "리뷰 배치 수정 API입니다."
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
+    })
+    ApiResponse<ReviewResDTO.ReviewBatchUpdateDTO> updateReviewBatch(
+            @RequestParam Long userId,
+            @PathVariable Long galaxyId,
+            @Valid @RequestBody ReviewReqDTO.BatchReviewUpdateDTO dto
+    );
 }

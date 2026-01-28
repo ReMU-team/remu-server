@@ -62,4 +62,15 @@ public class ReviewController implements ReviewControllerDocs {
         return ApiResponse.onSuccess(ReviewSuccessCode.UPDATE, result);
     }
 
+    @PatchMapping("/galaxies/{galaxyId}/reviews/batch")
+    @Override
+    public ApiResponse<ReviewResDTO.ReviewBatchUpdateDTO> updateReviewBatch(
+            @RequestParam Long userId,
+            @PathVariable Long galaxyId,
+            @Valid @RequestBody ReviewReqDTO.BatchReviewUpdateDTO dto
+    ) {
+        ReviewResDTO.ReviewBatchUpdateDTO result = reviewService.batchUpdate(userId, galaxyId, dto);
+
+        return ApiResponse.onSuccess(ReviewSuccessCode.UPDATE, result);
+    }
 }

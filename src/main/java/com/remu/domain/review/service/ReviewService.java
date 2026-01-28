@@ -23,6 +23,13 @@ public interface ReviewService {
             ReviewReqDTO.UpdateDTO dto
     );
 
+    // 리뷰 배치 업데이트
+    ReviewResDTO.ReviewBatchUpdateDTO batchUpdate(
+            Long userId,
+            Long galaxyId,
+            ReviewReqDTO.BatchReviewUpdateDTO dto
+    );
+
     // === Query 로직 (조회) ===
     ReviewResDTO.ReviewPreviewListDTO getReviewListByGalaxy(
             Long userId,

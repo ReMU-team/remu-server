@@ -37,6 +37,8 @@ public class ReviewResDTO {
             LocalDateTime createdAt
     ) {}
 
+    // 다짐 조회
+
     @Builder
     public record ReviewPreviewListDTO(
             List<ReviewPreviewDTO> reviewList,
@@ -53,11 +55,32 @@ public class ReviewResDTO {
             LocalDateTime createdAt
     ) {}
 
+    // 회고 단일 수정
+
     @Builder
     public record UpdateDTO(
             Long reviewId,
             Long resolutionId,
             String resolutionContent,
+            String reviewContent,
+            Boolean isResolutionFulfilled,
+            LocalDateTime updatedAt
+    ) {}
+
+    // 회고 배치 수정
+    @Builder
+    public record ReviewBatchUpdateDTO(
+            String reviewEmojiId,
+            String resolutionEmojiId,
+            String reflection,
+            List<SingleReviewUpdateDTO> reviews
+    ) {}
+
+    @Builder
+    public record SingleReviewUpdateDTO(
+            Long resolutionId,
+            String resolutionContent,
+            Long reviewId,
             String reviewContent,
             Boolean isResolutionFulfilled,
             LocalDateTime updatedAt

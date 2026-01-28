@@ -109,6 +109,8 @@ public class ReviewServiceImpl implements ReviewService{
         return ReviewConverter.toBatchCreateResDTO(galaxy, savedReviews);
     }
 
+    // 리뷰 단일 업데이트
+
     @Override
     public ReviewResDTO.UpdateDTO update(
             Long userId,
@@ -129,6 +131,48 @@ public class ReviewServiceImpl implements ReviewService{
         review.update(dto.content(), dto.isResolutionFulfilled());
 
         return ReviewConverter.toUpdateDTO(review);
+    }
+
+    // 리뷰 배치 업데이트
+    @Override
+    public ReviewResDTO.ReviewBatchUpdateDTO batchUpdate(
+            Long userId,
+            Long galaxyId,
+            ReviewReqDTO.BatchReviewUpdateDTO dto
+    ) {
+        // 1. 은하 조회
+
+        Galaxy galaxy = galaxyRepository.findById(galaxyId)
+                .orElseThrow(() -> new ResolutionException(GeneralErrorCode.NOT_FOUND));
+
+        // 2. 권한 검증(유저 ID 대조)
+        if (!galaxy.getUser().getId().equals(userId)) {
+            throw new ResolutionException(GeneralErrorCode.FORBIDDEN);
+        }
+
+        // 3. 여행 후기 및 이모지 저장
+        galaxy.updateReviewEmoji(dto.emojiId());
+        galaxy.updateReflection(dto.reflection());
+
+        // 4. 리스트 순회하며 회고 정보 업데이트
+        List<Review> updatedReviews = dto.reviews().stream()
+                .map(item -> {
+                    Review review = reviewRepository.findById(item.reviewId())
+                            .orElseThrow(() -> new ReviewException(ReviewErrorCode.NOT_FOUND));
+
+                    // 보안 검증: 현재 은하의 회고가 맞는지
+                    if (!review.getResolution().getGalaxy().getId().equals(galaxyId)) {
+                        throw new ResolutionException(GeneralErrorCode.FORBIDDEN);
+                    }
+
+                    // 데이터 업데이트
+                    review.update(item.reviewContent(), item.isResolutionFulfilled());
+
+                    return review;
+                })
+                .toList();
+
+        return ReviewConverter.toBatchUpdateResDTO(galaxy, updatedReviews);
     }
 
     // === Query 로직 (조회) ===
