@@ -24,6 +24,13 @@ public interface ResolutionService {
             ResolutionReqDTO.UpdateDTO dto
     );
 
+    // 배치 다짐 수정
+    ResolutionResDTO.BatchCreateDTO batchUpdate(
+            Long userId,
+            Long galaxyId,
+            ResolutionReqDTO.BatchUpdateDTO dto
+    );
+
     // === Query 로직 (조회) ===
     ResolutionResDTO.ResolutionPreviewListDTO findResolutions(
             Long userId, Long galaxyId

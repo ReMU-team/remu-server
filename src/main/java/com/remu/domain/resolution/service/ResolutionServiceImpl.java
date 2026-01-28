@@ -27,6 +27,8 @@ public class ResolutionServiceImpl implements ResolutionService {
     private final GalaxyRepository galaxyRepository;
 
     // === Command 로직 (상태 변경) ===
+
+    // 단일 다짐 생성
     @Override
     public ResolutionResDTO.CreateDTO create(
             Long userId,
@@ -54,6 +56,7 @@ public class ResolutionServiceImpl implements ResolutionService {
         return ResolutionConverter.toCreateDTO(saved);
     }
 
+    // 다짐 배치 생성
     @Override
     public ResolutionResDTO.BatchCreateDTO batchCreate(
             Long userId,
@@ -85,6 +88,7 @@ public class ResolutionServiceImpl implements ResolutionService {
 
     }
 
+    // 단일 다짐 수정
     @Override
     public ResolutionResDTO.UpdateDTO update(
             Long userId,
@@ -105,6 +109,42 @@ public class ResolutionServiceImpl implements ResolutionService {
         resolution.updateContent(dto.content());
 
         return ResolutionConverter.toUpdateDTO(resolution);
+    }
+
+    // 배치 다짐 수정
+    @Override
+    public ResolutionResDTO.BatchCreateDTO batchUpdate(
+            Long userId,
+            Long galaxyId,
+            ResolutionReqDTO.BatchUpdateDTO dto
+    ) {
+        // 1. 은하 조회
+        Galaxy galaxy = galaxyRepository.findById(galaxyId)
+                .orElseThrow(() -> new ResolutionException(GeneralErrorCode.NOT_FOUND));
+
+        // 2. 권한 검증(유저 ID 대조)
+        if (!galaxy.getUser().getId().equals(userId)) {
+            throw new ResolutionException(GeneralErrorCode.FORBIDDEN);
+        }
+
+        // 3. 이모지 업데이트
+        galaxy.updateResolutionEmoji(dto.emojiId());
+
+        // 4. 다짐 리스트 순회하며 업데이트
+        List<Resolution> updatedResolutions = dto.resolutions().stream()
+                .map(item -> {
+                    Resolution resolution = resolutionRepository.findById(item.resolutionId())
+                            .orElseThrow(() -> new ResolutionException(ResolutionErrorCode.NOT_FOUND));
+
+                    if (!resolution.getGalaxy().getId().equals(galaxyId)) {
+                        throw new ResolutionException(GeneralErrorCode.FORBIDDEN);
+                    }
+
+                    resolution.updateContent(item.content());
+                    return resolution;
+                })
+                .toList();
+        return ResolutionConverter.toBatchCreateDTO(galaxy, updatedResolutions);
     }
 
     // === Query 로직 (조회) ===

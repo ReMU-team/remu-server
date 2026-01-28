@@ -18,7 +18,7 @@ public interface ResolutionControllerDocs {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
     })
-    ApiResponse<ResolutionResDTO.CreateDTO> create(
+    ApiResponse<ResolutionResDTO.CreateDTO> createResolution(
             @RequestParam Long userId,
             @PathVariable Long galaxyId,
             ResolutionReqDTO.CreateDTO dto
@@ -33,7 +33,7 @@ public interface ResolutionControllerDocs {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
     })
-    ApiResponse<ResolutionResDTO.BatchCreateDTO> createBatch(
+    ApiResponse<ResolutionResDTO.BatchCreateDTO> createResolutionBatch(
             @RequestParam Long userId,
             @PathVariable Long galaxyId,
             @Valid @RequestBody ResolutionReqDTO.BatchCreateDTO dto
@@ -56,7 +56,7 @@ public interface ResolutionControllerDocs {
     // 다짐 수정
 
     @Operation(
-            summary = "다짐 목록들을 수정하는 API by 매튜/진현준",
+            summary = "다짐 목록을 수정하는 API by 매튜/진현준",
             description = "다짐을 수정하는 API입니다."
     )
     @ApiResponses({
@@ -67,5 +67,21 @@ public interface ResolutionControllerDocs {
             @RequestParam Long userId,
             @PathVariable Long resolutionId,
             @RequestBody ResolutionReqDTO.UpdateDTO dto
+    );
+
+    // 다짐 배치 수정
+    @Operation(
+            summary = "다짐 목록들을 배치 처리해 수정하는 API by 매튜/진현준",
+            description = "다짐들을 배치 처리해 수정하는 API입니다."
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
+    })
+    @PatchMapping("/galaxies/{galaxyId}/resolutions/batch")
+    ApiResponse<ResolutionResDTO.BatchCreateDTO> updateResolutionBatch(
+            @RequestParam Long userId,
+            @PathVariable Long galaxyId,
+            @Valid @RequestBody ResolutionReqDTO.BatchUpdateDTO dto
     );
 }

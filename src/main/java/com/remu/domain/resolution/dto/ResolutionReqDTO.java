@@ -1,9 +1,12 @@
 package com.remu.domain.resolution.dto;
 
 import com.remu.domain.galaxy.entity.Galaxy;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.extern.java.Log;
 
 import java.util.List;
 
@@ -34,6 +37,24 @@ public class ResolutionReqDTO {
 
     // 다짐 수정 DTO
     public record UpdateDTO(
+            String content
+    ) {}
+
+    // 다짐 수정 배치 DTO
+    public record BatchUpdateDTO(
+            @NotBlank(message = "이모지 선택은 필수입니다.")
+            String emojiId,
+
+            @NotEmpty(message = "수정할 다짐 리스트가 비어있습니다.")
+            List<@Valid UpdateItemDTO> resolutions
+    ) {}
+
+    public record UpdateItemDTO(
+            @NotNull(message = "다짐 ID는 필수입니다.")
+            Long resolutionId,
+
+            @NotBlank(message = "내용은 비어있을 수 없습니다.")
+            @Size(max = 100, message = "내용은 100자 이내여야 합니다.")
             String content
     ) {}
 }
