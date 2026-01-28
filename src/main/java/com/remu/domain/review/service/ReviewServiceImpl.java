@@ -37,7 +37,7 @@ public class ReviewServiceImpl implements ReviewService{
     public ReviewResDTO.ReviewCreateDTO create(
             Long userId,
             Long resolutionId,
-            ReviewReqDTO.CreateDTO dto
+            ReviewReqDTO.ReviewCreateDTO dto
     ) {
 
         // 1. 대상 다짐 조회
@@ -112,10 +112,10 @@ public class ReviewServiceImpl implements ReviewService{
     // 리뷰 단일 업데이트
 
     @Override
-    public ReviewResDTO.UpdateDTO update(
+    public ReviewResDTO.ReviewUpdateDTO update(
             Long userId,
             Long reviewId,
-            ReviewReqDTO.UpdateDTO dto
+            ReviewReqDTO.ReviewUpdateDTO dto
     ) {
         // 1. 기존 회고 조회
         // TODO: 향후 fetch 조인 적용 고려
@@ -195,7 +195,7 @@ public class ReviewServiceImpl implements ReviewService{
         // 3. 데이터 조회(N+1 문제 방지 코드)
         List<Review> reviews = reviewRepository.findAllByGalaxyId(galaxyId);
 
-        return ReviewConverter.toReviewPreviewListDTO(reviews);
+        return ReviewConverter.toReviewPreviewListDTO(galaxy ,reviews);
 
     }
 }

@@ -30,10 +30,10 @@ public class ResolutionServiceImpl implements ResolutionService {
 
     // 단일 다짐 생성
     @Override
-    public ResolutionResDTO.CreateDTO create(
+    public ResolutionResDTO.ResolutionCreateDTO create(
             Long userId,
             Long galaxyId,
-            ResolutionReqDTO.CreateDTO dto
+            ResolutionReqDTO.ResolutionCreateDTO dto
     ) {
         // 1. 은하 조회
         Galaxy galaxy = galaxyRepository.findById(galaxyId)
@@ -58,10 +58,10 @@ public class ResolutionServiceImpl implements ResolutionService {
 
     // 다짐 배치 생성
     @Override
-    public ResolutionResDTO.BatchCreateDTO batchCreate(
+    public ResolutionResDTO.ResolutionBatchCreateDTO batchCreate(
             Long userId,
             Long galaxyId,
-            ResolutionReqDTO.BatchCreateDTO dto
+            ResolutionReqDTO.ResolutionBatchCreateDTO dto
     ) {
         // 1. 은하 조회
 
@@ -91,10 +91,10 @@ public class ResolutionServiceImpl implements ResolutionService {
 
     // 단일 다짐 수정
     @Override
-    public ResolutionResDTO.UpdateDTO update(
+    public ResolutionResDTO.ResolutionUpdateDTO update(
             Long userId,
             Long resolutionId,
-            ResolutionReqDTO.UpdateDTO dto
+            ResolutionReqDTO.ResolutionUpdateDTO dto
     ) {
 
         // 1. 수정할 다짐 찾기
@@ -114,10 +114,10 @@ public class ResolutionServiceImpl implements ResolutionService {
 
     // 배치 다짐 수정
     @Override
-    public ResolutionResDTO.BatchCreateDTO batchUpdate(
+    public ResolutionResDTO.ResolutionBatchCreateDTO batchUpdate(
             Long userId,
             Long galaxyId,
-            ResolutionReqDTO.BatchUpdateDTO dto
+            ResolutionReqDTO.ResolutionBatchUpdateDTO dto
     ) {
         // 1. 은하 조회
         Galaxy galaxy = galaxyRepository.findById(galaxyId)

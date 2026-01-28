@@ -18,24 +18,24 @@ public class ResolutionController implements ResolutionControllerDocs{
     // 다짐 생성
     @Override
     @PostMapping("/galaxies/{galaxyId}/resolutions")
-    public ApiResponse<ResolutionResDTO.CreateDTO> createResolution (
+    public ApiResponse<ResolutionResDTO.ResolutionCreateDTO> createResolution (
             @RequestParam Long userId,
             @PathVariable Long galaxyId,
-            @Valid @RequestBody ResolutionReqDTO.CreateDTO dto
+            @Valid @RequestBody ResolutionReqDTO.ResolutionCreateDTO dto
     ) {
-        ResolutionResDTO.CreateDTO result = resolutionService.create(userId, galaxyId, dto);
+        ResolutionResDTO.ResolutionCreateDTO result = resolutionService.create(userId, galaxyId, dto);
         return ApiResponse.onSuccess(ResolutionSuccessCode.CREATE, result);
     }
 
     // 다짐 배치 생성
     @Override
     @PostMapping("/galaxies/{galaxyId}/resolutions/batch")
-    public ApiResponse<ResolutionResDTO.BatchCreateDTO> createResolutionBatch(
+    public ApiResponse<ResolutionResDTO.ResolutionBatchCreateDTO> createResolutionBatch(
             @RequestParam Long userId,
             @PathVariable Long galaxyId,
-            @Valid @RequestBody ResolutionReqDTO.BatchCreateDTO dto
+            @Valid @RequestBody ResolutionReqDTO.ResolutionBatchCreateDTO dto
     ) {
-        ResolutionResDTO.BatchCreateDTO result = resolutionService.batchCreate(userId, galaxyId, dto);
+        ResolutionResDTO.ResolutionBatchCreateDTO result = resolutionService.batchCreate(userId, galaxyId, dto);
         return ApiResponse.onSuccess(ResolutionSuccessCode.CREATE, result);
     }
 
@@ -53,24 +53,24 @@ public class ResolutionController implements ResolutionControllerDocs{
     // 다짐 수정
     @PatchMapping("/resolutions/{resolutionId}")
     @Override
-    public ApiResponse<ResolutionResDTO.UpdateDTO> updateResolution(
+    public ApiResponse<ResolutionResDTO.ResolutionUpdateDTO> updateResolution(
             @RequestParam Long userId,
             @PathVariable Long resolutionId,
-            @RequestBody ResolutionReqDTO.UpdateDTO dto
+            @RequestBody ResolutionReqDTO.ResolutionUpdateDTO dto
     ) {
-        ResolutionResDTO.UpdateDTO result = resolutionService.update(userId, resolutionId, dto);
+        ResolutionResDTO.ResolutionUpdateDTO result = resolutionService.update(userId, resolutionId, dto);
         return ApiResponse.onSuccess(ResolutionSuccessCode.UPDATE, result);
     }
 
     // 다짐 배치 수정
     @PatchMapping("/galaxies/{galaxyId}/resolutions/batch")
     @Override
-    public ApiResponse<ResolutionResDTO.BatchCreateDTO> updateResolutionBatch(
+    public ApiResponse<ResolutionResDTO.ResolutionBatchCreateDTO> updateResolutionBatch(
             @RequestParam Long userId,
             @PathVariable Long galaxyId,
-            @Valid @RequestBody ResolutionReqDTO.BatchUpdateDTO dto
+            @Valid @RequestBody ResolutionReqDTO.ResolutionBatchUpdateDTO dto
     ) {
-        ResolutionResDTO.BatchCreateDTO result = resolutionService.batchUpdate(userId, galaxyId, dto);
+        ResolutionResDTO.ResolutionBatchCreateDTO result = resolutionService.batchUpdate(userId, galaxyId, dto);
         return ApiResponse.onSuccess(ResolutionSuccessCode.UPDATE, result);
     }
 }

@@ -4,7 +4,6 @@ import com.remu.domain.galaxy.entity.Galaxy;
 import com.remu.domain.resolution.dto.ResolutionReqDTO;
 import com.remu.domain.resolution.dto.ResolutionResDTO;
 import com.remu.domain.resolution.entity.Resolution;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -15,10 +14,10 @@ public class ResolutionConverter {
      * --------------------- */
 
     // Entity -> DTO
-    public static ResolutionResDTO.CreateDTO toCreateDTO(
+    public static ResolutionResDTO.ResolutionCreateDTO toCreateDTO(
             Resolution resolution
     ) {
-        return ResolutionResDTO.CreateDTO.builder()
+        return ResolutionResDTO.ResolutionCreateDTO.builder()
                 .resolutionId(resolution.getId())
                 .content(resolution.getContent())
                 .emojiId(resolution.getGalaxy().getResolutionEmojiId())
@@ -28,7 +27,7 @@ public class ResolutionConverter {
 
     // DTO -> Entity
     public static Resolution toResolution(
-            ResolutionReqDTO.CreateDTO dto, Galaxy galaxy
+            ResolutionReqDTO.ResolutionCreateDTO dto, Galaxy galaxy
     ) {
         return Resolution.builder()
                 .galaxy(galaxy)
@@ -49,7 +48,7 @@ public class ResolutionConverter {
     }
 
     // Entity -> DTO
-    public static ResolutionResDTO.BatchCreateDTO toBatchCreateDTO(
+    public static ResolutionResDTO.ResolutionBatchCreateDTO toBatchCreateDTO(
             Galaxy galaxy,
             List<Resolution> resolutions
     ) {
@@ -61,7 +60,7 @@ public class ResolutionConverter {
                         .build())
                 .toList();
 
-        return ResolutionResDTO.BatchCreateDTO.builder()
+        return ResolutionResDTO.ResolutionBatchCreateDTO.builder()
                 .emojiId(galaxy.getResolutionEmojiId())
                 .illustId(galaxy.getResolutionIllustId())
                 .resolutions(list)
@@ -100,8 +99,8 @@ public class ResolutionConverter {
      * [UPDATE] 수정 관련 변환
      * --------------------- */
 
-    public static ResolutionResDTO.UpdateDTO toUpdateDTO(Resolution resolution) {
-        return ResolutionResDTO.UpdateDTO.builder()
+    public static ResolutionResDTO.ResolutionUpdateDTO toUpdateDTO(Resolution resolution) {
+        return ResolutionResDTO.ResolutionUpdateDTO.builder()
                 .resolutionId(resolution.getId())
                 .content(resolution.getContent())
                 .updatedAt(resolution.getUpdatedAt())

@@ -21,7 +21,7 @@ public interface ReviewControllerDocs {
     ApiResponse<ReviewResDTO.ReviewCreateDTO> createReview(
             @RequestParam Long userId,
             @PathVariable Long resolutionId,
-            @Valid @RequestBody ReviewReqDTO.CreateDTO dto
+            @Valid @RequestBody ReviewReqDTO.ReviewCreateDTO dto
     );
 
     @Operation(
@@ -60,10 +60,10 @@ public interface ReviewControllerDocs {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
     })
-    ApiResponse<ReviewResDTO.UpdateDTO> updateReview(
+    ApiResponse<ReviewResDTO.ReviewUpdateDTO> updateReview(
             @RequestParam Long userId,
             @PathVariable Long reviewId,
-            @Valid @RequestBody ReviewReqDTO.UpdateDTO dto
+            @Valid @RequestBody ReviewReqDTO.ReviewUpdateDTO dto
     );
 
     @Operation(

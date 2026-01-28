@@ -29,7 +29,7 @@ public class ReviewConverter {
 
     // DTO -> Entity
     public static Review toReview(
-            ReviewReqDTO.CreateDTO dto, Resolution resolution
+            ReviewReqDTO.ReviewCreateDTO dto, Resolution resolution
     ) {
         return Review.builder()
                 .resolution(resolution)
@@ -85,9 +85,13 @@ public class ReviewConverter {
      * --------------------- */
 
     public static ReviewResDTO.ReviewPreviewListDTO toReviewPreviewListDTO(
+            Galaxy galaxy,
             List<Review> reviews
     ) {
         return ReviewResDTO.ReviewPreviewListDTO.builder()
+                .reviewEmojiId(galaxy.getReviewEmojiId())
+                .resolutionEmojiId(galaxy.getResolutionEmojiId())
+                .reflection(galaxy.getReflection())
                 .reviewList(reviews.stream()
                         .map(ReviewConverter::toReviewPreviewDTO)
                         .toList()
@@ -113,8 +117,8 @@ public class ReviewConverter {
      * [UPDATE] 단일 수정 관련 변환
      * --------------------- */
 
-    public static ReviewResDTO.UpdateDTO toUpdateDTO(Review review) {
-        return ReviewResDTO.UpdateDTO.builder()
+    public static ReviewResDTO.ReviewUpdateDTO toUpdateDTO(Review review) {
+        return ReviewResDTO.ReviewUpdateDTO.builder()
                 .reviewId(review.getId())
                 .resolutionId(review.getResolution().getId())
                 .resolutionContent(review.getResolution().getContent())

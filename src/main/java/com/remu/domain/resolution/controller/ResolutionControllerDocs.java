@@ -18,10 +18,10 @@ public interface ResolutionControllerDocs {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
     })
-    ApiResponse<ResolutionResDTO.CreateDTO> createResolution(
+    ApiResponse<ResolutionResDTO.ResolutionCreateDTO> createResolution(
             @RequestParam Long userId,
             @PathVariable Long galaxyId,
-            ResolutionReqDTO.CreateDTO dto
+            ResolutionReqDTO.ResolutionCreateDTO dto
     );
 
     // 다짐 배치 생성
@@ -33,10 +33,10 @@ public interface ResolutionControllerDocs {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
     })
-    ApiResponse<ResolutionResDTO.BatchCreateDTO> createResolutionBatch(
+    ApiResponse<ResolutionResDTO.ResolutionBatchCreateDTO> createResolutionBatch(
             @RequestParam Long userId,
             @PathVariable Long galaxyId,
-            @Valid @RequestBody ResolutionReqDTO.BatchCreateDTO dto
+            @Valid @RequestBody ResolutionReqDTO.ResolutionBatchCreateDTO dto
     );
 
     @Operation(
@@ -63,10 +63,10 @@ public interface ResolutionControllerDocs {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
     })
-    ApiResponse<ResolutionResDTO.UpdateDTO> updateResolution(
+    ApiResponse<ResolutionResDTO.ResolutionUpdateDTO> updateResolution(
             @RequestParam Long userId,
             @PathVariable Long resolutionId,
-            @RequestBody ResolutionReqDTO.UpdateDTO dto
+            @RequestBody ResolutionReqDTO.ResolutionUpdateDTO dto
     );
 
     // 다짐 배치 수정
@@ -79,9 +79,9 @@ public interface ResolutionControllerDocs {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
     })
     @PatchMapping("/galaxies/{galaxyId}/resolutions/batch")
-    ApiResponse<ResolutionResDTO.BatchCreateDTO> updateResolutionBatch(
+    ApiResponse<ResolutionResDTO.ResolutionBatchCreateDTO> updateResolutionBatch(
             @RequestParam Long userId,
             @PathVariable Long galaxyId,
-            @Valid @RequestBody ResolutionReqDTO.BatchUpdateDTO dto
+            @Valid @RequestBody ResolutionReqDTO.ResolutionBatchUpdateDTO dto
     );
 }

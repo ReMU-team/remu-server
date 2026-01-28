@@ -11,7 +11,7 @@ public class ResolutionResDTO {
 
     // 다짐 생성 요청에 대한 응답 결과
     @Builder
-    public record CreateDTO(
+    public record ResolutionCreateDTO(
             Long resolutionId,
             String content,
             String emojiId,
@@ -20,7 +20,7 @@ public class ResolutionResDTO {
 
     // 다짐 생성 요청 배치 처리
     @Builder
-    public record BatchCreateDTO(
+    public record ResolutionBatchCreateDTO(
             String emojiId,
             String illustId,
             List<SingleResolutionDTO> resolutions
@@ -52,7 +52,7 @@ public class ResolutionResDTO {
 
     // 다짐 수정 DTO
     @Builder
-    public record UpdateDTO(
+    public record ResolutionUpdateDTO(
             Long resolutionId,
             String content,
             LocalDateTime updatedAt

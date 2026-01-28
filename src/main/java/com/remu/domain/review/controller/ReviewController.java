@@ -22,7 +22,7 @@ public class ReviewController implements ReviewControllerDocs {
     public ApiResponse<ReviewResDTO.ReviewCreateDTO> createReview(
             @RequestParam Long userId,
             @PathVariable Long resolutionId,
-            @Valid @RequestBody ReviewReqDTO.CreateDTO dto
+            @Valid @RequestBody ReviewReqDTO.ReviewCreateDTO dto
     ) {
         ReviewResDTO.ReviewCreateDTO result = reviewService.create(userId, resolutionId, dto);
         return ApiResponse.onSuccess(ReviewSuccessCode.CREATE, result);
@@ -53,12 +53,12 @@ public class ReviewController implements ReviewControllerDocs {
     // 리뷰 수정
     @Override
     @PatchMapping("/reviews/{reviewId}")
-    public ApiResponse<ReviewResDTO.UpdateDTO> updateReview(
+    public ApiResponse<ReviewResDTO.ReviewUpdateDTO> updateReview(
             @RequestParam Long userId,
             @PathVariable Long reviewId,
-            @Valid @RequestBody ReviewReqDTO.UpdateDTO dto
+            @Valid @RequestBody ReviewReqDTO.ReviewUpdateDTO dto
     ) {
-        ReviewResDTO.UpdateDTO result = reviewService.update(userId, reviewId, dto);
+        ReviewResDTO.ReviewUpdateDTO result = reviewService.update(userId, reviewId, dto);
         return ApiResponse.onSuccess(ReviewSuccessCode.UPDATE, result);
     }
 

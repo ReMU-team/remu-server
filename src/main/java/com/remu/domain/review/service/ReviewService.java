@@ -7,7 +7,7 @@ public interface ReviewService {
     ReviewResDTO.ReviewCreateDTO create(
             Long userId,
             Long resolutionId,
-            ReviewReqDTO.CreateDTO dto
+            ReviewReqDTO.ReviewCreateDTO dto
     );
 
     // 회고 배치 생성
@@ -17,10 +17,10 @@ public interface ReviewService {
             ReviewReqDTO.BatchReviewCreateDTO dto
     );
 
-    ReviewResDTO.UpdateDTO update(
+    ReviewResDTO.ReviewUpdateDTO update(
             Long userId,
             Long reviewId,
-            ReviewReqDTO.UpdateDTO dto
+            ReviewReqDTO.ReviewUpdateDTO dto
     );
 
     // 리뷰 배치 업데이트

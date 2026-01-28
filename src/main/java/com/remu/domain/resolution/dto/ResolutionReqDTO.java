@@ -1,12 +1,10 @@
 package com.remu.domain.resolution.dto;
 
-import com.remu.domain.galaxy.entity.Galaxy;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.extern.java.Log;
 
 import java.util.List;
 
@@ -15,7 +13,7 @@ import java.util.List;
 public class ResolutionReqDTO {
 
     // 다짐 생성 단일 요청 DTO
-    public record CreateDTO(
+    public record ResolutionCreateDTO(
             @NotBlank(message = "다짐 내용은 필수입니다.")
             @Size(max = 100, message = "다짐은 최대 100자까지 가능합니다.")
             String content,
@@ -25,7 +23,7 @@ public class ResolutionReqDTO {
     ) {}
 
     // 다짐 생성 배치 요청 DTO
-    public record BatchCreateDTO(
+    public record ResolutionBatchCreateDTO(
             @NotBlank(message = "이모지 선택은 필수입니다.")
             String emojiId,
 
@@ -39,20 +37,20 @@ public class ResolutionReqDTO {
     ) {}
 
     // 다짐 수정 DTO
-    public record UpdateDTO(
+    public record ResolutionUpdateDTO(
             String content
     ) {}
 
     // 다짐 수정 배치 DTO
-    public record BatchUpdateDTO(
+    public record ResolutionBatchUpdateDTO(
             @NotBlank(message = "이모지 선택은 필수입니다.")
             String emojiId,
 
             @NotEmpty(message = "수정할 다짐 리스트가 비어있습니다.")
-            List<@Valid UpdateItemDTO> resolutions
+            List<@Valid ResolutionUpdateItemDTO> resolutions
     ) {}
 
-    public record UpdateItemDTO(
+    public record ResolutionUpdateItemDTO(
             @NotNull(message = "다짐 ID는 필수입니다.")
             Long resolutionId,
 

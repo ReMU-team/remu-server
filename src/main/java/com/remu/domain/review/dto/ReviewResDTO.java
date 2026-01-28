@@ -37,10 +37,13 @@ public class ReviewResDTO {
             LocalDateTime createdAt
     ) {}
 
-    // 다짐 조회
+    // 회고 조회
 
     @Builder
     public record ReviewPreviewListDTO(
+            String reviewEmojiId,
+            String resolutionEmojiId,
+            String reflection,
             List<ReviewPreviewDTO> reviewList,
             Integer listSize
     ) {}
@@ -58,7 +61,7 @@ public class ReviewResDTO {
     // 회고 단일 수정
 
     @Builder
-    public record UpdateDTO(
+    public record ReviewUpdateDTO(
             Long reviewId,
             Long resolutionId,
             String resolutionContent,

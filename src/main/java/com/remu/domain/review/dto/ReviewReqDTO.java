@@ -10,7 +10,7 @@ import java.util.List;
 public class ReviewReqDTO {
 
     // 회고 단일 생성
-    public record CreateDTO(
+    public record ReviewCreateDTO(
 
             @NotBlank(message = "회고 내용은 필수입니다.")
             String content,
@@ -45,7 +45,7 @@ public class ReviewReqDTO {
 
     // 회고 단일 수정
 
-    public record UpdateDTO(
+    public record ReviewUpdateDTO(
 
             @NotBlank(message = "회고 내용은 필수입니다.")
             String content,
