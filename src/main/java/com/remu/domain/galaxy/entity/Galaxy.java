@@ -73,6 +73,9 @@ public class Galaxy extends BaseEntity {
     @Column(name = "resolution_emoji_id")
     private String resolutionEmojiId;
 
+    @Column(name = "resolution_illust_id")
+    private String resolutionIllustId;
+
     @Column(name = "review_emoji_id")
     private String reviewEmojiId;
 
@@ -88,5 +91,10 @@ public class Galaxy extends BaseEntity {
     // 다짐 이모지 추가 메서드
     public void updateResolutionEmoji(String emojiId) {
         this.resolutionEmojiId = emojiId;
+    }
+
+    // 다짐 일러스트 추가 메서드
+    public void updateResolutionIllust(String resolutionIllustId) {
+        this.resolutionIllustId = resolutionIllustId;
     }
 }

@@ -22,6 +22,7 @@ public class ResolutionResDTO {
     @Builder
     public record BatchCreateDTO(
             String emojiId,
+            String illustId,
             List<SingleResolutionDTO> resolutions
     ) {}
 
@@ -37,6 +38,7 @@ public class ResolutionResDTO {
     @Builder
     public record ResolutionPreviewListDTO(
         String emojiId,
+        String illustId,
         List<ResolutionPreviewDTO> resolutionList,
         Integer listSize
     ) {}

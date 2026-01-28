@@ -73,8 +73,9 @@ public class ResolutionServiceImpl implements ResolutionService {
             throw new ResolutionException(GeneralErrorCode.FORBIDDEN);
         }
 
-        // 3. 은하 이모지 업데이트
+        // 3. 다짐 이모지 및 일러스트 업데이트
         galaxy.updateResolutionEmoji(dto.emojiId());
+        galaxy.updateResolutionIllust(dto.illustId());
 
         // 4. 리스트 저장
         List<Resolution> resolutions = dto.contents().stream()
@@ -162,13 +163,14 @@ public class ResolutionServiceImpl implements ResolutionService {
             throw new ResolutionException(GeneralErrorCode.FORBIDDEN);
         }
 
-        // 3. 이모지 정보 획득
+        // 3. 이모지 및 일러스트 정보 획득
         String resolutionEmojiId = galaxy.getResolutionEmojiId();
+        String resolutionIllustId = galaxy.getResolutionIllustId();
 
         // 4. Repository 통한 데이터 조회
         List<Resolution> resolutions = resolutionRepository.findAllByGalaxyId(galaxyId);
 
         // 5. Converter를 이용한 반환
-        return ResolutionConverter.toResolutionPreviewListDTO(resolutions, resolutionEmojiId);
+        return ResolutionConverter.toResolutionPreviewListDTO(resolutions, resolutionEmojiId, resolutionIllustId);
     }
 }

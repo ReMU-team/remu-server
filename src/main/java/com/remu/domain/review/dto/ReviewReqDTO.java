@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotNull;
 
 public class ReviewReqDTO {
 
+    // 회고 단일 생성
     public record CreateDTO(
 
             @NotBlank(message = "회고 내용은 필수입니다.")

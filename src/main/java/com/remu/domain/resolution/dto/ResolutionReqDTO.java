@@ -29,6 +29,9 @@ public class ResolutionReqDTO {
             @NotBlank(message = "이모지 선택은 필수입니다.")
             String emojiId,
 
+            @NotBlank(message = "일러스트 정보는 필수입니다.")
+            String illustId,
+
             @NotEmpty(message = "최소 하나의 다짐은 필수입니다.")
             List<@NotBlank(message = "다짐 내용은 비어있을 수 없습니다.")
                 @Size(max = 100, message ="다짐은 최대 100자까지 가능합니다.")

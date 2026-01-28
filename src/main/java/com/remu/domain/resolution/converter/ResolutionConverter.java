@@ -63,6 +63,7 @@ public class ResolutionConverter {
 
         return ResolutionResDTO.BatchCreateDTO.builder()
                 .emojiId(galaxy.getResolutionEmojiId())
+                .illustId(galaxy.getResolutionIllustId())
                 .resolutions(list)
                 .build();
     }
@@ -72,10 +73,11 @@ public class ResolutionConverter {
      * --------------------- */
 
     public static ResolutionResDTO.ResolutionPreviewListDTO toResolutionPreviewListDTO(
-            List<Resolution> resolutions, String emojiId
+            List<Resolution> resolutions, String emojiId, String illustId
     ) {
         return ResolutionResDTO.ResolutionPreviewListDTO.builder()
                 .emojiId(emojiId)
+                .illustId(illustId)
                 .resolutionList(resolutions.stream()
                         .map(ResolutionConverter::toResolutionPreviewDTO)
                         .toList()
