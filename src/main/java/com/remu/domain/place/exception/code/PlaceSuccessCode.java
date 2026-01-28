@@ -8,7 +8,7 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 @Getter
 public enum PlaceSuccessCode implements BaseSuccessCode {
-    PLACE_SEARCH_SUCCESS(HttpStatus.OK, "PLACE_200_1", "장소 검색에 성공했습니다.");
+    PLACE_SEARCH_SUCCESS(HttpStatus.OK, "PLACE200_1", "장소 검색에 성공했습니다.");
 
 
     private final HttpStatus status;

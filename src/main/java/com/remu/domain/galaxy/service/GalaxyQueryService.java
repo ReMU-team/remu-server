@@ -15,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -24,7 +23,7 @@ public class GalaxyQueryService {
     private final GalaxyRepository galaxyRepository;
 
     // 은하 상세 조회
-    public GalaxyResDTO.DetailDTO getGalaxyDetail(Long galaxyId, User user) {
+    public GalaxyResDTO.GalaxyDetailDTO getGalaxyDetail(Long galaxyId, User user) {
         // 1. 은하 조회 및 권한 확인
         Galaxy galaxy = galaxyRepository.findById(galaxyId)
                 .orElseThrow(()->new GalaxyException(GalaxyErrorCode.GALAXY_NOT_FOUND));
@@ -53,7 +52,7 @@ public class GalaxyQueryService {
         // 2. 전체 개수 조회
         Long totalCount = galaxyRepository.countByUserId(user.getId());
         // 3. 응답 DTO 변환
-        List<GalaxyResDTO.SummaryDTO> summaryDTOList = galaxyList.stream()
+        List<GalaxyResDTO.GalaxySummaryDTO> summaryDTOList = galaxyList.stream()
                 .map(galaxy -> {
                     return GalaxyConverter.toSummaryDTO(galaxy);
                 })

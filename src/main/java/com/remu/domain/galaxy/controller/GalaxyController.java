@@ -23,7 +23,7 @@ public class GalaxyController implements GalaxyControllerDocs {
     // 1. 은하 생성
     // TODO 인증된 User 객체 넣기 @AuthenticationPrincipal
     @PostMapping
-    public ApiResponse<GalaxyResDTO.CreateDTO> createGalaxy(
+    public ApiResponse<GalaxyResDTO.GalaxyCreateDTO> createGalaxy(
             @RequestBody @Valid GalaxyReqDTO.GalaxyCreateDTO request) {
 
         return ApiResponse.onSuccess(GalaxySuccessCode.GALAXY_CREATED, galaxyCommandService.createGalaxy(request, getMockUser()));
@@ -31,10 +31,10 @@ public class GalaxyController implements GalaxyControllerDocs {
 
     // 2. 은하 상세 조회
     @GetMapping("/{galaxyId}")
-    public ApiResponse<GalaxyResDTO.DetailDTO> getGalaxyDetail(
+    public ApiResponse<GalaxyResDTO.GalaxyDetailDTO> getGalaxyDetail(
             @PathVariable Long galaxyId) {
 
-        GalaxyResDTO.DetailDTO response = galaxyQueryService.getGalaxyDetail(galaxyId, getMockUser());
+        GalaxyResDTO.GalaxyDetailDTO response = galaxyQueryService.getGalaxyDetail(galaxyId, getMockUser());
         return ApiResponse.onSuccess(GalaxySuccessCode.GALAXY_GET_SUCCESS, response);
     }
 

@@ -26,8 +26,8 @@ public class GalaxyConverter {
     }
 
     // entity->response dto
-    public static GalaxyResDTO.CreateDTO toCreateDTO(Galaxy galaxy) {
-        return new GalaxyResDTO.CreateDTO(
+    public static GalaxyResDTO.GalaxyCreateDTO toCreateDTO(Galaxy galaxy) {
+        return new GalaxyResDTO.GalaxyCreateDTO(
                 galaxy.getId(),
                 galaxy.getName(),
                 galaxy.getStartDate(),
@@ -42,8 +42,8 @@ public class GalaxyConverter {
     // request dto->entity
 
     // entity->response dto
-    public static GalaxyResDTO.DetailDTO toDetailDTO(Galaxy galaxy, Long dDay){
-        return new GalaxyResDTO.DetailDTO(
+    public static GalaxyResDTO.GalaxyDetailDTO toDetailDTO(Galaxy galaxy, Long dDay){
+        return new GalaxyResDTO.GalaxyDetailDTO(
                 galaxy.getId(),
                 galaxy.getName(),
                 galaxy.getEmojiResourceName(),
@@ -55,8 +55,8 @@ public class GalaxyConverter {
         );
     }
 
-    public static GalaxyResDTO.SummaryDTO toSummaryDTO(Galaxy galaxy) {
-        return new GalaxyResDTO.SummaryDTO(
+    public static GalaxyResDTO.GalaxySummaryDTO toSummaryDTO(Galaxy galaxy) {
+        return new GalaxyResDTO.GalaxySummaryDTO(
                 galaxy.getId(),
                 galaxy.getName(),
                 galaxy.getEmojiResourceName()
