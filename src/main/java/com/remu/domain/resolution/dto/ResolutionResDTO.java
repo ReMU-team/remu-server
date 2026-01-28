@@ -14,6 +14,20 @@ public class ResolutionResDTO {
     public record CreateDTO(
             Long resolutionId,
             String content,
+            String emojiId,
+            LocalDateTime createdAt
+    ) {}
+
+    @Builder
+    public record BatchCreateDTO(
+            String emojiId,
+            List<SingleResolutionDTO> resolutions
+    ) {}
+
+    @Builder
+    public record SingleResolutionDTO(
+            Long resolutionId,
+            String content,
             LocalDateTime createdAt
     ) {}
 

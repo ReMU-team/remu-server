@@ -70,6 +70,12 @@ public class Galaxy extends BaseEntity {
 
     private LocalDateTime aiAnalyzedAt;
 
+    @Column(name = "resolution_emoji_id")
+    private String resolutionEmojiId;
+
+    @Column(name = "review_emoji_id")
+    private String reviewEmojiId;
+
     // updateInfo
     public void updateInfo(String name, String emojiResourceName, LocalDate startDate, LocalDate arrivalDate, LocalDate endDate) {
         this.name = name;
@@ -77,5 +83,10 @@ public class Galaxy extends BaseEntity {
         this.startDate = startDate;
         this.arrivalDate = arrivalDate;
         this.endDate = endDate;
+    }
+
+    // 다짐 이모지 추가 메서드
+    public void updateResolutionEmoji(String emojiId) {
+        this.resolutionEmojiId = emojiId;
     }
 }

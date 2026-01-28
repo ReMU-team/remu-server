@@ -27,6 +27,18 @@ public class ResolutionController implements ResolutionControllerDocs{
         return ApiResponse.onSuccess(ResolutionSuccessCode.CREATE, result);
     }
 
+    // 다짐 배치 생성
+    @Override
+    @PostMapping("/galaxies/{galaxyId}/resolutions/batch")
+    public ApiResponse<ResolutionResDTO.BatchCreateDTO> createBatch(
+            @RequestParam Long userId,
+            @PathVariable Long galaxyId,
+            @Valid @RequestBody ResolutionReqDTO.BatchCreateDTO dto
+    ) {
+        ResolutionResDTO.BatchCreateDTO result = resolutionService.batchCreate(userId, galaxyId, dto);
+        return ApiResponse.onSuccess(ResolutionSuccessCode.CREATE, result);
+    }
+
     // 다짐 목록 조회
     @Override
     @GetMapping("/galaxies/{galaxyId}/resolutions")

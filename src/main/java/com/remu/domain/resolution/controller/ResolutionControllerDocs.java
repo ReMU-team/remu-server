@@ -5,6 +5,7 @@ import com.remu.domain.resolution.dto.ResolutionResDTO;
 import com.remu.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 public interface ResolutionControllerDocs {
@@ -21,6 +22,21 @@ public interface ResolutionControllerDocs {
             @RequestParam Long userId,
             @PathVariable Long galaxyId,
             ResolutionReqDTO.CreateDTO dto
+    );
+
+    // 다짐 배치 생성
+    @Operation(
+            summary = "다짐 배치 생성 API by 매튜/진현준",
+            description = "다짐 배치 생성 API입니다."
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
+    })
+    ApiResponse<ResolutionResDTO.BatchCreateDTO> createBatch(
+            @RequestParam Long userId,
+            @PathVariable Long galaxyId,
+            @Valid @RequestBody ResolutionReqDTO.BatchCreateDTO dto
     );
 
     @Operation(

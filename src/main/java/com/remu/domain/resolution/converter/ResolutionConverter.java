@@ -11,7 +11,7 @@ import java.util.List;
 public class ResolutionConverter {
 
     /* ---------------------
-     * [CREATE] 생성 관련 변환
+     * [CREATE] 단일 생성 관련 변환
      * --------------------- */
 
     // Entity -> DTO
@@ -21,6 +21,7 @@ public class ResolutionConverter {
         return ResolutionResDTO.CreateDTO.builder()
                 .resolutionId(resolution.getId())
                 .content(resolution.getContent())
+                .emojiId(resolution.getGalaxy().getResolutionEmojiId())
                 .createdAt(resolution.getCreatedAt())
                 .build();
     }
@@ -32,6 +33,37 @@ public class ResolutionConverter {
         return Resolution.builder()
                 .galaxy(galaxy)
                 .content(dto.content())
+                .build();
+    }
+
+    /* ---------------------
+     * [CREATE] 배치 생성 관련 변환
+     * --------------------- */
+
+    // DTO -> Entity
+    public static Resolution toResolutionFromBatch(String content, Galaxy galaxy) {
+        return Resolution.builder()
+                .galaxy(galaxy)
+                .content(content)
+                .build();
+    }
+
+    // Entity -> DTO
+    public static ResolutionResDTO.BatchCreateDTO toBatchCreateDTO(
+            Galaxy galaxy,
+            List<Resolution> resolutions
+    ) {
+        List<ResolutionResDTO.SingleResolutionDTO> list = resolutions.stream()
+                .map(res -> ResolutionResDTO.SingleResolutionDTO.builder()
+                        .resolutionId(res.getId())
+                        .content(res.getContent())
+                        .createdAt(res.getCreatedAt())
+                        .build())
+                .toList();
+
+        return ResolutionResDTO.BatchCreateDTO.builder()
+                .emojiId(galaxy.getResolutionEmojiId())
+                .resolutions(list)
                 .build();
     }
 

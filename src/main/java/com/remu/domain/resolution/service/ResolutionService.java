@@ -12,6 +12,12 @@ public interface ResolutionService {
             ResolutionReqDTO.CreateDTO dto
     );
 
+    ResolutionResDTO.BatchCreateDTO batchCreate(
+            Long userId,
+            Long galaxyId,
+            ResolutionReqDTO.BatchCreateDTO dto
+    );
+
     ResolutionResDTO.UpdateDTO update(
             Long userId,
             Long resolutionId,

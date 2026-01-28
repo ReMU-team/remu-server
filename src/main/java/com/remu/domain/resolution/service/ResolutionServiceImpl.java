@@ -42,12 +42,47 @@ public class ResolutionServiceImpl implements ResolutionService {
             throw new ResolutionException(GeneralErrorCode.FORBIDDEN);
         }
 
-        // 3. DTO -> Entity 변환
+        // 3. 은하의 다짐 이모지 업데이트
+        galaxy.updateResolutionEmoji(dto.emojiId());
+
+        // 4. DTO -> Entity 변환
         Resolution resolution = ResolutionConverter.toResolution(dto, galaxy);
 
-        // 4. 저장 및 응답 반환
+        // 5. 저장 및 응답 반환
         Resolution saved = resolutionRepository.save(resolution);
+
         return ResolutionConverter.toCreateDTO(saved);
+    }
+
+    @Override
+    public ResolutionResDTO.BatchCreateDTO batchCreate(
+            Long userId,
+            Long galaxyId,
+            ResolutionReqDTO.BatchCreateDTO dto
+    ) {
+        // 1. 은하 조회
+
+        Galaxy galaxy = galaxyRepository.findById(galaxyId)
+                .orElseThrow(() -> new ResolutionException(GeneralErrorCode.NOT_FOUND));
+
+        // 2. 권한 검증(유저 ID 대조)
+        if (!galaxy.getUser().getId().equals(userId)) {
+            throw new ResolutionException(GeneralErrorCode.FORBIDDEN);
+        }
+
+        // 3. 은하 이모지 업데이트
+        galaxy.updateResolutionEmoji(dto.emojiId());
+
+        // 4. 리스트 저장
+        List<Resolution> resolutions = dto.contents().stream()
+                .map(content -> ResolutionConverter.toResolutionFromBatch(content, galaxy))
+                .toList();
+
+        // 5. 일괄 저장
+        List<Resolution> savedResolutions = resolutionRepository.saveAll(resolutions);
+
+        return ResolutionConverter.toBatchCreateDTO(galaxy, savedResolutions);
+
     }
 
     @Override
