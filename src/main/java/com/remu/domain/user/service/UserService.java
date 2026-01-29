@@ -108,7 +108,8 @@ public class UserService {
                 throw new UserException(UserErrorCode.INVALID_NAME);
             }
 
-            if(userRepository.existsByName(name)){
+            // 현재 자신의 이름 외에 중복 검사
+            if(userRepository.existsByNameAndIdNot(name, user.getId())){
                 throw new UserException(UserErrorCode.NAME_DUPLICATE);
             }
 
