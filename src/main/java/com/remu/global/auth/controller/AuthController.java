@@ -33,11 +33,6 @@ public class AuthController implements AuthControllerDocs{
         return ApiResponse.onSuccess(AuthSuccessCode.LOGOUT_SUCCESS, null);
     }
 
-    @GetMapping("/")
-    public String healthCheck() {
-        return "로그인 성공! 발급된 토큰을 사용하여 API를 테스트하세요.";
-    }
-
     @Override
     @GetMapping("/login/google")
     public void googleLoginInfo(){}
