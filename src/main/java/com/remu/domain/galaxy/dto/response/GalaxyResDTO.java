@@ -1,14 +1,11 @@
 package com.remu.domain.galaxy.dto.response;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-
 import java.time.LocalDate;
 import java.util.List;
 
 public class GalaxyResDTO {
     // 생성
-    public record CreateDTO (
+    public record GalaxyCreateDTO(
             Long galaxyId,
             String name,
             LocalDate startDate,
@@ -17,7 +14,7 @@ public class GalaxyResDTO {
     ){}
 
     // 상세 조회
-    public record DetailDTO(
+    public record GalaxyDetailDTO(
             Long galaxyId,
             String name,
             String emojiResourceName, // URL이 아닌 리소스 이름
@@ -30,7 +27,7 @@ public class GalaxyResDTO {
 
     // 목록 조회
     // 목록 내 개별 항목 정보
-    public record SummaryDTO(
+    public record GalaxySummaryDTO(
             Long galaxyId,
             String name,
             String emojiResourceName
@@ -39,7 +36,7 @@ public class GalaxyResDTO {
     // 전체 목록 응답 (리스트를 감싸는 DTO)
     public record SummaryListDTO(
             Long totalCount,      // 사용자가 만든 은하 총 개수
-            List<SummaryDTO> galaxies,
+            List<GalaxySummaryDTO> galaxies,
             Integer currentPage,
             Boolean hasNext // 다음 페이지 존재 여부
 
