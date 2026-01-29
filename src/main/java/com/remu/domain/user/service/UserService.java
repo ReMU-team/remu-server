@@ -120,9 +120,9 @@ public class UserService {
     private void updateIntroduction(User user, String rawIntro) {
         if (rawIntro != null) {
             String intro = rawIntro.trim();
-            if (!intro.isEmpty()) {
-                user.updateIntroduction(intro);
-            }
+            user.updateIntroduction(
+                    intro.isEmpty() ? null : intro
+            );
         }
     }
 
