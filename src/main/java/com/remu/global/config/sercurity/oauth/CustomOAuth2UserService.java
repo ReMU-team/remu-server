@@ -98,20 +98,31 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         String finalName = name;
         String finalPicture = picture;
 
-        User user = userRepository.findBySocialTypeAndSocialId(socialType, finalSocialId)
-                .orElseGet(() -> userRepository.save(
-                        User.builder()
-                                .socialType(socialType)
-                                .socialId(finalSocialId)
-                                .email(finalEmail)
-                                .name(finalName)
-                                .role(Role.USER)
-                                .imageUrl(finalPicture)
-                                .build()
-                ));
+        boolean isNewUser;
+        User user;
+
+        var optionalUser =
+                userRepository.findBySocialTypeAndSocialId(socialType, finalSocialId);
+
+        if (optionalUser.isPresent()) {
+            user = optionalUser.get();
+            isNewUser = false;
+        } else {
+            user = userRepository.save(
+                    User.builder()
+                            .socialType(socialType)
+                            .socialId(finalSocialId)
+                            .email(finalEmail)
+                            .name(finalName)
+                            .role(Role.USER)
+                            .imageUrl(finalPicture)
+                            .build()
+            );
+            isNewUser = true;
+        }
 
         // 5. security 내부에서 사용할 유저 객체 생성
-        return new UserPrincipal(user, attributes);
+        return new UserPrincipal(user, attributes, isNewUser);
     }
 
     private static String getString(Object value) {

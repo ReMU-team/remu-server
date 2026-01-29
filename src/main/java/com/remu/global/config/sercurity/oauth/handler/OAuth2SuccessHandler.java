@@ -31,8 +31,9 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         // 1. UserService에서 넘겨준 UserPrincipal 꺼내기
         UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
         Long userId = principal.getId();
-        String authority = authentication.getAuthorities().iterator().next().getAuthority();
-        Role role = Role.fromKey(authority);
+        Role role = principal.getUser().getRole();
+//        String authority = authentication.getAuthorities().iterator().next().getAuthority();
+//        Role role = Role.fromKey(authority);
 
         // 2. 토큰 생성 및 저장
         String accessToken = jwtTokenProvider.createAccessToken(userId, role);
@@ -54,9 +55,10 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         responseBody.put("code", "COMMON200");
         responseBody.put("message", "소셜 로그인 성공");
 
-        Map<String, String> result = new HashMap<>();
+        Map<String, Object> result = new HashMap<>();
         result.put("accessToken", accessToken);
         result.put("refreshToken", refreshToken);
+        result.put("isNewUser", principal.isNewUser());
         responseBody.put("result", result);
 
         // 5. JSON 출력

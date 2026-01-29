@@ -19,12 +19,15 @@ public class UserPrincipal implements OAuth2User, UserDetails {
     private Collection<? extends GrantedAuthority> authorities;
     private Map<String, Object> attributes; // 소셜에서 받은 원본 데이터
 
-    public UserPrincipal(User user, Map<String, Object> attributes) {
+    private final boolean isNewUser; // 새로운 유저, 기존 유저 구분
+
+    public UserPrincipal(User user, Map<String, Object> attributes, boolean isNewUser) {
         this.user = user;
         this.id = user.getId();
         this.email = user.getEmail();
         this.authorities = Collections.singletonList(new SimpleGrantedAuthority(user.getRoleKey()));
         this.attributes = attributes;
+        this.isNewUser = isNewUser;
     }
 
     @Override
