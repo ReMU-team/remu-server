@@ -40,9 +40,6 @@ out/
 # 운영 환경 설정 파일 (보안상 절대 금지)
 /src/main/resources/application-prod.yml
 
-# 로컬 환경 설정 파일 (민감정보)
-/src/main/resources/application-local.yml
-
 # Querydsl 빌드 파일 (빌드 시 자동 생성되므로 제외)
 /src/main/resources/generated/
 
