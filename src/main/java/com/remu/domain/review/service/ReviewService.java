@@ -2,19 +2,32 @@ package com.remu.domain.review.service;
 
 import com.remu.domain.review.dto.ReviewReqDTO;
 import com.remu.domain.review.dto.ReviewResDTO;
-import org.springframework.transaction.annotation.Transactional;
 
 public interface ReviewService {
-    ReviewResDTO.CreateDTO create(
+    ReviewResDTO.ReviewCreateDTO create(
             Long userId,
             Long resolutionId,
-            ReviewReqDTO.CreateDTO dto
+            ReviewReqDTO.ReviewCreateDTO dto
     );
 
-    ReviewResDTO.UpdateDTO update(
+    // 회고 배치 생성
+    ReviewResDTO.ReviewBatchCreateDTO batchCreate(
+            Long userId,
+            Long galaxyId,
+            ReviewReqDTO.BatchReviewCreateDTO dto
+    );
+
+    ReviewResDTO.ReviewUpdateDTO update(
             Long userId,
             Long reviewId,
-            ReviewReqDTO.UpdateDTO dto
+            ReviewReqDTO.ReviewUpdateDTO dto
+    );
+
+    // 리뷰 배치 업데이트
+    ReviewResDTO.ReviewBatchUpdateDTO batchUpdate(
+            Long userId,
+            Long galaxyId,
+            ReviewReqDTO.BatchReviewUpdateDTO dto
     );
 
     // === Query 로직 (조회) ===

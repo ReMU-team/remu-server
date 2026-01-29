@@ -70,6 +70,19 @@ public class Galaxy extends BaseEntity {
 
     private LocalDateTime aiAnalyzedAt;
 
+    @Column(name = "resolution_emoji_id")
+    private String resolutionEmojiId;
+
+    @Column(name = "resolution_illust_id")
+    private String resolutionIllustId;
+
+    @Column(name = "review_emoji_id")
+    private String reviewEmojiId;
+
+    // 여행 전체 후기
+    @Column(columnDefinition = "TEXT")
+    private String reflection;
+
     // updateInfo
     public void updateInfo(String name, String emojiResourceName, LocalDate startDate, LocalDate arrivalDate, LocalDate endDate) {
         this.name = name;
@@ -77,5 +90,25 @@ public class Galaxy extends BaseEntity {
         this.startDate = startDate;
         this.arrivalDate = arrivalDate;
         this.endDate = endDate;
+    }
+
+    // 다짐 이모지 추가 메서드
+    public void updateResolutionEmoji(String emojiId) {
+        this.resolutionEmojiId = emojiId;
+    }
+
+    // 다짐 일러스트 추가 메서드
+    public void updateResolutionIllust(String resolutionIllustId) {
+        this.resolutionIllustId = resolutionIllustId;
+    }
+
+    // 회고 이모지 추가 메서드
+    public void updateReviewEmoji(String emojiId) {
+        this.reviewEmojiId = emojiId;
+    }
+
+    // 여행 후기 일러스트 추가 메서드
+    public void updateReflection(String reflection) {
+        this.reflection = reflection;
     }
 }
