@@ -19,12 +19,23 @@ public class ReviewController implements ReviewControllerDocs {
 
     @Override
     @PostMapping("/resolutions/{resolutionId}/reviews")
-    public ApiResponse<ReviewResDTO.CreateDTO> createReview(
+    public ApiResponse<ReviewResDTO.ReviewCreateDTO> createReview(
             @RequestParam Long userId,
             @PathVariable Long resolutionId,
-            @Valid @RequestBody ReviewReqDTO.CreateDTO dto
+            @Valid @RequestBody ReviewReqDTO.ReviewCreateDTO dto
     ) {
-        ReviewResDTO.CreateDTO result = reviewService.create(userId, resolutionId, dto);
+        ReviewResDTO.ReviewCreateDTO result = reviewService.create(userId, resolutionId, dto);
+        return ApiResponse.onSuccess(ReviewSuccessCode.CREATE, result);
+    }
+
+    @PostMapping("/galaxies/{galaxyId}/reviews/batch")
+    @Override
+    public ApiResponse<ReviewResDTO.ReviewBatchCreateDTO> createReviewBatch(
+            @RequestParam Long userId,
+            @PathVariable Long galaxyId,
+            @Valid @RequestBody ReviewReqDTO.BatchReviewCreateDTO dto
+    ) {
+        ReviewResDTO.ReviewBatchCreateDTO result = reviewService.batchCreate(userId, galaxyId, dto);
         return ApiResponse.onSuccess(ReviewSuccessCode.CREATE, result);
     }
 
@@ -42,13 +53,24 @@ public class ReviewController implements ReviewControllerDocs {
     // 리뷰 수정
     @Override
     @PatchMapping("/reviews/{reviewId}")
-    public ApiResponse<ReviewResDTO.UpdateDTO> updateReview(
+    public ApiResponse<ReviewResDTO.ReviewUpdateDTO> updateReview(
             @RequestParam Long userId,
             @PathVariable Long reviewId,
-            @Valid @RequestBody ReviewReqDTO.UpdateDTO dto
+            @Valid @RequestBody ReviewReqDTO.ReviewUpdateDTO dto
     ) {
-        ReviewResDTO.UpdateDTO result = reviewService.update(userId, reviewId, dto);
+        ReviewResDTO.ReviewUpdateDTO result = reviewService.update(userId, reviewId, dto);
         return ApiResponse.onSuccess(ReviewSuccessCode.UPDATE, result);
     }
 
+    @PatchMapping("/galaxies/{galaxyId}/reviews/batch")
+    @Override
+    public ApiResponse<ReviewResDTO.ReviewBatchUpdateDTO> updateReviewBatch(
+            @RequestParam Long userId,
+            @PathVariable Long galaxyId,
+            @Valid @RequestBody ReviewReqDTO.BatchReviewUpdateDTO dto
+    ) {
+        ReviewResDTO.ReviewBatchUpdateDTO result = reviewService.batchUpdate(userId, galaxyId, dto);
+
+        return ApiResponse.onSuccess(ReviewSuccessCode.UPDATE, result);
+    }
 }
