@@ -8,6 +8,7 @@ import com.remu.domain.review.service.ReviewService;
 import com.remu.global.apiPayload.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,7 +21,7 @@ public class ReviewController implements ReviewControllerDocs {
     @Override
     @PostMapping("/resolutions/{resolutionId}/reviews")
     public ApiResponse<ReviewResDTO.ReviewCreateDTO> createReview(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal(expression = "id") Long userId,
             @PathVariable Long resolutionId,
             @Valid @RequestBody ReviewReqDTO.ReviewCreateDTO dto
     ) {
@@ -31,7 +32,7 @@ public class ReviewController implements ReviewControllerDocs {
     @PostMapping("/galaxies/{galaxyId}/reviews/batch")
     @Override
     public ApiResponse<ReviewResDTO.ReviewBatchCreateDTO> createReviewBatch(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal(expression = "id") Long userId,
             @PathVariable Long galaxyId,
             @Valid @RequestBody ReviewReqDTO.BatchReviewCreateDTO dto
     ) {
@@ -43,7 +44,7 @@ public class ReviewController implements ReviewControllerDocs {
     @Override
     @GetMapping("/galaxies/{galaxyId}/reviews")
     public ApiResponse<ReviewResDTO.ReviewPreviewListDTO> getReviews(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal(expression = "id") Long userId,
             @PathVariable Long galaxyId
     ) {
         ReviewResDTO.ReviewPreviewListDTO result = reviewService.getReviewListByGalaxy(userId, galaxyId);
@@ -54,7 +55,7 @@ public class ReviewController implements ReviewControllerDocs {
     @Override
     @PatchMapping("/reviews/{reviewId}")
     public ApiResponse<ReviewResDTO.ReviewUpdateDTO> updateReview(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal(expression = "id") Long userId,
             @PathVariable Long reviewId,
             @Valid @RequestBody ReviewReqDTO.ReviewUpdateDTO dto
     ) {
@@ -65,7 +66,7 @@ public class ReviewController implements ReviewControllerDocs {
     @PatchMapping("/galaxies/{galaxyId}/reviews/batch")
     @Override
     public ApiResponse<ReviewResDTO.ReviewBatchUpdateDTO> updateReviewBatch(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal(expression = "id") Long userId,
             @PathVariable Long galaxyId,
             @Valid @RequestBody ReviewReqDTO.BatchReviewUpdateDTO dto
     ) {
