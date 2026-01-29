@@ -54,11 +54,4 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
         return null;
     }
-
-    // /api/v1/auth/ 로 시작하는 api는 매번 JWT를 검사하지 않는다.
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) {
-        return false;
-    }
-
 }
