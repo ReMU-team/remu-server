@@ -1,6 +1,7 @@
 package com.remu.global.config;
 
 import com.remu.global.config.sercurity.jwt.JwtAuthFilter;
+import com.remu.global.config.sercurity.jwt.JwtAuthenticationEntryPoint;
 import com.remu.global.config.sercurity.jwt.JwtTokenProvider;
 import com.remu.global.config.sercurity.oauth.CustomOAuth2UserService;
 import com.remu.global.config.sercurity.oauth.handler.OAuth2SuccessHandler;
@@ -24,6 +25,7 @@ public class SecurityConfig {
     private final JwtTokenProvider jwtTokenProvider;    // JWT 토큰 생성/검증 담당
     private final CustomOAuth2UserService customOAuth2UserService;  // OAuth2 로그인 시 사용자 정보 로드
     private final OAuth2SuccessHandler oAuth2SuccessHandler;    // OAuth2 로그인 성공 후 처리 (JWT 발급)
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint; // 인증 실패 처리
 
     // JWT 인증 필터
     @Bean
@@ -47,6 +49,11 @@ public class SecurityConfig {
                 // JWT로 할거라 세션 사용X
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+
+                // 안중 실패(401) 응답 커스터마이징
+                .exceptionHandling(ex -> ex
+                        .authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                )
 
                 // 모든 API 경로를 인증 없이 허용
                 .authorizeHttpRequests(auth -> auth
