@@ -23,10 +23,6 @@ import static com.remu.domain.user.enums.Role.USER;
                 @UniqueConstraint(
                         name = "uk_user_social",
                         columnNames = {"social_type", "social_id"}
-                ),
-                @UniqueConstraint(
-                        name = "uk_user_name",
-                        columnNames = {"name"}
                 )
         }
 )
@@ -75,5 +71,10 @@ public class User extends BaseEntity {
 
     public void updateIntroduction(String introduction) {
         this.introduction = introduction;
+    }
+
+    // roleKey를 반환
+    public String getRoleKey(){
+        return this.role.getKey();
     }
 }
