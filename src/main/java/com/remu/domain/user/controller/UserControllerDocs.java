@@ -2,9 +2,7 @@ package com.remu.domain.user.controller;
 
 import com.remu.domain.user.dto.req.UserReqDTO;
 import com.remu.domain.user.dto.res.UserResDTO;
-import com.remu.domain.user.entity.User;
 import com.remu.global.apiPayload.ApiResponse;
-import com.remu.global.config.sercurity.oauth.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
