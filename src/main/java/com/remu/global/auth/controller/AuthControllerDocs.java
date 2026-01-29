@@ -6,6 +6,8 @@ import com.remu.global.auth.dto.AuthResDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -46,6 +48,41 @@ public interface AuthControllerDocs {
     })
     @PostMapping("/api/v1/auth/logout")
     ApiResponse<Void> logout(
+            @AuthenticationPrincipal(expression = "id") Long userId,
             @RequestBody AuthReqDTO.LogoutDTO request
     );
+
+    @GetMapping("/api/v1/auth/login/google")
+    @Operation(
+            summary = "구글 로그인 (브라우저 리다이렉트)",
+            description = """
+    이 엔드포인트는 API 호출용이 아닙니다.
+
+    프론트엔드에서 로그인 버튼 클릭 시
+    아래 URL로 페이지 이동(redirect)시키면
+    네이버 로그인이 시작됩니다.
+
+    [개발 환경]
+    http://localhost:8080/oauth2/authorization/google
+    [운영 환경]
+    """
+    )
+    default void googleLoginInfo(){}
+
+    @GetMapping("/api/v1/auth/login/kakao")
+    @Operation(
+            summary = "카카오 로그인 (브라우저 리다이렉트)",
+            description = """
+    이 엔드포인트는 API 호출용이 아닙니다.
+
+    프론트엔드에서 로그인 버튼 클릭 시
+    아래 URL로 페이지 이동(redirect)시키면
+    카카오 로그인이 시작됩니다.
+
+    [개발 환경]
+    http://localhost:8080/oauth2/authorization/kakao
+    [운영 환경]
+    """
+    )
+    default void kakaoLoginInfo(){}
 }

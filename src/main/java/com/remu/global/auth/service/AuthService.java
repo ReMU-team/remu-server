@@ -69,16 +69,20 @@ public class AuthService {
         return new AuthResDTO.TokenDTO(newAccess, newRefresh);
     }
 
-    public void logout(String refreshTokenRaw) {
+    public void logout(Long userId, String refreshTokenRaw) {
         String hash = sha256(refreshTokenRaw);
 
         // 1. 해시 토큰 검증
-        if (!refreshTokenRepository.existsByTokenHash(hash)) {
-            throw new AuthException(AuthErrorCode.REFRESH_TOKEN_INVALID);
+        RefreshToken saved = refreshTokenRepository.findByTokenHash(hash)
+                .orElseThrow(() -> new AuthException(AuthErrorCode.REFRESH_TOKEN_INVALID));
+
+        // 토큰의 주인과 현재 로그아웃 요청자가 일치하는지 검증
+        if (!saved.getUserId().equals(userId)) {
+            throw new AuthException(AuthErrorCode.REFRESH_TOKEN_TAMPERED);
         }
 
         // 2. 존재할 때만 삭제 수행
-        refreshTokenRepository.deleteByTokenHash(sha256(refreshTokenRaw));
+        refreshTokenRepository.delete(saved);
     }
 
     public void saveRefreshToken(Long userId, String refreshTokenRaw, LocalDateTime expiresAt) {

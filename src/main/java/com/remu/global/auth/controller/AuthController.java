@@ -6,12 +6,13 @@ import com.remu.global.auth.dto.AuthResDTO;
 import com.remu.global.auth.exception.code.AuthSuccessCode;
 import com.remu.global.auth.service.AuthService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
-public class AuthController {
+public class AuthController implements AuthControllerDocs{
 
     private final AuthService authService;
 
@@ -25,9 +26,10 @@ public class AuthController {
 
     @PostMapping("/logout")
     public ApiResponse<Void> logout(
+            @AuthenticationPrincipal(expression = "id") Long userId,
             @RequestBody AuthReqDTO.LogoutDTO request
     ) {
-        authService.logout(request.refreshToken());
+        authService.logout(userId, request.refreshToken());
         return ApiResponse.onSuccess(AuthSuccessCode.LOGOUT_SUCCESS, null);
     }
 
@@ -35,4 +37,12 @@ public class AuthController {
     public String healthCheck() {
         return "로그인 성공! 발급된 토큰을 사용하여 API를 테스트하세요.";
     }
+
+    @Override
+    @GetMapping("/login/google")
+    public void googleLoginInfo(){}
+
+    @Override
+    @GetMapping("/login/kakao")
+    public void kakaoLoginInfo(){}
 }
