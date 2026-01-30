@@ -9,6 +9,10 @@ import org.springframework.http.HttpStatus;
 @AllArgsConstructor
 public enum AiFeedbackErrorCode implements BaseErrorCode {
 
+    NOT_FOUND(HttpStatus.NOT_FOUND,
+            "REVIEW404_1",
+            "해당 여행에 대한 피드백을 찾지 못했습니다."),
+
     ALREADY_EXISTS(HttpStatus.BAD_REQUEST,
             "REVIEW400_1",
             "이미 해당 여행에 대한 피드백이 존재합니다.");

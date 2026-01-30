@@ -65,6 +65,22 @@ public class AiFeedbackServiceImpl implements AiFeedbackService{
         return AiFeedbackConverter.toCreateDTO(feedback);
     }
 
+    @Transactional(readOnly = true)
+    @Override
+    public AiFeedbackResDTO.AiFeedbackCreateDTO readFeedback(
+            Long galaxyId
+    ) {
+        // 1. 은하의 존재 여부 확인
+        if (!galaxyRepository.existsById(galaxyId)) {
+            throw new AiFeedbackException(GalaxyErrorCode.GALAXY_NOT_FOUND);
+        }
+
+        AiFeedback feedback = aiFeedbackRepository.findByGalaxyId(galaxyId)
+                .orElseThrow(() -> new AiFeedbackException(AiFeedbackErrorCode.NOT_FOUND));
+
+        return AiFeedbackConverter.toCreateDTO(feedback);
+    }
+
     private String buildPromptContext(Galaxy galaxy) {
         StringBuilder sb = new StringBuilder();
 
