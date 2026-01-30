@@ -41,8 +41,8 @@ public class AiFeedbackServiceImpl implements AiFeedbackService{
 
         // 3. AI 호츌(String으로 결과 반환)
         String aiResponse = chatClient.prompt()
-                .system(s -> s.text("너는 유저의 기록을 분석해주는 다정한 가이드야." +
-                        "제공된 정보를 바탕으로 유저의 성장을 따뜻하게 격려해줘." +
+                .system(s -> s.text("너는 유저의 기록을 분석해주는 다정한 가이드야. " +
+                        "제공된 정보를 바탕으로 유저의 성장을 따뜻하게 격려해줘. " +
                         "답변은 3 문장으로, 존댓말로 해줘."))
                 .user(combinedInfo)
                 .call()
@@ -81,8 +81,57 @@ public class AiFeedbackServiceImpl implements AiFeedbackService{
         return AiFeedbackConverter.toCreateDTO(feedback);
     }
 
+    @Override
+    public AiFeedbackResDTO.AiFeedbackUpdateDTO updateFeedback(
+            Long galaxyId
+    ) {
+        // 1. 은하 찾기
+        Galaxy galaxy = galaxyRepository.findByIdWithAllDetails(galaxyId)
+                .orElseThrow(() -> new AiFeedbackException(GalaxyErrorCode.GALAXY_NOT_FOUND));
+
+        // 2. 사용자 정보 추출
+        String combinedInfo = buildPromptContext(galaxy);
+
+        // 2. 피드백 존재 여부 검증, 이번엔 기존 내용 업데이트라 없으면 에러
+        AiFeedback existingFeedback = galaxy.getAiFeedback();
+        if (existingFeedback == null) {
+            throw new AiFeedbackException(AiFeedbackErrorCode.NOT_FOUND);
+        }
+
+        // 3. AI 호츌(String으로 결과 반환)
+        String aiResponse = chatClient.prompt()
+                .system(s -> s.text("너는 유저의 기록을 분석해주는 다정한 가이드야. " +
+                        "제공된 정보 중 '이전 AI 피드백 내용'을 참고해서, " +
+                        "제공된 정보를 바탕으로 유저의 성장을 따뜻하게 격려해줘. " +
+                        "답변은 3 문장으로, 존댓말로 해줘."))
+                .user(combinedInfo)
+                .call()
+                .content();
+
+        // 4. AI 응답이 없을 경우
+        if (aiResponse == null || aiResponse.isBlank()) {
+            aiResponse = "유저님의 소중한 여행 기록을 잘 읽어보았어요. 정말 멋진 여정을 보내셨네요! 앞으로의 발걸음도 제가 응원할게요.";
+        }
+
+        // 5. 저장 및 후처리
+        existingFeedback.updateContent(aiResponse);
+
+        // 6. 응답 반환
+        return AiFeedbackConverter.toUpdateDTO(existingFeedback);
+
+    }
+
     private String buildPromptContext(Galaxy galaxy) {
         StringBuilder sb = new StringBuilder();
+
+        // [update api] 이전 피드백 맥락
+        AiFeedback existingFeedback = galaxy.getAiFeedback();
+
+        if (existingFeedback != null) {
+            sb.append("### [참고] 이전 AI 피드백 내용\n")
+                    .append("- 지난변 답변: ").append(existingFeedback.getContent()).append("\n")
+                    .append("- 이번에는 지난번 대화 내용을 기억하며 유저의 성장을 언급해줘.\n\n");
+        }
 
         // 1. 은하 정보
         sb.append("### 1. 은하 기본 정보\n")

@@ -23,4 +23,8 @@ public class AiFeedback extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "galaxy_id", nullable = false)
     private Galaxy galaxy;
+
+    public void updateContent(String content) {
+        this.content = content;
+    }
 }

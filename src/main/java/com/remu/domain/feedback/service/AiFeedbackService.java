@@ -12,4 +12,8 @@ public interface AiFeedbackService {
     AiFeedbackResDTO.AiFeedbackCreateDTO readFeedback(
             Long galaxyId
     );
+
+    AiFeedbackResDTO.AiFeedbackUpdateDTO updateFeedback(
+            Long galaxyId
+    );
 }

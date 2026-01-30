@@ -14,4 +14,14 @@ public class AiFeedbackConverter {
                 .createdAt(aiFeedback.getCreatedAt())
                 .build();
     }
+
+    // Entity -> Converter
+    public static AiFeedbackResDTO.AiFeedbackUpdateDTO toUpdateDTO(
+            AiFeedback aiFeedback
+    ) {
+        return AiFeedbackResDTO.AiFeedbackUpdateDTO.builder()
+                .content(aiFeedback.getContent())
+                .updatedAt(aiFeedback.getUpdatedAt())
+                .build();
+    }
 }

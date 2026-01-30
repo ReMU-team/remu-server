@@ -15,7 +15,11 @@ public enum AiFeedbackSuccessCode implements BaseSuccessCode {
 
     CREATE(HttpStatus.OK,
             "REVIEW200_2",
-            "성공적으로 피드백을 생성했습니다.");
+            "성공적으로 피드백을 생성했습니다."),
+
+    UPDATE(HttpStatus.OK,
+            "REVIEW200_3",
+                    "성공적으로 피드백을 수정했습니다.");
 
     private final HttpStatus status;
     private final String code;

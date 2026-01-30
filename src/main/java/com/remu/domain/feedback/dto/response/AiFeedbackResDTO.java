@@ -11,4 +11,10 @@ public class AiFeedbackResDTO {
             String content,
             LocalDateTime createdAt
     ) {}
+
+    @Builder
+    public record AiFeedbackUpdateDTO(
+            String content,
+            LocalDateTime updatedAt
+    ) {}
 }
