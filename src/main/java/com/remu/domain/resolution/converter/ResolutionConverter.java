@@ -10,32 +10,6 @@ import java.util.List;
 public class ResolutionConverter {
 
     /* ---------------------
-     * [CREATE] 단일 생성 관련 변환
-     * --------------------- */
-
-    // Entity -> DTO
-    public static ResolutionResDTO.ResolutionCreateDTO toCreateDTO(
-            Resolution resolution
-    ) {
-        return ResolutionResDTO.ResolutionCreateDTO.builder()
-                .resolutionId(resolution.getId())
-                .content(resolution.getContent())
-                .emojiId(resolution.getGalaxy().getResolutionEmojiId())
-                .createdAt(resolution.getCreatedAt())
-                .build();
-    }
-
-    // DTO -> Entity
-    public static Resolution toResolution(
-            ResolutionReqDTO.ResolutionCreateDTO dto, Galaxy galaxy
-    ) {
-        return Resolution.builder()
-                .galaxy(galaxy)
-                .content(dto.content())
-                .build();
-    }
-
-    /* ---------------------
      * [CREATE] 배치 생성 관련 변환
      * --------------------- */
 
@@ -92,18 +66,6 @@ public class ResolutionConverter {
                 .resolutionId(resolution.getId())
                 .content(resolution.getContent())
                 .createdAt(resolution.getCreatedAt())
-                .build();
-    }
-
-    /* ---------------------
-     * [UPDATE] 수정 관련 변환
-     * --------------------- */
-
-    public static ResolutionResDTO.ResolutionUpdateDTO toUpdateDTO(Resolution resolution) {
-        return ResolutionResDTO.ResolutionUpdateDTO.builder()
-                .resolutionId(resolution.getId())
-                .content(resolution.getContent())
-                .updatedAt(resolution.getUpdatedAt())
                 .build();
     }
 }

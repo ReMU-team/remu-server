@@ -6,7 +6,7 @@ spring:
     password: ${DB_PW} # MySQL 비밀번호
   sql:
     init:
-      mode: always
+      mode: never
 
   jpa:
     database: mysql # 사용할 데이터베이스 유형 지정 (MySQL)

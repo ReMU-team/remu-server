@@ -11,20 +11,6 @@ import org.springframework.web.bind.annotation.*;
 public interface ReviewControllerDocs {
 
     @Operation(
-            summary = "리뷰를 생성하는 API by 매튜/진현준",
-            description = "리뷰를 생성하는 API입니다."
-    )
-    @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
-    })
-    ApiResponse<ReviewResDTO.ReviewCreateDTO> createReview(
-            @RequestParam Long userId,
-            @PathVariable Long resolutionId,
-            @Valid @RequestBody ReviewReqDTO.ReviewCreateDTO dto
-    );
-
-    @Operation(
             summary = "리뷰 배치 생성 API by 매튜/진현준",
             description = "리뷰 배치 생성 API입니다."
     )
@@ -52,19 +38,6 @@ public interface ReviewControllerDocs {
     );
 
     // 리뷰 수정
-    @Operation(
-            summary = "리뷰를 수정하는 API by 매튜/진현준",
-            description = "리뷰를 수정하는 API입니다."
-    )
-    @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
-    })
-    ApiResponse<ReviewResDTO.ReviewUpdateDTO> updateReview(
-            @RequestParam Long userId,
-            @PathVariable Long reviewId,
-            @Valid @RequestBody ReviewReqDTO.ReviewUpdateDTO dto
-    );
 
     @Operation(
             summary = "리뷰 배치 수정 API by 매튜/진현준",

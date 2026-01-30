@@ -28,34 +28,6 @@ public class ResolutionServiceImpl implements ResolutionService {
 
     // === Command 로직 (상태 변경) ===
 
-    // 단일 다짐 생성
-    @Override
-    public ResolutionResDTO.ResolutionCreateDTO create(
-            Long userId,
-            Long galaxyId,
-            ResolutionReqDTO.ResolutionCreateDTO dto
-    ) {
-        // 1. 은하 조회
-        Galaxy galaxy = galaxyRepository.findById(galaxyId)
-                .orElseThrow(() -> new ResolutionException(GeneralErrorCode.NOT_FOUND));
-
-        // 2. 권한 검증(유저 ID 대조)
-        if (!galaxy.getUser().getId().equals(userId)) {
-            throw new ResolutionException(GeneralErrorCode.FORBIDDEN);
-        }
-
-        // 3. 은하의 다짐 이모지 업데이트
-        galaxy.updateResolutionEmoji(dto.emojiId());
-
-        // 4. DTO -> Entity 변환
-        Resolution resolution = ResolutionConverter.toResolution(dto, galaxy);
-
-        // 5. 저장 및 응답 반환
-        Resolution saved = resolutionRepository.save(resolution);
-
-        return ResolutionConverter.toCreateDTO(saved);
-    }
-
     // 다짐 배치 생성
     @Override
     public ResolutionResDTO.ResolutionBatchCreateDTO batchCreate(
@@ -87,29 +59,6 @@ public class ResolutionServiceImpl implements ResolutionService {
 
         return ResolutionConverter.toBatchCreateDTO(galaxy, savedResolutions);
 
-    }
-
-    // 단일 다짐 수정
-    @Override
-    public ResolutionResDTO.ResolutionUpdateDTO update(
-            Long userId,
-            Long resolutionId,
-            ResolutionReqDTO.ResolutionUpdateDTO dto
-    ) {
-
-        // 1. 수정할 다짐 찾기
-        Resolution resolution = resolutionRepository.findById(resolutionId)
-                .orElseThrow(() -> new ResolutionException(ResolutionErrorCode.NOT_FOUND));
-
-        // 2. 권한 확인
-        if (!resolution.getGalaxy().getUser().getId().equals(userId)) {
-            throw new ResolutionException(GeneralErrorCode.FORBIDDEN);
-        }
-
-        // 3. 데이터 수정(엔티티 메서드 호출)
-        resolution.updateContent(dto.content());
-
-        return ResolutionConverter.toUpdateDTO(resolution);
     }
 
     // 배치 다짐 수정

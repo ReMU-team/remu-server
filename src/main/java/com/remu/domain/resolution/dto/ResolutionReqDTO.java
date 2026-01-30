@@ -12,16 +12,6 @@ import java.util.List;
 
 public class ResolutionReqDTO {
 
-    // 다짐 생성 단일 요청 DTO
-    public record ResolutionCreateDTO(
-            @NotBlank(message = "다짐 내용은 필수입니다.")
-            @Size(max = 100, message = "다짐은 최대 100자까지 가능합니다.")
-            String content,
-
-            @NotBlank(message = "다짐 이모지 정보는 필수입니다.")
-            String emojiId
-    ) {}
-
     // 다짐 생성 배치 요청 DTO
     public record ResolutionBatchCreateDTO(
             @NotBlank(message = "이모지 선택은 필수입니다.")
@@ -34,11 +24,6 @@ public class ResolutionReqDTO {
             List<@NotBlank(message = "다짐 내용은 비어있을 수 없습니다.")
                 @Size(max = 100, message ="다짐은 최대 100자까지 가능합니다.")
                     String> contents
-    ) {}
-
-    // 다짐 수정 DTO
-    public record ResolutionUpdateDTO(
-            String content
     ) {}
 
     // 다짐 수정 배치 DTO

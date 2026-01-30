@@ -4,23 +4,12 @@ import com.remu.domain.review.dto.ReviewReqDTO;
 import com.remu.domain.review.dto.ReviewResDTO;
 
 public interface ReviewService {
-    ReviewResDTO.ReviewCreateDTO create(
-            Long userId,
-            Long resolutionId,
-            ReviewReqDTO.ReviewCreateDTO dto
-    );
 
     // 회고 배치 생성
     ReviewResDTO.ReviewBatchCreateDTO batchCreate(
             Long userId,
             Long galaxyId,
             ReviewReqDTO.BatchReviewCreateDTO dto
-    );
-
-    ReviewResDTO.ReviewUpdateDTO update(
-            Long userId,
-            Long reviewId,
-            ReviewReqDTO.ReviewUpdateDTO dto
     );
 
     // 리뷰 배치 업데이트

@@ -9,11 +9,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/galaxies/{galaxyId}/feedback")
 public class AiFeedbackController implements AiFeedbackControllerDocs{
 
     private final AiFeedbackService aiFeedbackService;
 
-    @PostMapping("/galaxies/{galaxyId}/feedback")
+    @PostMapping
     @Override
     public ApiResponse<AiFeedbackResDTO.AiFeedbackCreateDTO> createFeedback(
             @PathVariable Long galaxyId
@@ -22,7 +23,7 @@ public class AiFeedbackController implements AiFeedbackControllerDocs{
         return ApiResponse.onSuccess(AiFeedbackSuccessCode.CREATE, result);
     }
 
-    @GetMapping("/galaxies/{galaxyId}/feedback")
+    @GetMapping
     @Override
     public ApiResponse<AiFeedbackResDTO.AiFeedbackCreateDTO> getFeedback(
             @PathVariable Long galaxyId
@@ -31,7 +32,7 @@ public class AiFeedbackController implements AiFeedbackControllerDocs{
         return ApiResponse.onSuccess(AiFeedbackSuccessCode.FOUND, result);
     }
 
-    @PatchMapping("/galaxies/{galaxyId}/feedback")
+    @PatchMapping
     @Override
     public ApiResponse<AiFeedbackResDTO.AiFeedbackUpdateDTO> updateFeedback(
             @PathVariable Long galaxyId

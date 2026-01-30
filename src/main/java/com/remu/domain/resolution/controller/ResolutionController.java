@@ -11,25 +11,14 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/galaxies/{galaxyId}/resolutions")
 public class ResolutionController implements ResolutionControllerDocs{
 
     private final ResolutionService resolutionService;
 
-    // 다짐 생성
-    @Override
-    @PostMapping("/galaxies/{galaxyId}/resolutions")
-    public ApiResponse<ResolutionResDTO.ResolutionCreateDTO> createResolution (
-            @RequestParam Long userId,
-            @PathVariable Long galaxyId,
-            @Valid @RequestBody ResolutionReqDTO.ResolutionCreateDTO dto
-    ) {
-        ResolutionResDTO.ResolutionCreateDTO result = resolutionService.create(userId, galaxyId, dto);
-        return ApiResponse.onSuccess(ResolutionSuccessCode.CREATE, result);
-    }
-
     // 다짐 배치 생성
+    @PostMapping
     @Override
-    @PostMapping("/galaxies/{galaxyId}/resolutions/batch")
     public ApiResponse<ResolutionResDTO.ResolutionBatchCreateDTO> createResolutionBatch(
             @RequestParam Long userId,
             @PathVariable Long galaxyId,
@@ -40,8 +29,8 @@ public class ResolutionController implements ResolutionControllerDocs{
     }
 
     // 다짐 목록 조회
+    @GetMapping
     @Override
-    @GetMapping("/galaxies/{galaxyId}/resolutions")
     public ApiResponse<ResolutionResDTO.ResolutionPreviewListDTO> getResolutions(
             @RequestParam Long userId,
             @PathVariable Long galaxyId
@@ -50,20 +39,8 @@ public class ResolutionController implements ResolutionControllerDocs{
         return ApiResponse.onSuccess(ResolutionSuccessCode.FOUND, result);
     }
 
-    // 다짐 수정
-    @PatchMapping("/resolutions/{resolutionId}")
-    @Override
-    public ApiResponse<ResolutionResDTO.ResolutionUpdateDTO> updateResolution(
-            @RequestParam Long userId,
-            @PathVariable Long resolutionId,
-            @RequestBody ResolutionReqDTO.ResolutionUpdateDTO dto
-    ) {
-        ResolutionResDTO.ResolutionUpdateDTO result = resolutionService.update(userId, resolutionId, dto);
-        return ApiResponse.onSuccess(ResolutionSuccessCode.UPDATE, result);
-    }
-
     // 다짐 배치 수정
-    @PatchMapping("/galaxies/{galaxyId}/resolutions/batch")
+    @PatchMapping
     @Override
     public ApiResponse<ResolutionResDTO.ResolutionBatchCreateDTO> updateResolutionBatch(
             @RequestParam Long userId,

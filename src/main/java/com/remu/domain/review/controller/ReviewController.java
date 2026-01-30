@@ -12,22 +12,12 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/v1/galaxies/{galaxyId}/reviews")
 public class ReviewController implements ReviewControllerDocs {
 
     private final ReviewService reviewService;
 
-    @Override
-    @PostMapping("/resolutions/{resolutionId}/reviews")
-    public ApiResponse<ReviewResDTO.ReviewCreateDTO> createReview(
-            @RequestParam Long userId,
-            @PathVariable Long resolutionId,
-            @Valid @RequestBody ReviewReqDTO.ReviewCreateDTO dto
-    ) {
-        ReviewResDTO.ReviewCreateDTO result = reviewService.create(userId, resolutionId, dto);
-        return ApiResponse.onSuccess(ReviewSuccessCode.CREATE, result);
-    }
-
-    @PostMapping("/galaxies/{galaxyId}/reviews/batch")
+    @PostMapping
     @Override
     public ApiResponse<ReviewResDTO.ReviewBatchCreateDTO> createReviewBatch(
             @RequestParam Long userId,
@@ -39,8 +29,8 @@ public class ReviewController implements ReviewControllerDocs {
     }
 
     // 리뷰 목록 조회. 이때 은하 내부 모든 회고를 갖고 와야 하기에 galaxy로 접근
+    @GetMapping
     @Override
-    @GetMapping("/galaxies/{galaxyId}/reviews")
     public ApiResponse<ReviewResDTO.ReviewPreviewListDTO> getReviews(
             @RequestParam Long userId,
             @PathVariable Long galaxyId
@@ -49,19 +39,7 @@ public class ReviewController implements ReviewControllerDocs {
         return ApiResponse.onSuccess(ReviewSuccessCode.FOUND, result);
     }
 
-    // 리뷰 수정
-    @Override
-    @PatchMapping("/reviews/{reviewId}")
-    public ApiResponse<ReviewResDTO.ReviewUpdateDTO> updateReview(
-            @RequestParam Long userId,
-            @PathVariable Long reviewId,
-            @Valid @RequestBody ReviewReqDTO.ReviewUpdateDTO dto
-    ) {
-        ReviewResDTO.ReviewUpdateDTO result = reviewService.update(userId, reviewId, dto);
-        return ApiResponse.onSuccess(ReviewSuccessCode.UPDATE, result);
-    }
-
-    @PatchMapping("/galaxies/{galaxyId}/reviews/batch")
+    @PatchMapping
     @Override
     public ApiResponse<ReviewResDTO.ReviewBatchUpdateDTO> updateReviewBatch(
             @RequestParam Long userId,

@@ -11,34 +11,6 @@ import java.util.List;
 public class ReviewConverter {
 
     /* ---------------------
-     * [CREATE] 단일 생성 관련 변환
-     * --------------------- */
-
-    // Entity -> DTO
-    public static ReviewResDTO.ReviewCreateDTO toCreateDTO(
-            Review review
-    ) {
-        return ReviewResDTO.ReviewCreateDTO.builder()
-                .reviewId(review.getId())
-                .resolutionId(review.getResolution().getId())
-                .content(review.getContent())
-                .isResolutionFulfilled(review.getIsResolutionFulfilled())
-                .createdAt(review.getCreatedAt())
-                .build();
-    }
-
-    // DTO -> Entity
-    public static Review toReview(
-            ReviewReqDTO.ReviewCreateDTO dto, Resolution resolution
-    ) {
-        return Review.builder()
-                .resolution(resolution)
-                .content(dto.content())
-                .isResolutionFulfilled(dto.isResolutionFulfilled())
-                .build();
-    }
-
-    /* ---------------------
      * [CREATE] 배치 생성 관련 변환
      * --------------------- */
 
@@ -110,21 +82,6 @@ public class ReviewConverter {
                 .reviewContent(review.getContent())
                 .isResolutionFulfilled(review.getIsResolutionFulfilled())
                 .createdAt(review.getCreatedAt())
-                .build();
-    }
-
-    /* ---------------------
-     * [UPDATE] 단일 수정 관련 변환
-     * --------------------- */
-
-    public static ReviewResDTO.ReviewUpdateDTO toUpdateDTO(Review review) {
-        return ReviewResDTO.ReviewUpdateDTO.builder()
-                .reviewId(review.getId())
-                .resolutionId(review.getResolution().getId())
-                .resolutionContent(review.getResolution().getContent())
-                .reviewContent(review.getContent())
-                .isResolutionFulfilled(review.getIsResolutionFulfilled())
-                .updatedAt(review.getUpdatedAt())
                 .build();
     }
 
