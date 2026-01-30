@@ -100,7 +100,9 @@ public class ReviewServiceImpl implements ReviewService{
                     }
 
                     // review 엔티티 생성(Resolution과 1:1 매핑)
-                    return ReviewConverter.toReviewFromBatch(resolution, item);
+                    Review review = ReviewConverter.toReviewFromBatch(resolution, item);
+                    resolution.setReview(review);
+                    return review;
                 })
                 .toList();
 

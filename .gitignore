@@ -40,6 +40,9 @@ out/
 # 운영 환경 설정 파일 (보안상 절대 금지)
 /src/main/resources/application-prod.yml
 
+# 자체 테스트 코드용 data
+/src/main/resources/data.sql
+
 # Querydsl 빌드 파일 (빌드 시 자동 생성되므로 제외)
 /src/main/resources/generated/
 

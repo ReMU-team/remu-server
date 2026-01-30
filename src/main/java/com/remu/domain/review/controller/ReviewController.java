@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.*;
 public class ReviewController implements ReviewControllerDocs {
 
     private final ReviewService reviewService;
-    private final ResolutionRepository resolutionRepository;
 
     @Override
     @PostMapping("/resolutions/{resolutionId}/reviews")
