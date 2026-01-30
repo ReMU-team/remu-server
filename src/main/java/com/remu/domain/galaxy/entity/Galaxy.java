@@ -1,5 +1,6 @@
 package com.remu.domain.galaxy.entity;
 
+import com.remu.domain.feedback.entity.AiFeedback;
 import com.remu.domain.galaxy.enums.GalaxyStatus;
 import com.remu.domain.place.entity.Place;
 import com.remu.domain.resolution.entity.Resolution;
@@ -48,6 +49,10 @@ public class Galaxy extends BaseEntity {
     @Builder.Default
     private List<Star> stars = new ArrayList<>();
 
+    // Ai 피드백
+    @OneToOne(mappedBy = "galaxy", cascade = CascadeType.ALL, orphanRemoval = true)
+    private AiFeedback aiFeedback;
+
     @Column(name = "name")
     private String name;
 
@@ -64,11 +69,6 @@ public class Galaxy extends BaseEntity {
     @Builder.Default
     @Column(name = "status")
     private GalaxyStatus status = GalaxyStatus.READY;
-
-    @Column(columnDefinition = "TEXT")
-    private String aiFeedback;
-
-    private LocalDateTime aiAnalyzedAt;
 
     @Column(name = "resolution_emoji_id")
     private String resolutionEmojiId;
