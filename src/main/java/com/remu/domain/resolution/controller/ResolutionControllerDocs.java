@@ -6,6 +6,7 @@ import com.remu.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 public interface ResolutionControllerDocs {
@@ -19,7 +20,7 @@ public interface ResolutionControllerDocs {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
     })
     ApiResponse<ResolutionResDTO.ResolutionCreateDTO> createResolution(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal(expression = "id") Long userId,
             @PathVariable Long galaxyId,
             ResolutionReqDTO.ResolutionCreateDTO dto
     );
@@ -34,7 +35,7 @@ public interface ResolutionControllerDocs {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
     })
     ApiResponse<ResolutionResDTO.ResolutionBatchCreateDTO> createResolutionBatch(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal(expression = "id") Long userId,
             @PathVariable Long galaxyId,
             @Valid @RequestBody ResolutionReqDTO.ResolutionBatchCreateDTO dto
     );
@@ -48,7 +49,7 @@ public interface ResolutionControllerDocs {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
     })
     ApiResponse<ResolutionResDTO.ResolutionPreviewListDTO> getResolutions(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal(expression = "id") Long userId,
             @PathVariable Long galaxyId
     );
 
@@ -64,7 +65,7 @@ public interface ResolutionControllerDocs {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
     })
     ApiResponse<ResolutionResDTO.ResolutionUpdateDTO> updateResolution(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal(expression = "id") Long userId,
             @PathVariable Long resolutionId,
             @RequestBody ResolutionReqDTO.ResolutionUpdateDTO dto
     );
@@ -80,7 +81,7 @@ public interface ResolutionControllerDocs {
     })
     @PatchMapping("/galaxies/{galaxyId}/resolutions/batch")
     ApiResponse<ResolutionResDTO.ResolutionBatchCreateDTO> updateResolutionBatch(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal(expression = "id") Long userId,
             @PathVariable Long galaxyId,
             @Valid @RequestBody ResolutionReqDTO.ResolutionBatchUpdateDTO dto
     );

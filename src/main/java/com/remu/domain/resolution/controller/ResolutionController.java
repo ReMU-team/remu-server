@@ -7,6 +7,7 @@ import com.remu.domain.resolution.service.ResolutionService;
 import com.remu.global.apiPayload.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -19,7 +20,7 @@ public class ResolutionController implements ResolutionControllerDocs{
     @Override
     @PostMapping("/galaxies/{galaxyId}/resolutions")
     public ApiResponse<ResolutionResDTO.ResolutionCreateDTO> createResolution (
-            @RequestParam Long userId,
+            @AuthenticationPrincipal(expression = "id") Long userId,
             @PathVariable Long galaxyId,
             @Valid @RequestBody ResolutionReqDTO.ResolutionCreateDTO dto
     ) {
@@ -31,7 +32,7 @@ public class ResolutionController implements ResolutionControllerDocs{
     @Override
     @PostMapping("/galaxies/{galaxyId}/resolutions/batch")
     public ApiResponse<ResolutionResDTO.ResolutionBatchCreateDTO> createResolutionBatch(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal(expression = "id") Long userId,
             @PathVariable Long galaxyId,
             @Valid @RequestBody ResolutionReqDTO.ResolutionBatchCreateDTO dto
     ) {
@@ -43,7 +44,7 @@ public class ResolutionController implements ResolutionControllerDocs{
     @Override
     @GetMapping("/galaxies/{galaxyId}/resolutions")
     public ApiResponse<ResolutionResDTO.ResolutionPreviewListDTO> getResolutions(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal(expression = "id") Long userId,
             @PathVariable Long galaxyId
     ) {
         ResolutionResDTO.ResolutionPreviewListDTO result = resolutionService.findResolutions(userId, galaxyId);
@@ -54,7 +55,7 @@ public class ResolutionController implements ResolutionControllerDocs{
     @PatchMapping("/resolutions/{resolutionId}")
     @Override
     public ApiResponse<ResolutionResDTO.ResolutionUpdateDTO> updateResolution(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal(expression = "id") Long userId,
             @PathVariable Long resolutionId,
             @RequestBody ResolutionReqDTO.ResolutionUpdateDTO dto
     ) {
@@ -66,7 +67,7 @@ public class ResolutionController implements ResolutionControllerDocs{
     @PatchMapping("/galaxies/{galaxyId}/resolutions/batch")
     @Override
     public ApiResponse<ResolutionResDTO.ResolutionBatchCreateDTO> updateResolutionBatch(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal(expression = "id") Long userId,
             @PathVariable Long galaxyId,
             @Valid @RequestBody ResolutionReqDTO.ResolutionBatchUpdateDTO dto
     ) {
