@@ -16,8 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-// 추후 시스템 복잡도에 따라 service 클래스 command, query로 구분 예정
-
 @Service
 @Transactional
 @RequiredArgsConstructor

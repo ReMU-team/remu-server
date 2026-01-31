@@ -10,15 +10,15 @@ import org.springframework.http.HttpStatus;
 public enum AiFeedbackSuccessCode implements BaseSuccessCode {
 
     FOUND(HttpStatus.OK,
-            "REVIEW200_1",
+            "AiFeedback200_1",
             "성공적으로 피드백을 조회했습니다."),
 
     CREATE(HttpStatus.OK,
-            "REVIEW200_2",
+            "AiFeedback_2",
             "성공적으로 피드백을 생성했습니다."),
 
     UPDATE(HttpStatus.OK,
-            "REVIEW200_3",
+            "AiFeedback_3",
                     "성공적으로 피드백을 수정했습니다.");
 
     private final HttpStatus status;
