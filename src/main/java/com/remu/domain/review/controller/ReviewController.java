@@ -8,6 +8,7 @@ import com.remu.domain.review.service.ReviewService;
 import com.remu.global.apiPayload.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,7 +21,7 @@ public class ReviewController implements ReviewControllerDocs {
     @PostMapping
     @Override
     public ApiResponse<ReviewResDTO.ReviewBatchCreateDTO> createReviewBatch(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal(expression = "id") Long userId,
             @PathVariable Long galaxyId,
             @Valid @RequestBody ReviewReqDTO.BatchReviewCreateDTO dto
     ) {
@@ -29,10 +30,10 @@ public class ReviewController implements ReviewControllerDocs {
     }
 
     // 리뷰 목록 조회. 이때 은하 내부 모든 회고를 갖고 와야 하기에 galaxy로 접근
-    @GetMapping
     @Override
+    @GetMapping
     public ApiResponse<ReviewResDTO.ReviewPreviewListDTO> getReviews(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal(expression = "id") Long userId,
             @PathVariable Long galaxyId
     ) {
         ReviewResDTO.ReviewPreviewListDTO result = reviewService.getReviewListByGalaxy(userId, galaxyId);
@@ -42,7 +43,7 @@ public class ReviewController implements ReviewControllerDocs {
     @PatchMapping
     @Override
     public ApiResponse<ReviewResDTO.ReviewBatchUpdateDTO> updateReviewBatch(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal(expression = "id") Long userId,
             @PathVariable Long galaxyId,
             @Valid @RequestBody ReviewReqDTO.BatchReviewUpdateDTO dto
     ) {

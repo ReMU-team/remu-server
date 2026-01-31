@@ -6,6 +6,7 @@ import com.remu.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 public interface ReviewControllerDocs {
@@ -19,7 +20,7 @@ public interface ReviewControllerDocs {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
     })
     ApiResponse<ReviewResDTO.ReviewBatchCreateDTO> createReviewBatch(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal(expression = "id") Long userId,
             @PathVariable Long galaxyId,
             @Valid @RequestBody ReviewReqDTO.BatchReviewCreateDTO dto
     );
@@ -33,7 +34,7 @@ public interface ReviewControllerDocs {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
     })
     ApiResponse<ReviewResDTO.ReviewPreviewListDTO> getReviews(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal(expression = "id") Long userId,
             @PathVariable Long galaxyId
     );
 
@@ -48,7 +49,7 @@ public interface ReviewControllerDocs {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
     })
     ApiResponse<ReviewResDTO.ReviewBatchUpdateDTO> updateReviewBatch(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal(expression = "id") Long userId,
             @PathVariable Long galaxyId,
             @Valid @RequestBody ReviewReqDTO.BatchReviewUpdateDTO dto
     );

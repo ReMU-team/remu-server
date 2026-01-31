@@ -7,6 +7,7 @@ import com.remu.domain.resolution.service.ResolutionService;
 import com.remu.global.apiPayload.ApiResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -20,7 +21,7 @@ public class ResolutionController implements ResolutionControllerDocs{
     @PostMapping
     @Override
     public ApiResponse<ResolutionResDTO.ResolutionBatchCreateDTO> createResolutionBatch(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal(expression = "id") Long userId,
             @PathVariable Long galaxyId,
             @Valid @RequestBody ResolutionReqDTO.ResolutionBatchCreateDTO dto
     ) {
@@ -32,7 +33,7 @@ public class ResolutionController implements ResolutionControllerDocs{
     @GetMapping
     @Override
     public ApiResponse<ResolutionResDTO.ResolutionPreviewListDTO> getResolutions(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal(expression = "id") Long userId,
             @PathVariable Long galaxyId
     ) {
         ResolutionResDTO.ResolutionPreviewListDTO result = resolutionService.findResolutions(userId, galaxyId);
@@ -43,7 +44,7 @@ public class ResolutionController implements ResolutionControllerDocs{
     @PatchMapping
     @Override
     public ApiResponse<ResolutionResDTO.ResolutionBatchCreateDTO> updateResolutionBatch(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal(expression = "id") Long userId,
             @PathVariable Long galaxyId,
             @Valid @RequestBody ResolutionReqDTO.ResolutionBatchUpdateDTO dto
     ) {
