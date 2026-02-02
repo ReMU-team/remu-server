@@ -51,6 +51,9 @@ public class User extends BaseEntity {
     @Column(name = "name", length = 15)
     private String name;
 
+    @Column(name = "fcm_token")
+    private String fcmToken; // FCM 토큰 추가
+
     // 연관 관계
     // 갤럭시 리스트
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -67,5 +70,10 @@ public class User extends BaseEntity {
 
     public void updateIntroduction(String introduction) {
         this.introduction = introduction;
+    }
+
+    // FCM 토큰 업데이트 메서드
+    public void updateFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
     }
 }
