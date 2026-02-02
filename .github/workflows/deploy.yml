@@ -70,28 +70,28 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           BASE_URL: ${{ secrets.BASE_URL }}
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
-          script: |
-            # EC2 내 도커가 ECR에서 이미지를 당겨올 수 있도록 로그인
-            aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin $ECR_REGISTRY
-            
-            # 기존 컨테이너 정리
-            docker stop remu-server || true
-            docker rm remu-server || true
-            
-            # 새 이미지 pull
-            docker pull $ECR_REGISTRY/remu-server:latest
-            
-            # [핵심] RDS 및 환경변수 주입하며 실행
-            docker run -d --name remu-server -p 8080:8080 \
-              -e DB_URL=$DB_URL \
-              -e DB_USER=$DB_USER \
-              -e DB_PW=$DB_PW \
-              -e GEMINI_API_KEY=$GEMINI_API_KEY \
-              -e GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID \
-              -e GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET \
-              -e KAKAO_CLIENT_ID=$KAKAO_CLIENT_ID \
-              -e KAKAO_CLIENT_SECRET=$KAKAO_CLIENT_SECRET \
-              -e JWT_SECRET=$JWT_SECRET \
-              -e BASE_URL=$BASE_URL \
-              -e GOOGLE_API_KEY=$GOOGLE_API_KEY \
-              $ECR_REGISTRY/remu-server:latest
+        script: |
+          # EC2 내 도커가 ECR에서 이미지를 당겨올 수 있도록 로그인
+          aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin $ECR_REGISTRY
+          
+          # 기존 컨테이너 정리
+          docker stop remu-server || true
+          docker rm remu-server || true
+          
+          # 새 이미지 pull
+          docker pull $ECR_REGISTRY/remu-server:latest
+          
+          # [핵심] RDS 및 환경변수 주입하며 실행
+          docker run -d --name remu-server -p 8080:8080 \
+            -e DB_URL=$DB_URL \
+            -e DB_USER=$DB_USER \
+            -e DB_PW=$DB_PW \
+            -e GEMINI_API_KEY=$GEMINI_API_KEY \
+            -e GOOGLE_CLIENT_ID=$GOOGLE_CLIENT_ID \
+            -e GOOGLE_CLIENT_SECRET=$GOOGLE_CLIENT_SECRET \
+            -e KAKAO_CLIENT_ID=$KAKAO_CLIENT_ID \
+            -e KAKAO_CLIENT_SECRET=$KAKAO_CLIENT_SECRET \
+            -e JWT_SECRET=$JWT_SECRET \
+            -e BASE_URL=$BASE_URL \
+            -e GOOGLE_API_KEY=$GOOGLE_API_KEY \
+            $ECR_REGISTRY/remu-server:latest
