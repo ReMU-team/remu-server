@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 public interface AiFeedbackControllerDocs {
 
     @Operation(
-            summary = "AI 피드백 생성 API by 매튜/진현준",
+            summary = "AI 피드백 생성하는 API by 매튜/진현준",
             description = "AI 피드백 생성 API입니다."
     )
     @ApiResponses({
