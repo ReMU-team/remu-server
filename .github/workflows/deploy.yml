@@ -22,7 +22,7 @@ jobs:
         run: |
           mkdir -p ./src/main/resources
           # 통합된 yml 하나만 생성합니다. local.yml 생성 단계는 삭제했습니다.
-          echo "${{ secrets.APPLICATION_YML }}" > ./src/main/resources/application.yml
+          echo '${{ secrets.APPLICATION_YML }}' > ./src/main/resources/application.yml
 
       - name: 빌드하기 (테스트 제외)
         # RDS 보안 그룹 설정 등에 따라 빌드 중 DB 접속 테스트가 실패할 수 있으므로
