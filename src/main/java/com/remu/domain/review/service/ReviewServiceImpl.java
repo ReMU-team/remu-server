@@ -33,39 +33,6 @@ public class ReviewServiceImpl implements ReviewService{
 
     // === Command 로직 (상태 변경) ===
 
-    @Override
-    public ReviewResDTO.ReviewCreateDTO create(
-            Long userId,
-            Long resolutionId,
-            ReviewReqDTO.ReviewCreateDTO dto
-    ) {
-
-        // 1. 대상 다짐 조회
-        Resolution resolution = resolutionRepository.findById(resolutionId)
-                .orElseThrow(() -> new ResolutionException(ResolutionErrorCode.NOT_FOUND));
-
-        // 2. 본인 확인
-        if (!resolution.getGalaxy().getUser().getId().equals(userId)) {
-            throw new ReviewException(GeneralErrorCode.FORBIDDEN);
-        }
-
-        // 3. 여행 종료 확인
-        if (LocalDate.now().isBefore(resolution.getGalaxy().getEndDate())) {
-            throw new ReviewException(ReviewErrorCode.TRAVEL_NOT_FINISHED);
-        }
-
-        // 4. 중복 작성 확인: 이미 해당 다짐에 대한 회고가 있는지
-        if (reviewRepository.existsByResolutionId(resolutionId)) {
-            throw new ReviewException(ReviewErrorCode.ALREADY_EXISTS);
-        }
-
-        // DTO -> Entity 변환
-        Review review = ReviewConverter.toReview(dto, resolution);
-
-        // 이후 저장
-        return ReviewConverter.toCreateDTO(reviewRepository.save(review));
-    }
-
     // 회고 배치 생성
     @Override
     public ReviewResDTO.ReviewBatchCreateDTO batchCreate(
@@ -100,37 +67,15 @@ public class ReviewServiceImpl implements ReviewService{
                     }
 
                     // review 엔티티 생성(Resolution과 1:1 매핑)
-                    return ReviewConverter.toReviewFromBatch(resolution, item);
+                    Review review = ReviewConverter.toReviewFromBatch(resolution, item);
+                    resolution.setReview(review);
+                    return review;
                 })
                 .toList();
 
         // 5. 모든 회고 데이터 일괄 저장
         List<Review> savedReviews = reviewRepository.saveAll(reviews);
         return ReviewConverter.toBatchCreateResDTO(galaxy, savedReviews);
-    }
-
-    // 리뷰 단일 업데이트
-
-    @Override
-    public ReviewResDTO.ReviewUpdateDTO update(
-            Long userId,
-            Long reviewId,
-            ReviewReqDTO.ReviewUpdateDTO dto
-    ) {
-        // 1. 기존 회고 조회
-        // TODO: 향후 fetch 조인 적용 고려
-        Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new ReviewException(ReviewErrorCode.NOT_FOUND));
-
-        // 2. 권한 검증
-        if (!review.getResolution().getGalaxy().getUser().getId().equals(userId)) {
-            throw new ReviewException(GeneralErrorCode.FORBIDDEN);
-        }
-
-        // 3. 수정(엔티티 메서드 호출)
-        review.update(dto.content(), dto.isResolutionFulfilled());
-
-        return ReviewConverter.toUpdateDTO(review);
     }
 
     // 리뷰 배치 업데이트

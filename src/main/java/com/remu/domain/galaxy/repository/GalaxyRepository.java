@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface GalaxyRepository extends JpaRepository<Galaxy, Long> {
+public interface GalaxyRepository extends JpaRepository<Galaxy, Long>, GalaxyQueryDsl {
     Slice <Galaxy> findAllByUserId(Long userId, Pageable pageable);
 
     // 총 개수

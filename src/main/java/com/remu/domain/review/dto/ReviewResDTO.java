@@ -7,16 +7,6 @@ import java.util.List;
 
 public class ReviewResDTO {
 
-    // 단일 생성
-    @Builder
-    public record ReviewCreateDTO(
-            Long resolutionId,
-            Long reviewId,
-            String content,
-            Boolean isResolutionFulfilled,
-            LocalDateTime createdAt
-    ) {}
-
     // 배치 생성
     @Builder
     public record ReviewBatchCreateDTO(
@@ -56,18 +46,6 @@ public class ReviewResDTO {
             String reviewContent,
             Boolean isResolutionFulfilled,
             LocalDateTime createdAt
-    ) {}
-
-    // 회고 단일 수정
-
-    @Builder
-    public record ReviewUpdateDTO(
-            Long reviewId,
-            Long resolutionId,
-            String resolutionContent,
-            String reviewContent,
-            Boolean isResolutionFulfilled,
-            LocalDateTime updatedAt
     ) {}
 
     // 회고 배치 수정

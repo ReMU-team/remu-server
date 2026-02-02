@@ -4,6 +4,9 @@ spring:
     url: ${DB_URL}?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul # jdbc:mysql://localhost:3306/{데이터베이스명} + 이모지 대응 코드
     username: ${DB_USER} # MySQL 유저 이름
     password: ${DB_PW} # MySQL 비밀번호
+  sql:
+    init:
+      mode: never
 
   jpa:
     database: mysql # 사용할 데이터베이스 유형 지정 (MySQL)
@@ -14,6 +17,11 @@ spring:
     properties:
       hibernate:
         format_sql: true # 출력되는 SQL 쿼리를 보기 좋게 포맷팅
+    defer-datasource-initialization: true
+
+  ai:
+    openai:
+      api-key: ${GEMINI_API_KEY:} # : 붙여서 환경변수가 없으면 빈 값으로 처리(에러 방지)
 
   security:
     oauth2:
