@@ -26,6 +26,11 @@ public class NotificationService {
     // 알림 생성 및 전송 (내부 호출용)
     @Transactional
     public void createAndSendNotification(User user, Galaxy galaxy, NotificationType type) {
+        // 알림 수신 거부한 유저는 건너뜀
+        if (!user.getIsAlarmOn()) {
+            return;
+        }
+
         String content = "";
         Question question = null;
 
@@ -61,18 +66,5 @@ public class NotificationService {
 
         // 2. FCM 전송 (비동기로 처리하면 좋음)
         fcmService.sendMessage(user.getFcmToken(), "ReMU", content);
-    }
-
-    // 유저의 알림 목록 조회
-    public List<Notification> getNotifications(Long userId) {
-        return notificationRepository.findAllByUserIdOrderByCreatedAtDesc(userId);
-    }
-
-    // 알림 읽음 처리
-    @Transactional
-    public void readNotification(Long notificationId) {
-        Notification notification = notificationRepository.findById(notificationId)
-                .orElseThrow(() -> new IllegalArgumentException("알림을 찾을 수 없습니다."));
-        notification.read(); // 읽음 처리
     }
 }

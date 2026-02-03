@@ -57,4 +57,30 @@ public interface UserControllerDocs {
 
     })
     ApiResponse<Void> deleteAccount(Long userId);
+
+    @Operation(
+            summary = "알림 설정 변경 API",
+            description = "알림 수신 여부(ON/OFF)를 변경합니다."
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
+    })
+    ApiResponse<String> toggleAlarm(
+            @RequestParam("userId") Long userId,
+            @RequestParam("isAlarmOn") Boolean isAlarmOn
+    );
+
+    @Operation(
+            summary = "FCM 토큰 갱신 API",
+            description = "로그인 시 또는 앱 실행 시 FCM 토큰을 갱신합니다."
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
+    })
+    ApiResponse<String> updateFcmToken(
+            @RequestParam("userId") Long userId,
+            @RequestParam("fcmToken") String fcmToken
+    );
 }

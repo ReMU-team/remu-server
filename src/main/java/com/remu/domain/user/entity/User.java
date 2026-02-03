@@ -52,7 +52,11 @@ public class User extends BaseEntity {
     private String name;
 
     @Column(name = "fcm_token")
-    private String fcmToken; // FCM 토큰 추가
+    private String fcmToken; // FCM 토큰
+
+    @Column(name = "is_alarm_on", nullable = false)
+    @Builder.Default
+    private Boolean isAlarmOn = true; // 알림 수신 여부 (기본값 ON)
 
     // 연관 관계
     // 갤럭시 리스트
@@ -75,5 +79,10 @@ public class User extends BaseEntity {
     // FCM 토큰 업데이트 메서드
     public void updateFcmToken(String fcmToken) {
         this.fcmToken = fcmToken;
+    }
+
+    // 알림 설정 변경 메서드
+    public void toggleAlarm(Boolean isAlarmOn) {
+        this.isAlarmOn = isAlarmOn;
     }
 }
