@@ -1,0 +1,25 @@
+package com.remu.domain.user.enums;
+
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+
+@Getter
+@RequiredArgsConstructor
+public enum Role {
+
+    GUEST("ROLE_GUEST", "손님"),
+    USER("ROLE_USER", "일반 사용자"),
+    ADMIN("ROLE_ADMIN", "관리자");
+
+    private final String key;
+    private final String title;
+
+    public static Role fromKey(String key) {
+        for (Role role : values()) {
+            if (role.key.equals(key)) {
+                return role;
+            }
+        }
+        throw new IllegalArgumentException("Invalid role key: " + key);
+    }
+}

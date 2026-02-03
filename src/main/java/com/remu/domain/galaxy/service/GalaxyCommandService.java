@@ -24,14 +24,13 @@ public class GalaxyCommandService {
     /*
     1. 은하 생성
      */
-    public GalaxyResDTO.CreateDTO createGalaxy(GalaxyReqDTO.GalaxyCreateDTO request, User user) {
+    public GalaxyResDTO.GalaxyCreateDTO createGalaxy(GalaxyReqDTO.GalaxyCreateDTO request, User user) {
         // TODO 은하 개수 검증
 
         // 1) 날짜 논리 검증 (Start <= Arrival <= End)
         validateTravelDates(request.startDate(), request.arrivalDate(), request.endDate());
 
         // 2) 장소 처리: 기존 장소면 가져오고, 없으면 새로 저장 (googlePlaceId 기준)
-        // TODO: 구글맵 위치 필드값 확인 후 적용
         Place place = placeRepository.findByGooglePlaceId(request.googlePlaceId())
                 .orElseGet(()->placeRepository.save(
                         Place.builder()

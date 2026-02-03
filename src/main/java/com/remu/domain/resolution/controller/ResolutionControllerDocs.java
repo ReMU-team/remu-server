@@ -5,24 +5,28 @@ import com.remu.domain.resolution.dto.ResolutionResDTO;
 import com.remu.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import jakarta.validation.Valid;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 public interface ResolutionControllerDocs {
 
+    // 다짐 배치 생성
     @Operation(
-            summary = "다짐을 생성하는 API by 매튜/진현준",
-            description = "다짐을 생성하는 API입니다. 생성 과정에 userId, galaxyId를 통해 유효한 사용자인지 검증합니다."
+            summary = "다짐 배치 생성 API by 매튜/진현준",
+            description = "다짐 배치 생성 API입니다."
     )
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
     })
-    ApiResponse<ResolutionResDTO.CreateDTO> create(
-            @RequestParam Long userId,
+    ApiResponse<ResolutionResDTO.ResolutionBatchCreateDTO> createResolutionBatch(
+            @AuthenticationPrincipal(expression = "id") Long userId,
             @PathVariable Long galaxyId,
-            ResolutionReqDTO.CreateDTO dto
+            @Valid @RequestBody ResolutionReqDTO.ResolutionBatchCreateDTO dto
     );
 
+    // 다짐 목록 조회
     @Operation(
             summary = "다짐 목록들을 조회하는 API by 매튜/진현준",
             description = "다짐을 조회하는 API입니다."
@@ -32,24 +36,22 @@ public interface ResolutionControllerDocs {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
     })
     ApiResponse<ResolutionResDTO.ResolutionPreviewListDTO> getResolutions(
-            @RequestParam Long userId,
+            @AuthenticationPrincipal(expression = "id") Long userId,
             @PathVariable Long galaxyId
     );
 
-
-    // 다짐 수정
-
+    // 다짐 배치 수정
     @Operation(
-            summary = "다짐 목록들을 수정하는 API by 매튜/진현준",
-            description = "다짐을 수정하는 API입니다."
+            summary = "다짐 목록들을 배치 처리해 수정하는 API by 매튜/진현준",
+            description = "다짐들을 배치 처리해 수정하는 API입니다."
     )
     @ApiResponses({
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
     })
-    ApiResponse<ResolutionResDTO.UpdateDTO> updateResolution(
-            @RequestParam Long userId,
-            @PathVariable Long resolutionId,
-            @RequestBody ResolutionReqDTO.UpdateDTO dto
+    ApiResponse<ResolutionResDTO.ResolutionBatchCreateDTO> updateResolutionBatch(
+            @AuthenticationPrincipal(expression = "id") Long userId,
+            @PathVariable Long galaxyId,
+            @Valid @RequestBody ResolutionReqDTO.ResolutionBatchUpdateDTO dto
     );
 }

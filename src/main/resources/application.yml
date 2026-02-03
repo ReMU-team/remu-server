@@ -3,4 +3,17 @@ spring:
     active: local # 기본값을 local로 설정하여 팀원들이 바로 실행되게 함
   application:
     name: remu
+  jpa:
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
+  ai:
+    openai:
+      chat:
+        base-url: "https://generativelanguage.googleapis.com/v1beta/openai/"
+        options:
+          model: "gemini-2.5-flash-lite"
+          temperature: 0.0 # 낮은 창의성, 정확한 답변 요구
+        completions-path: "/chat/completions" # 구글 서버에 데이터 요청 시 사용하는 엔드포인트
+
 

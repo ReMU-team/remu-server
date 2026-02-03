@@ -6,16 +6,18 @@ import com.remu.domain.resolution.dto.ResolutionResDTO;
 public interface ResolutionService {
 
     // === Command 로직 (상태 변경) ===
-    ResolutionResDTO.CreateDTO create(
+
+    ResolutionResDTO.ResolutionBatchCreateDTO batchCreate(
             Long userId,
             Long galaxyId,
-            ResolutionReqDTO.CreateDTO dto
+            ResolutionReqDTO.ResolutionBatchCreateDTO dto
     );
 
-    ResolutionResDTO.UpdateDTO update(
+    // 배치 다짐 수정
+    ResolutionResDTO.ResolutionBatchCreateDTO batchUpdate(
             Long userId,
-            Long resolutionId,
-            ResolutionReqDTO.UpdateDTO dto
+            Long galaxyId,
+            ResolutionReqDTO.ResolutionBatchUpdateDTO dto
     );
 
     // === Query 로직 (조회) ===

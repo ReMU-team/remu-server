@@ -17,7 +17,7 @@ public class Review extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(mappedBy = "review", fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     private Resolution resolution;
 
     @Column(name = "content", columnDefinition = "TEXT")
@@ -25,6 +25,10 @@ public class Review extends BaseEntity {
 
     @Column(name = "is_resolution_fulfilled")
     private Boolean isResolutionFulfilled;
+
+    public void setResolution(Resolution resolution) {
+        this.resolution = resolution;
+    }
 
     public void update(String content, Boolean isResolutionFulfilled) {
         this.content = content;

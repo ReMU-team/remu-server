@@ -4,34 +4,40 @@ import com.remu.domain.galaxy.entity.Galaxy;
 import com.remu.domain.resolution.dto.ResolutionReqDTO;
 import com.remu.domain.resolution.dto.ResolutionResDTO;
 import com.remu.domain.resolution.entity.Resolution;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 public class ResolutionConverter {
 
     /* ---------------------
-     * [CREATE] 생성 관련 변환
+     * [CREATE] 배치 생성 관련 변환
      * --------------------- */
 
-    // Entity -> DTO
-    public static ResolutionResDTO.CreateDTO toCreateDTO(
-            Resolution resolution
-    ) {
-        return ResolutionResDTO.CreateDTO.builder()
-                .resolutionId(resolution.getId())
-                .content(resolution.getContent())
-                .createdAt(resolution.getCreatedAt())
+    // DTO -> Entity
+    public static Resolution toResolutionFromBatch(String content, Galaxy galaxy) {
+        return Resolution.builder()
+                .galaxy(galaxy)
+                .content(content)
                 .build();
     }
 
-    // DTO -> Entity
-    public static Resolution toResolution(
-            ResolutionReqDTO.CreateDTO dto, Galaxy galaxy
+    // Entity -> DTO
+    public static ResolutionResDTO.ResolutionBatchCreateDTO toBatchCreateDTO(
+            Galaxy galaxy,
+            List<Resolution> resolutions
     ) {
-        return Resolution.builder()
-                .galaxy(galaxy)
-                .content(dto.content())
+        List<ResolutionResDTO.SingleResolutionDTO> list = resolutions.stream()
+                .map(res -> ResolutionResDTO.SingleResolutionDTO.builder()
+                        .resolutionId(res.getId())
+                        .content(res.getContent())
+                        .createdAt(res.getCreatedAt())
+                        .build())
+                .toList();
+
+        return ResolutionResDTO.ResolutionBatchCreateDTO.builder()
+                .emojiId(galaxy.getResolutionEmojiId())
+                .illustId(galaxy.getResolutionIllustId())
+                .resolutions(list)
                 .build();
     }
 
@@ -40,9 +46,11 @@ public class ResolutionConverter {
      * --------------------- */
 
     public static ResolutionResDTO.ResolutionPreviewListDTO toResolutionPreviewListDTO(
-            List<Resolution> resolutions
+            List<Resolution> resolutions, String emojiId, String illustId
     ) {
         return ResolutionResDTO.ResolutionPreviewListDTO.builder()
+                .emojiId(emojiId)
+                .illustId(illustId)
                 .resolutionList(resolutions.stream()
                         .map(ResolutionConverter::toResolutionPreviewDTO)
                         .toList()
@@ -58,18 +66,6 @@ public class ResolutionConverter {
                 .resolutionId(resolution.getId())
                 .content(resolution.getContent())
                 .createdAt(resolution.getCreatedAt())
-                .build();
-    }
-
-    /* ---------------------
-     * [UPDATE] 수정 관련 변환
-     * --------------------- */
-
-    public static ResolutionResDTO.UpdateDTO toUpdateDTO(Resolution resolution) {
-        return ResolutionResDTO.UpdateDTO.builder()
-                .resolutionId(resolution.getId())
-                .content(resolution.getContent())
-                .updatedAt(resolution.getUpdatedAt())
                 .build();
     }
 }

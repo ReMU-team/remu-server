@@ -88,7 +88,7 @@ public class UserService {
     // 회원 탈퇴
     @Transactional
     public Void deleteAccount(Long userId) {
-        //TODO 소셜 로그인 구현 후 소셜 로그인 연동 해제 기능 추가
+        //TODO 소셜 로그인 구현 후 소셜 로그인 연동 해제 기능 추가하기
 
         // 1. 유저 존재 여부 검증 및 조회
         User user = userRepository.findById(userId)
@@ -124,7 +124,8 @@ public class UserService {
                 throw new UserException(UserErrorCode.INVALID_NAME);
             }
 
-            if(userRepository.existsByName(name)){
+            // 현재 자신의 이름 외에 중복 검사
+            if(userRepository.existsByNameAndIdNot(name, user.getId())){
                 throw new UserException(UserErrorCode.NAME_DUPLICATE);
             }
 
@@ -136,9 +137,9 @@ public class UserService {
     private void updateIntroduction(User user, String rawIntro) {
         if (rawIntro != null) {
             String intro = rawIntro.trim();
-            if (!intro.isEmpty()) {
-                user.updateIntroduction(intro);
-            }
+            user.updateIntroduction(
+                    intro.isEmpty() ? null : intro
+            );
         }
     }
 

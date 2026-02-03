@@ -10,7 +10,7 @@ import org.springframework.data.repository.query.Param;
 import java.time.LocalDate;
 import java.util.List;
 
-public interface GalaxyRepository extends JpaRepository<Galaxy, Long> {
+public interface GalaxyRepository extends JpaRepository<Galaxy, Long>, GalaxyQueryDsl {
     Slice <Galaxy> findAllByUserId(Long userId, Pageable pageable);
 
     // 총 개수

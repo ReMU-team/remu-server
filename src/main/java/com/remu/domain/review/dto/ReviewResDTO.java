@@ -7,17 +7,33 @@ import java.util.List;
 
 public class ReviewResDTO {
 
+    // 배치 생성
     @Builder
-    public record CreateDTO(
+    public record ReviewBatchCreateDTO(
+            String reviewEmojiId,
+            String resolutionEmojiId,
+            String reflection,
+            List<SingleReviewDTO> reviews
+
+    ) {}
+
+    @Builder
+    public record SingleReviewDTO(
             Long resolutionId,
+            String resolutionContent,
             Long reviewId,
-            String content,
+            String reviewContent,
             Boolean isResolutionFulfilled,
             LocalDateTime createdAt
     ) {}
 
+    // 회고 조회
+
     @Builder
     public record ReviewPreviewListDTO(
+            String reviewEmojiId,
+            String resolutionEmojiId,
+            String reflection,
             List<ReviewPreviewDTO> reviewList,
             Integer listSize
     ) {}
@@ -32,11 +48,20 @@ public class ReviewResDTO {
             LocalDateTime createdAt
     ) {}
 
+    // 회고 배치 수정
     @Builder
-    public record UpdateDTO(
-            Long reviewId,
+    public record ReviewBatchUpdateDTO(
+            String reviewEmojiId,
+            String resolutionEmojiId,
+            String reflection,
+            List<SingleReviewUpdateDTO> reviews
+    ) {}
+
+    @Builder
+    public record SingleReviewUpdateDTO(
             Long resolutionId,
             String resolutionContent,
+            Long reviewId,
             String reviewContent,
             Boolean isResolutionFulfilled,
             LocalDateTime updatedAt

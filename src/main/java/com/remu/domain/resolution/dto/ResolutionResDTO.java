@@ -9,9 +9,16 @@ import java.util.List;
 
 public class ResolutionResDTO {
 
-    // 다짐 생성 요청에 대한 응답 결과
+    // 다짐 생성 요청 배치 처리
     @Builder
-    public record CreateDTO(
+    public record ResolutionBatchCreateDTO(
+            String emojiId,
+            String illustId,
+            List<SingleResolutionDTO> resolutions
+    ) {}
+
+    @Builder
+    public record SingleResolutionDTO(
             Long resolutionId,
             String content,
             LocalDateTime createdAt
@@ -21,6 +28,8 @@ public class ResolutionResDTO {
     // 다짐 조회 DTO
     @Builder
     public record ResolutionPreviewListDTO(
+        String emojiId,
+        String illustId,
         List<ResolutionPreviewDTO> resolutionList,
         Integer listSize
     ) {}
@@ -30,13 +39,5 @@ public class ResolutionResDTO {
             Long resolutionId,
             String content,
             LocalDateTime createdAt
-    ) {}
-
-    // 다짐 수정 DTO
-    @Builder
-    public record UpdateDTO(
-            Long resolutionId,
-            String content,
-            LocalDateTime updatedAt
     ) {}
 }

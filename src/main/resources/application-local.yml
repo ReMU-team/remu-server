@@ -4,6 +4,9 @@ spring:
     url: ${DB_URL}?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul # jdbc:mysql://localhost:3306/{데이터베이스명} + 이모지 대응 코드
     username: ${DB_USER} # MySQL 유저 이름
     password: ${DB_PW} # MySQL 비밀번호
+  sql:
+    init:
+      mode: never
 
   jpa:
     database: mysql # 사용할 데이터베이스 유형 지정 (MySQL)
@@ -14,10 +17,50 @@ spring:
     properties:
       hibernate:
         format_sql: true # 출력되는 SQL 쿼리를 보기 좋게 포맷팅
+    defer-datasource-initialization: true
+
+  ai:
+    openai:
+      api-key: ${GEMINI_API_KEY:} # : 붙여서 환경변수가 없으면 빈 값으로 처리(에러 방지)
+
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            redirect-uri: "${BASE_URL}/login/oauth2/code/google"
+            scope:
+              - profile
+              - email
+          kakao:
+            client-id: ${KAKAO_CLIENT_ID}
+            client-secret: ${KAKAO_CLIENT_SECRET}
+            client-authentication-method: client_secret_post
+            authorization-grant-type: authorization_code
+            redirect-uri: "${BASE_URL}/login/oauth2/code/kakao"
+            scope:
+              - profile_nickname
+              - account_email
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+
+jwt:
+  secret: ${JWT_SECRET}
+  access-expiration: 1800000 # 30분
+  refresh-expiration: 1209600000 # 14일
 
 logging:
   level:
     org.springframework.security: DEBUG
-
-jwt:
   secret: "this-is-remu-project-local-secret-key-for-jwt-testing-12345678"
+
+google:
+  api:
+    key: ${GOOGLE_API_KEY:dummy_key}
+    url: https://maps.googleapis.com/maps/api/place/queryautocomplete/json # Query Autocomplete API
