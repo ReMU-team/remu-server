@@ -1,7 +1,9 @@
-package com.remu.global.common;
+package com.remu.global.s3;
 
 import com.remu.global.apiPayload.code.GeneralErrorCode;
 import com.remu.global.apiPayload.exception.GeneralException;
+import com.remu.global.s3.exception.S3ErrorCode;
+import com.remu.global.s3.exception.S3Exception;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -38,13 +40,13 @@ public class S3Service {
     /**
      * [단일 업로드] 파일을 S3에 업로드하고 정보(파일명, 미리보기 URL)를 반환
      */
-    public S3TotalResponse uploadFile(MultipartFile file, String folderName) {
+    public S3TotalResponse uploadFile(MultipartFile file, S3Directory s3Directory) {
         // 1, 파일이 있는지 체크
         if (file == null || file.isEmpty()) {
-            throw new GeneralException(GeneralErrorCode.NOT_FOUND);
+            throw new GeneralException(S3ErrorCode.S3_FILE_NOT_FOUND);
         }
 
-        String fileName = generateFileName(file.getOriginalFilename(), folderName);
+        String fileName = generateFileName(file.getOriginalFilename(), s3Directory.getDirectory());
 
         try {
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
@@ -59,18 +61,18 @@ public class S3Service {
 
             return new S3TotalResponse(fileName, getPresignedUrl(fileName));
         } catch (IOException e) {
-            throw new RuntimeException("S3 파일 업로드 실패: " + fileName, e);
+            throw new S3Exception(S3ErrorCode.S3_UPLOAD_FAIL);
         }
     }
 
     /**
      * [다중 업로드] 파일을 S3에 업로드하고 정보(파일명, 미리보기 URL)를 반환
      */
-    public List<S3TotalResponse> uploadFiles(List<MultipartFile> files, String folderName) {
+    public List<S3TotalResponse> uploadFiles(List<MultipartFile> files, S3Directory s3Directory) {
         if (files == null || files.isEmpty()) return Collections.emptyList();
 
         return files.stream()
-                .map(file -> uploadFile(file, folderName))
+                .map(file -> uploadFile(file, s3Directory))
                 .toList();
     }
 
@@ -111,7 +113,7 @@ public class S3Service {
             s3Client.deleteObject(deleteObjectRequest);
             return new S3TotalResponse(fileName, null);
         } catch (Exception e) {
-            throw new GeneralException(GeneralErrorCode.BAD_REQUEST);
+            throw new S3Exception(S3ErrorCode.S3_DELETE_FAIL);
         }
     }
     

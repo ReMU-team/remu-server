@@ -1,6 +1,5 @@
-package com.remu.global.common;
+package com.remu.global.s3;
 
-import com.remu.global.apiPayload.ApiResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -27,9 +26,9 @@ public class S3Controller {
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public S3Service.S3TotalResponse uploadFile(
             @RequestPart("file") MultipartFile file,
-            @RequestParam(value = "folder", defaultValue = "test") String folder) {
+            @RequestParam(value = "folder", defaultValue = "test") S3Directory s3Directory) {
 
-        return s3Service.uploadFile(file, folder);
+        return s3Service.uploadFile(file, s3Directory);
     }
 
     /**
@@ -39,9 +38,9 @@ public class S3Controller {
     @PostMapping(value = "/upload-multiple", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public List<S3Service.S3TotalResponse> uploadFiles(
             @RequestPart("files") List<MultipartFile> files,
-            @RequestParam(value = "folder", defaultValue = "test") String folder) {
+            @RequestParam(value = "folder", defaultValue = "test") S3Directory s3Directory) {
 
-        return s3Service.uploadFiles(files, folder);
+        return s3Service.uploadFiles(files, s3Directory);
     }
 
     /**
