@@ -1,5 +1,6 @@
 package com.remu.domain.notification.entity;
 
+import com.remu.domain.notification.enums.QuestionDifficulty;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -17,4 +18,9 @@ public class Question {
 
     @Column(name = "content", nullable = false)
     private String content; // 질문 내용
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "difficulty", nullable = false)
+    @Builder.Default
+    private QuestionDifficulty difficulty = QuestionDifficulty.EASY; // 난이도 (기본값 EASY)
 }

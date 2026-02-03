@@ -20,7 +20,7 @@ public class NotificationScheduler {
     private final GalaxyRepository galaxyRepository;
     private final NotificationService notificationService;
 
-    // 1. 여행 도착일 - 기본 알림 (매일 09:00)
+    // 1. 여행 시작 알림 (매일 09:00)
     @Scheduled(cron = "0 0 9 * * *")
     public void sendArrivalNotification() {
         LocalDate today = LocalDate.now();
@@ -32,11 +32,13 @@ public class NotificationScheduler {
         }
     }
 
-    // 2. 여행지 도착일 - 기록 유도 알림 (매일 20:00)
-    @Scheduled(cron = "0 0 20 * * *")
+    // 2. 기록 유도 알림 (매일 23:00)
+    // 조건: 오늘 기록 0개일 때만 (Service에서 체크)
+    @Scheduled(cron = "0 0 23 * * *")
     public void sendRecordNotification() {
         LocalDate today = LocalDate.now();
-        List<Galaxy> galaxies = galaxyRepository.findAllByArrivalDate(today);
+        // 여행 기간 중인 모든 은하 대상 (도착일 포함)
+        List<Galaxy> galaxies = galaxyRepository.findAllByDateBetween(today);
 
         log.info("Sending RECORD notifications for {} galaxies", galaxies.size());
         for (Galaxy galaxy : galaxies) {
@@ -44,9 +46,19 @@ public class NotificationScheduler {
         }
     }
 
-    // 3. 여행 기간 - 랜덤 질문 알림 (매일 14:00)
+    // 3. 랜덤 질문 알림 (매일 14:00, 20:00)
+    // 조건: 별 개수에 따라 난이도 다름 (Service에서 체크)
     @Scheduled(cron = "0 0 14 * * *")
-    public void sendQuestionNotification() {
+    public void sendQuestionNotificationAfterLunch() {
+        sendQuestionNotification();
+    }
+
+    @Scheduled(cron = "0 0 20 * * *")
+    public void sendQuestionNotificationAfterDinner() {
+        sendQuestionNotification();
+    }
+
+    private void sendQuestionNotification() {
         LocalDate today = LocalDate.now();
         List<Galaxy> galaxies = galaxyRepository.findAllByDateBetween(today);
 
@@ -56,7 +68,7 @@ public class NotificationScheduler {
         }
     }
 
-    // 4. 여행 종료일 + 1 - 회상 유도 알림 (매일 10:00)
+    // 4. 회고 알림 (매일 10:00)
     @Scheduled(cron = "0 0 10 * * *")
     public void sendReviewNotification() {
         LocalDate yesterday = LocalDate.now().minusDays(1); // 어제가 종료일인 경우
