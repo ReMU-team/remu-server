@@ -16,13 +16,16 @@ public interface GalaxyRepository extends JpaRepository<Galaxy, Long>, GalaxyQue
     // 총 개수
     Long countByUserId(Long userId);
 
-    // 1. 여행 도착일이 특정 날짜인 은하 조회 (ARRIVAL, RECORD 알림용)
+    // 1. 여행 시작일이 특정 날짜인 은하 조회 (ARRIVAL 알림용)
+    List<Galaxy> findAllByStartDate(LocalDate startDate);
+
+    // 2. 여행 도착일이 특정 날짜인 은하 조회 (RECORD 알림용 - 첫날 체크 등)
     List<Galaxy> findAllByArrivalDate(LocalDate arrivalDate);
 
-    // 2. 여행 종료일이 특정 날짜인 은하 조회 (REVIEW 알림용)
+    // 3. 여행 종료일이 특정 날짜인 은하 조회 (REVIEW 알림용)
     List<Galaxy> findAllByEndDate(LocalDate endDate);
 
-    // 3. 여행 기간 중에 포함되는 은하 조회 (QUESTION 알림용)
+    // 4. 여행 기간 중에 포함되는 은하 조회 (QUESTION, RECORD 알림용)
     // startDate <= today <= endDate
     @Query("select g from Galaxy g where :today >= g.startDate and :today <= g.endDate")
     List<Galaxy> findAllByDateBetween(@Param("today") LocalDate today);

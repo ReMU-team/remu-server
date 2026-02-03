@@ -47,14 +47,15 @@ public class NotificationService {
                 break;
 
             case RECORD:
-                // 오늘 이미 기록했으면 알림 안 보냄
-                if (starCount > 0) {
-                    return;
-                }
                 // 여행 첫날인지 확인
-                if (today.isEqual(galaxy.getStartDate())) {
+                if (today.isEqual(galaxy.getArrivalDate())) {
+                    // 첫날은 기록 여부 상관없이 무조건 발송
                     content = "여행지에 잘 도착하셨나요? 첫 기록을 남겨보세요! 📝";
                 } else {
+                    // 그 외 날짜는 오늘 기록이 없을 때만 발송
+                    if (starCount > 0) {
+                        return;
+                    }
                     content = "오늘 하루는 어떠셨나요? 기록을 남겨보세요.";
                 }
                 break;

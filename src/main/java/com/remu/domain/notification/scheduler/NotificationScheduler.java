@@ -24,7 +24,8 @@ public class NotificationScheduler {
     @Scheduled(cron = "0 0 9 * * *")
     public void sendArrivalNotification() {
         LocalDate today = LocalDate.now();
-        List<Galaxy> galaxies = galaxyRepository.findAllByArrivalDate(today);
+        // 여행 시작일인 은하 조회
+        List<Galaxy> galaxies = galaxyRepository.findAllByStartDate(today);
 
         log.info("Sending ARRIVAL notifications for {} galaxies", galaxies.size());
         for (Galaxy galaxy : galaxies) {
