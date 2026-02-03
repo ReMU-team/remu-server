@@ -1,6 +1,7 @@
 package com.remu.domain.user.entity;
 
 import com.remu.domain.galaxy.entity.Galaxy;
+import com.remu.domain.user.enums.Role;
 import com.remu.domain.user.enums.SocialType;
 import com.remu.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -51,6 +52,10 @@ public class User extends BaseEntity {
     @Column(name = "name", length = 15)
     private String name;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", nullable = false)
+    private Role role; // Role 필드 복구
+
     @Column(name = "fcm_token")
     private String fcmToken; // FCM 토큰
 
@@ -84,5 +89,10 @@ public class User extends BaseEntity {
     // 알림 설정 변경 메서드
     public void toggleAlarm(Boolean isAlarmOn) {
         this.isAlarmOn = isAlarmOn;
+    }
+
+    // Role Key 반환 메서드 (Security에서 사용)
+    public String getRoleKey() {
+        return this.role.getKey();
     }
 }
