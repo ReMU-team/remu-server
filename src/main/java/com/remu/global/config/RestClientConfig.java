@@ -19,7 +19,7 @@ public class RestClientConfig {
                 .build();
 
         // 2. 위에서 만든 HttpClient를 사용하는 팩토리 생성
-        JdkClientHttpRequestFactory factory = new JdkClientHttpRequestFactory();
+        JdkClientHttpRequestFactory factory = new JdkClientHttpRequestFactory(httpClient);
 
         // 3. 읽기 타임아웃은 팩토리에서 직접 설정 가능
         // 응답 타임아웃 5초
