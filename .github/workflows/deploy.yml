@@ -26,7 +26,7 @@ jobs:
 
       - name: 빌드하기 (테스트 제외)
         # RDS 보안 그룹 설정 등에 따라 빌드 중 DB 접속 테스트가 실패할 수 있으므로
-        # 안정적인 배포를 위해 -x test를 권장합니다.
+        # 안정적인 배포를 위해 -x test를 권장.
         run: |
           chmod +x ./gradlew
           ./gradlew clean build -x test
@@ -55,8 +55,8 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop: true
-          # [핵심] SSH 환경으로 GitHub Secrets 변수들을 넘겨줍니다.
-          envs: ECR_REGISTRY,DB_URL,DB_USER,DB_PW,GEMINI_API_KEY,GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,KAKAO_CLIENT_ID,KAKAO_CLIENT_SECRET,JWT_SECRET,BASE_URL,GOOGLE_API_KEY
+          # SSH 환경으로 GitHub Secrets 변수 전달
+          envs: ECR_REGISTRY,DB_URL,DB_USER,DB_PW,GEMINI_API_KEY,GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,KAKAO_CLIENT_ID,KAKAO_CLIENT_SECRET,JWT_SECRET,BASE_URL,GOOGLE_API_KEY,S3_BUCKET_NAME
           script: |
             # EC2 내 도커가 ECR에서 이미지를 당겨올 수 있도록 로그인
             aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin $ECR_REGISTRY
@@ -81,6 +81,7 @@ jobs:
               -e JWT_SECRET=$JWT_SECRET \
               -e BASE_URL=$BASE_URL \
               -e GOOGLE_API_KEY=$GOOGLE_API_KEY \
+              -e S3_BUCKET_NAME=$S3_BUCKET_NAME \
               $ECR_REGISTRY/remu-server:latest
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
@@ -95,3 +96,4 @@ jobs:
           JWT_SECRET: ${{ secrets.JWT_SECRET }}
           BASE_URL: ${{ secrets.BASE_URL }}
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
+          S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
