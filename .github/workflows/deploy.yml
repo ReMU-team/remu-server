@@ -21,8 +21,15 @@ jobs:
       - name: application.yml (통합본) 파일 생성
         run: |
           mkdir -p ./src/main/resources
-          # 통합된 yml 하나만 생성합니다. local.yml 생성 단계는 삭제했습니다.
+          # 통합된 yml 하나만 생성. local.yml은 삭제했습니다.
           echo '${{ secrets.APPLICATION_YML }}' > ./src/main/resources/application.yml
+
+      - name: Create Firebase Secret File
+        run: |
+          # 폴더가 없으면 생성
+          mkdir -p ./src/main/resources/firebase
+          # Secret에 담긴 텍스트를 파일로 기록
+          echo '${{ secrets.FIREBASE_JSON }}' > ./src/main/resources/firebase/serviceAccountKey.json
 
       - name: 빌드하기 (테스트 제외)
         # RDS 보안 그룹 설정 등에 따라 빌드 중 DB 접속 테스트가 실패할 수 있으므로
