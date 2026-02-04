@@ -3,9 +3,11 @@ package com.remu.domain.galaxy.controller;
 import com.remu.domain.galaxy.dto.request.GalaxyReqDTO;
 import com.remu.domain.galaxy.dto.response.GalaxyResDTO;
 import com.remu.global.apiPayload.ApiResponse;
+import com.remu.global.config.sercurity.oauth.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,7 +21,7 @@ public interface GalaxyControllerDocs {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
     })
-    ApiResponse<GalaxyResDTO.GalaxyCreateDTO> createGalaxy(@RequestBody @Valid GalaxyReqDTO.GalaxyCreateDTO request);
+    ApiResponse<GalaxyResDTO.GalaxyCreateDTO> createGalaxy(@RequestBody @Valid GalaxyReqDTO.GalaxyCreateDTO request, @AuthenticationPrincipal UserPrincipal userPrincipal);
 
     // 2. 은하 상세 조회
     @Operation(
@@ -30,7 +32,7 @@ public interface GalaxyControllerDocs {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
     })
-    ApiResponse<GalaxyResDTO.GalaxyDetailDTO> getGalaxyDetail(@PathVariable Long galaxyId);
+    ApiResponse<GalaxyResDTO.GalaxyDetailDTO> getGalaxyDetail(@PathVariable Long galaxyId, @AuthenticationPrincipal UserPrincipal userPrincipal);
 
     // 3. 은하 전체 조회
     @Operation(
@@ -42,7 +44,7 @@ public interface GalaxyControllerDocs {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
     })
     ApiResponse<GalaxyResDTO.SummaryListDTO> getGalaxyList(@RequestParam(defaultValue = "0") int page,
-                                                           @RequestParam(defaultValue = "10") int size);
+                                                           @RequestParam(defaultValue = "10") int size, @AuthenticationPrincipal UserPrincipal userPrincipal);
 
 
     // 4. 은하 삭제
@@ -54,7 +56,7 @@ public interface GalaxyControllerDocs {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "성공"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
     })
-    ApiResponse<Void> deleteGalaxy(@PathVariable Long galaxyId);
+    ApiResponse<Void> deleteGalaxy(@PathVariable Long galaxyId, @AuthenticationPrincipal UserPrincipal userPrincipal);
 
     // 5. 은하 수정
     @Operation(
@@ -66,6 +68,6 @@ public interface GalaxyControllerDocs {
     })
     ApiResponse<Void> updateGalaxy(
             @PathVariable Long galaxyId,
-            @RequestBody GalaxyReqDTO.GalaxyUpdateDTO request);
+            @RequestBody GalaxyReqDTO.GalaxyUpdateDTO request, @AuthenticationPrincipal UserPrincipal userPrincipal);
 
 }

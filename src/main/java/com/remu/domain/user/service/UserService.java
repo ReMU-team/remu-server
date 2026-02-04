@@ -100,6 +100,22 @@ public class UserService {
         return null;
     }
 
+    // 알림 설정 변경 (ON/OFF)
+    @Transactional
+    public void toggleAlarm(Long userId, Boolean isAlarmOn) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+        user.toggleAlarm(isAlarmOn);
+    }
+
+    // FCM 토큰 갱신
+    @Transactional
+    public void updateFcmToken(Long userId, String fcmToken) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+        user.updateFcmToken(fcmToken);
+    }
+
     // 이름 업데이트
     private void updateName(User user, String rawName) {
         if (rawName != null) {

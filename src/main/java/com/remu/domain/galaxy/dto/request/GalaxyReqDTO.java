@@ -14,7 +14,6 @@ public class GalaxyReqDTO {
             @NotNull(message = "시작 날짜는 필수입니다.")
             LocalDate startDate,
 
-            @NotNull(message = "도착 날짜는 필수입니다.")
             LocalDate arrivalDate,
 
             @NotNull(message = "종료 날짜는 필수입니다.")
