@@ -26,9 +26,10 @@ public class S3Controller {
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public S3Service.S3TotalResponse uploadFile(
             @RequestPart("file") MultipartFile file,
-            @RequestParam(value = "folder", defaultValue = "test") S3Directory s3Directory) {
+            @RequestParam(value = "folder", defaultValue = "test") S3Directory s3Directory,
+            @RequestParam Long userId) {
 
-        return s3Service.uploadFile(file, s3Directory);
+        return s3Service.uploadFile(file, s3Directory, userId);
     }
 
     /**
@@ -38,9 +39,10 @@ public class S3Controller {
     @PostMapping(value = "/upload-multiple", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public List<S3Service.S3TotalResponse> uploadFiles(
             @RequestPart("files") List<MultipartFile> files,
-            @RequestParam(value = "folder", defaultValue = "test") S3Directory s3Directory) {
+            @RequestParam(value = "folder", defaultValue = "test") S3Directory s3Directory,
+            @RequestParam Long userId) {
 
-        return s3Service.uploadFiles(files, s3Directory);
+        return s3Service.uploadFiles(files, s3Directory, userId);
     }
 
     /**

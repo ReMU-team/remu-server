@@ -40,13 +40,13 @@ public class S3Service {
     /**
      * [단일 업로드] 파일을 S3에 업로드하고 정보(파일명, 미리보기 URL)를 반환
      */
-    public S3TotalResponse uploadFile(MultipartFile file, S3Directory s3Directory) {
+    public S3TotalResponse uploadFile(MultipartFile file, S3Directory s3Directory, Long userId) {
         // 1, 파일이 있는지 체크
         if (file == null || file.isEmpty()) {
             throw new GeneralException(S3ErrorCode.S3_FILE_NOT_FOUND);
         }
 
-        String fileName = generateFileName(file.getOriginalFilename(), s3Directory.getDirectory());
+        String fileName = generateFileName(file.getOriginalFilename(), s3Directory.getDirectory(), userId);
 
         try {
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
@@ -68,11 +68,11 @@ public class S3Service {
     /**
      * [다중 업로드] 파일을 S3에 업로드하고 정보(파일명, 미리보기 URL)를 반환
      */
-    public List<S3TotalResponse> uploadFiles(List<MultipartFile> files, S3Directory s3Directory) {
+    public List<S3TotalResponse> uploadFiles(List<MultipartFile> files, S3Directory s3Directory, Long userId) {
         if (files == null || files.isEmpty()) return Collections.emptyList();
 
         return files.stream()
-                .map(file -> uploadFile(file, s3Directory))
+                .map(file -> uploadFile(file, s3Directory, userId))
                 .toList();
     }
 
@@ -135,8 +135,8 @@ public class S3Service {
     }
 
     // S3 저장 경로 및 파일명 생성 (folder/UUID_name)
-    private String generateFileName(String originalFilename, String folderName) {
-        return String.format("%s/%s_%s", folderName, UUID.randomUUID(), originalFilename);
+    private String generateFileName(String originalFilename, String folderName, Long userId) {
+        return String.format("%s/%d/%s_%s", folderName, userId, UUID.randomUUID(), originalFilename);
     }
 
     // 응답용 레코드
