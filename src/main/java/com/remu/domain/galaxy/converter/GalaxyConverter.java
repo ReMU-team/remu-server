@@ -7,19 +7,21 @@ import com.remu.domain.galaxy.enums.GalaxyStatus;
 import com.remu.domain.place.entity.Place;
 import com.remu.domain.user.entity.User;
 
+import java.time.LocalDate;
+
 public class GalaxyConverter {
     /*
     은하 생성
      */
     // request dto->entity
-    public static Galaxy toGalaxy(GalaxyReqDTO.GalaxyCreateDTO req, Place place, User user) {
+    public static Galaxy toGalaxy(GalaxyReqDTO.GalaxyCreateDTO req, LocalDate date, Place place, User user) {
         return Galaxy.builder()
                 .name(req.name())
                 .user(user)
                 .place(place)
                 .emojiResourceName(req.emojiResourceName())
                 .startDate(req.startDate())
-                .arrivalDate(req.arrivalDate())
+                .arrivalDate(date)
                 .endDate(req.endDate())
                 .status(GalaxyStatus.READY)
                 .build();
