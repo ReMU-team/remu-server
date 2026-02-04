@@ -5,12 +5,13 @@ import com.remu.domain.galaxy.dto.response.GalaxyResDTO;
 import com.remu.domain.galaxy.exception.code.GalaxySuccessCode;
 import com.remu.domain.galaxy.service.GalaxyCommandService;
 import com.remu.domain.galaxy.service.GalaxyQueryService;
-import com.remu.domain.user.entity.User;
 import com.remu.global.apiPayload.ApiResponse;
+import com.remu.global.config.sercurity.oauth.UserPrincipal;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -21,40 +22,39 @@ public class GalaxyController implements GalaxyControllerDocs {
     private final GalaxyQueryService galaxyQueryService;
 
     // 1. 은하 생성
-    // TODO 인증된 User 객체 넣기 @AuthenticationPrincipal
     @PostMapping
     public ApiResponse<GalaxyResDTO.GalaxyCreateDTO> createGalaxy(
-            @RequestBody @Valid GalaxyReqDTO.GalaxyCreateDTO request) {
+            @RequestBody @Valid GalaxyReqDTO.GalaxyCreateDTO request, @AuthenticationPrincipal UserPrincipal userPrincipal) {
 
-        return ApiResponse.onSuccess(GalaxySuccessCode.GALAXY_CREATED, galaxyCommandService.createGalaxy(request, getMockUser()));
+        return ApiResponse.onSuccess(GalaxySuccessCode.GALAXY_CREATED, galaxyCommandService.createGalaxy(request, userPrincipal.getUser()));
     }
 
     // 2. 은하 상세 조회
     @GetMapping("/{galaxyId}")
     public ApiResponse<GalaxyResDTO.GalaxyDetailDTO> getGalaxyDetail(
-            @PathVariable Long galaxyId) {
+            @PathVariable Long galaxyId, @AuthenticationPrincipal UserPrincipal userPrincipal) {
 
-        GalaxyResDTO.GalaxyDetailDTO response = galaxyQueryService.getGalaxyDetail(galaxyId, getMockUser());
+        GalaxyResDTO.GalaxyDetailDTO response = galaxyQueryService.getGalaxyDetail(galaxyId, userPrincipal.getUser());
         return ApiResponse.onSuccess(GalaxySuccessCode.GALAXY_GET_SUCCESS, response);
     }
 
     // 3. 은하 전체 조회
     @GetMapping
     public ApiResponse<GalaxyResDTO.SummaryListDTO> getGalaxyList(@RequestParam(defaultValue = "0") int page,
-                                                                  @RequestParam(defaultValue = "10") int size){
+                                                                  @RequestParam(defaultValue = "10") int size, @AuthenticationPrincipal UserPrincipal userPrincipal){
 
 
         // PageRequest를 통해 Pageable 객체 생성
         Pageable pageable = PageRequest.of(page, size);
 
-        return ApiResponse.onSuccess(GalaxySuccessCode.GALAXY_LIST_GET_SUCCESS,galaxyQueryService.getGalaxyList(getMockUser(), pageable));
+        return ApiResponse.onSuccess(GalaxySuccessCode.GALAXY_LIST_GET_SUCCESS,galaxyQueryService.getGalaxyList(userPrincipal.getUser(), pageable));
     }
 
     // 4. 은하 삭제
     @DeleteMapping("/{galaxyId}")
-    public ApiResponse<Void> deleteGalaxy(@PathVariable Long galaxyId) {
+    public ApiResponse<Void> deleteGalaxy(@PathVariable Long galaxyId, @AuthenticationPrincipal UserPrincipal userPrincipal) {
 
-        galaxyCommandService.deleteGalaxy(galaxyId, getMockUser());
+        galaxyCommandService.deleteGalaxy(galaxyId, userPrincipal.getUser());
         return ApiResponse.onSuccess(GalaxySuccessCode.GALAXY_DELETE_SUCCESS, null);
     }
 
@@ -62,23 +62,11 @@ public class GalaxyController implements GalaxyControllerDocs {
     @PatchMapping("/{galaxyId}")
     public ApiResponse<Void> updateGalaxy(
             @PathVariable Long galaxyId,
-            @RequestBody GalaxyReqDTO.GalaxyUpdateDTO request
+            @RequestBody GalaxyReqDTO.GalaxyUpdateDTO request, @AuthenticationPrincipal UserPrincipal userPrincipal
     ){
-        galaxyCommandService.updateGalaxy(galaxyId, request, getMockUser());
+        galaxyCommandService.updateGalaxy(galaxyId, request, userPrincipal.getUser());
         return ApiResponse.onSuccess(GalaxySuccessCode.GALAXY_UPDATE_SUCCESS, null);
     }
 
-
-    /*
-    TODO: delete
-    Test User
-     */
-    private User getMockUser() {
-        return User.builder()
-                .id(1L)
-                .email("test@test.com")
-                .name("테스트유저")
-                .build();
-    }
 
 }

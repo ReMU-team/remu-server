@@ -43,9 +43,9 @@ public class StarService {
         // 3. Star 엔티티 생성 및 저장 (Converter 사용)
         Star star = StarConverter.toStar(request, galaxy, imageUrl);
         
-        starRepository.save(star);
+        Star savedStar = starRepository.save(star); // 저장된 객체 반환받기
 
-        return star.getId();
+        return savedStar.getId(); // 저장된 객체의 ID 반환
     }
 
     // 별 수정

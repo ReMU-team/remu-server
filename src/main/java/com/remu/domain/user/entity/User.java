@@ -10,8 +10,6 @@ import lombok.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.remu.domain.user.enums.Role.USER;
-
 @Entity
 @Builder
 @Getter
@@ -23,6 +21,10 @@ import static com.remu.domain.user.enums.Role.USER;
                 @UniqueConstraint(
                         name = "uk_user_social",
                         columnNames = {"social_type", "social_id"}
+                ),
+                @UniqueConstraint(
+                        name = "uk_user_name",
+                        columnNames = {"name"}
                 )
         }
 )
@@ -51,9 +53,15 @@ public class User extends BaseEntity {
     private String name;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
+    @Column(name = "role", nullable = false)
+    private Role role; // Role 필드 복구
+
+    @Column(name = "fcm_token")
+    private String fcmToken; // FCM 토큰
+
+    @Column(name = "is_alarm_on", nullable = false)
     @Builder.Default
-    private Role role = USER;
+    private Boolean isAlarmOn = true; // 알림 수신 여부 (기본값 ON)
 
     // 연관 관계
     // 갤럭시 리스트
@@ -73,8 +81,18 @@ public class User extends BaseEntity {
         this.introduction = introduction;
     }
 
-    // roleKey를 반환
-    public String getRoleKey(){
+    // FCM 토큰 업데이트 메서드
+    public void updateFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
+    }
+
+    // 알림 설정 변경 메서드
+    public void toggleAlarm(Boolean isAlarmOn) {
+        this.isAlarmOn = isAlarmOn;
+    }
+
+    // Role Key 반환 메서드 (Security에서 사용)
+    public String getRoleKey() {
         return this.role.getKey();
     }
 }

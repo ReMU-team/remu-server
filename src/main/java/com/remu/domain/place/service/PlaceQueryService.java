@@ -17,18 +17,15 @@ public class PlaceQueryService {
     @Value("${google.api.key}")
     private String apiKey;
 
-    private final RestClient restClient;
+    private final RestClient googleRestClient;
 
     public PlaceResDTO.PlaceSearchResDTO searchPlace(String query) {
         // 1. 자음/모음만 있는 경우 사전에 차단 (구글에 굳이 보낼 필요 없음)
-        if (query.matches("^[ㄱ-ㅎㅏ-ㅣ]+$")) {
+        if (query == null || query.isBlank() || query.matches("^[ㄱ-ㅎㅏ-ㅣ]+$")) {
             throw new PlaceException(PlaceErrorCode.INVALID_PLACE_QUERY);
         }
-
-        if (query == null || query.isBlank()) {
-            throw new PlaceException(PlaceErrorCode.INVALID_PLACE_QUERY);
-        }try {
-            PlaceResDTO.PlaceSearchResDTO response=restClient.get()
+        try {
+            PlaceResDTO.PlaceSearchResDTO response=googleRestClient.get()
                     .uri(uriBuilder -> uriBuilder
                             .path("/maps/api/place/autocomplete/json")
                             .queryParam("input", query)
@@ -38,6 +35,7 @@ public class PlaceQueryService {
                             .build())
                     .retrieve()
                     .body(PlaceResDTO.PlaceSearchResDTO.class);
+
             if (response==null || "ZERO_RESULTS".equals(response.status())) {
                 throw new PlaceException(PlaceErrorCode.PLACE_NOT_FOUND);
             }
