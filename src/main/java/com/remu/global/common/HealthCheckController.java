@@ -11,6 +11,6 @@ public class HealthCheckController {
     @GetMapping("/health")
     public ResponseEntity<String> healthCheck() {
         // 상태 코드 200과 함께 메시지 반환
-        return ResponseEntity.ok("Success Health Check");
+        return ResponseEntity.ok("Success Health Check!");
     }
 }
