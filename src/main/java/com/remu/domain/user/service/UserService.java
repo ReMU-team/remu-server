@@ -4,6 +4,8 @@ import com.remu.domain.user.converter.UserConverter;
 import com.remu.domain.user.dto.req.UserReqDTO;
 import com.remu.domain.user.dto.res.UserResDTO;
 import com.remu.domain.user.entity.User;
+import com.remu.domain.user.enums.Role;
+import com.remu.domain.user.enums.SocialType;
 import com.remu.domain.user.exception.UserException;
 import com.remu.domain.user.exception.code.UserErrorCode;
 import com.remu.domain.user.repository.UserRepository;
@@ -98,6 +100,21 @@ public class UserService {
         userRepository.delete(user);
 
         return null;
+    }
+
+    @Transactional
+    public User findOrCreateUser(String socialId, SocialType socialType, String email, String name, String imageUrl) {
+        return userRepository.findBySocialTypeAndSocialId(socialType, socialId)
+                .orElseGet(() -> userRepository.save(
+                        User.builder()
+                                .socialId(socialId)
+                                .socialType(socialType)
+                                .email(email)
+                                .name(name)
+                                .imageUrl(imageUrl)
+                                .role(Role.USER)
+                                .build()
+                ));
     }
 
     // 이름 업데이트
