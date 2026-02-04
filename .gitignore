@@ -46,6 +46,9 @@ out/
 # Querydsl 빌드 파일 (빌드 시 자동 생성되므로 제외)
 /src/main/resources/generated/
 
+# Firebase Admin SDK Key (보안상 절대 금지)
+src/main/resources/firebase/serviceAccountKey.json
+
 ### OS 별 임시 파일 ###
 .DS_Store
 Thumbs.db
