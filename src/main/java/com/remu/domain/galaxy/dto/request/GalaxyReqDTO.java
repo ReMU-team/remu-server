@@ -14,8 +14,6 @@ public class GalaxyReqDTO {
             @NotNull(message = "시작 날짜는 필수입니다.")
             LocalDate startDate,
 
-            LocalDate arrivalDate,
-
             @NotNull(message = "종료 날짜는 필수입니다.")
             LocalDate endDate,
 
@@ -35,7 +33,6 @@ public class GalaxyReqDTO {
             String name,
             String emojiResourceName,
             LocalDate startDate,
-            LocalDate arrivalDate,
             LocalDate endDate,
             String googlePlaceId,
             String placeName

@@ -59,9 +59,6 @@ public class Galaxy extends BaseEntity {
     @Column(name = "start_date")
     private LocalDate startDate;
 
-    @Column(name = "arrival_date")
-    private LocalDate arrivalDate;
-
     @Column(name = "end_date")
     private LocalDate endDate;
 
@@ -84,11 +81,10 @@ public class Galaxy extends BaseEntity {
     private String reflection;
 
     // updateInfo
-    public void updateInfo(String name, String emojiResourceName, LocalDate startDate, LocalDate arrivalDate, LocalDate endDate) {
+    public void updateInfo(String name, String emojiResourceName, LocalDate startDate, LocalDate endDate) {
         this.name = name;
         this.emojiResourceName = emojiResourceName;
         this.startDate = startDate;
-        this.arrivalDate = arrivalDate;
         this.endDate = endDate;
     }
 
