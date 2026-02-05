@@ -39,6 +39,7 @@ out/
 ### Custom Configuration ###
 # 운영 환경 설정 파일 (보안상 절대 금지)
 /src/main/resources/application-prod.yml
+/src/main/resources/application-local.yml
 
 # 자체 테스트 코드용 data
 /src/main/resources/data.sql
