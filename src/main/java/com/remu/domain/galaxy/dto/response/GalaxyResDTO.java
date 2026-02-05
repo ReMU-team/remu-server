@@ -9,7 +9,6 @@ public class GalaxyResDTO {
             Long galaxyId,
             String name,
             LocalDate startDate,
-            LocalDate arrivalDate,
             LocalDate endDate
     ){}
 
@@ -20,7 +19,6 @@ public class GalaxyResDTO {
             String emojiResourceName, // URL이 아닌 리소스 이름
             Long dDay,                // 계산된 D-Day
             LocalDate startDate,
-            LocalDate arrivalDate,
             LocalDate endDate,
             String placeName
     ) {}
