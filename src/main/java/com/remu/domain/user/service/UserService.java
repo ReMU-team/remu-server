@@ -102,19 +102,29 @@ public class UserService {
         return null;
     }
 
+    public record UserResult(User user, boolean isNewUser) {}
+
     @Transactional
-    public User findOrCreateUser(String socialId, SocialType socialType, String email, String name, String imageUrl) {
+    public UserResult findOrCreateUser(String socialId, SocialType socialType, String email, String name, String imageUrl) {
+        // 1. DB에서 유저를 찾기
         return userRepository.findBySocialTypeAndSocialId(socialType, socialId)
-                .orElseGet(() -> userRepository.save(
-                        User.builder()
-                                .socialId(socialId)
-                                .socialType(socialType)
-                                .email(email)
-                                .name(name)
-                                .imageUrl(imageUrl)
-                                .role(Role.USER)
-                                .build()
-                ));
+                .map(user -> new UserResult(user, false)) // 있으면 기존 유저 (false)
+                .orElseGet(() -> {
+                    // 없으면 새로 생성하고 신규 유저 (true) 반환
+                    User newUser = userRepository.save(
+                            User.builder()
+                                    .socialId(socialId)
+                                    .socialType(socialType)
+                                    .email(email)
+                                    .name(name)
+                                    .imageUrl(imageUrl)
+                                    .role(Role.USER)
+                                    .build()
+                    );
+                    return new UserResult(newUser, true);
+                });
+    }
+
     // 알림 설정 변경 (ON/OFF)
     @Transactional
     public void toggleAlarm(Long userId, Boolean isAlarmOn) {

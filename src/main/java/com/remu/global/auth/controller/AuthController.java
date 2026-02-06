@@ -70,12 +70,13 @@ public class AuthController implements AuthControllerDocs{
         }
 
         // 2. 통합된 유저 생성/조회
-        User user = userService.findOrCreateUser(socialId, socialType, email, nickname, profileImage);
+        UserService.UserResult result = userService.findOrCreateUser(socialId, socialType, email, nickname, profileImage);
+        User user = result.user();
+        boolean isNewUser = result.isNewUser();
 
         // 3. 토큰 발행
         String ourAccessToken = tokenProvider.createAccessToken(user.getId(), user.getRole());
         String ourRefreshToken = tokenProvider.createRefreshToken(user.getId());
-
 
         // 4. DB에 리프레시 토큰 저장
         authService.saveRefreshToken(
@@ -84,10 +85,10 @@ public class AuthController implements AuthControllerDocs{
                 tokenProvider.getExpiryDateTime(ourRefreshToken)
         );
 
-        // 5. 응답 (access token, refresh token)
+        // 5. 응답 (access token, refresh token, isNewUser)
         return ResponseEntity.ok(ApiResponse.onSuccess(
                 AuthSuccessCode.LOGIN_SUCCESS,
-                new AuthResDTO.TokenDTO(ourAccessToken, ourRefreshToken)
+                new AuthResDTO.Token(ourAccessToken, ourRefreshToken, isNewUser)
         ));
     }
 
