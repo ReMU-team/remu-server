@@ -80,9 +80,10 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-configuration-processor'
 
     // 구글 로그인
-// 구글 토큰 검증을 위한 라이브러리
-    implementation 'com.google.api-client:google-api-client:2.0.0'
-    implementation 'com.google.http-client:google-http-client-gson:1.42.3'}
+    // 구글 토큰 검증을 위한 라이브러리
+    implementation 'com.google.api-client:google-api-client:2.2.0'
+    implementation 'com.google.http-client:google-http-client-gson:1.43.3'
+}
 
 tasks.named('test') {
 	useJUnitPlatform()
