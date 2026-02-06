@@ -14,14 +14,13 @@ public class GalaxyConverter {
     은하 생성
      */
     // request dto->entity
-    public static Galaxy toGalaxy(GalaxyReqDTO.GalaxyCreateDTO req, LocalDate date, Place place, User user) {
+    public static Galaxy toGalaxy(GalaxyReqDTO.GalaxyCreateDTO req, Place place, User user) {
         return Galaxy.builder()
                 .name(req.name())
                 .user(user)
                 .place(place)
                 .emojiResourceName(req.emojiResourceName())
                 .startDate(req.startDate())
-                .arrivalDate(date)
                 .endDate(req.endDate())
                 .status(GalaxyStatus.READY)
                 .build();
@@ -33,7 +32,6 @@ public class GalaxyConverter {
                 galaxy.getId(),
                 galaxy.getName(),
                 galaxy.getStartDate(),
-                galaxy.getArrivalDate(),
                 galaxy.getEndDate()
         );
     }
@@ -51,7 +49,6 @@ public class GalaxyConverter {
                 galaxy.getEmojiResourceName(),
                 dDay,
                 galaxy.getStartDate(),
-                galaxy.getArrivalDate(),
                 galaxy.getEndDate(),
                 galaxy.getPlace().getName()
         );

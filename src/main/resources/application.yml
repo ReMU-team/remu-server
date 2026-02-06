@@ -1,19 +1,95 @@
 spring:
   profiles:
-    active: local # 기본값을 local로 설정하여 팀원들이 바로 실행되게 함
+    active: local # yml 파일 통합으로 없어도 상관 X
   application:
     name: remu
+
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: ${DB_URL}?useUnicode=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    username: ${DB_USER}
+    password: ${DB_PW}
+  sql:
+    init:
+      mode: never
+
   jpa:
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
+    hibernate:
+      # [운영 시 변경] ddl-auto: update는 운영 DB 구조를 망칠 위험이 큼.
+      # 실서버 배포 시에는 'none' 또는 'validate'로 변경 권장
+      ddl-auto: update
     properties:
       hibernate:
+        # [운영 시 변경] show_sql 및 format_sql은 로그 양이 너무 많아 성능을 저하시킴.
+        # 실서버 배포 시에는 'false'로 변경 권장
+        show_sql: true
+        format_sql: true
         default_batch_fetch_size: 100
+    defer-datasource-initialization: true
+
   ai:
     openai:
+      api-key: ${GEMINI_API_KEY:}
       chat:
         base-url: "https://generativelanguage.googleapis.com/v1beta/openai/"
         options:
           model: "gemini-2.5-flash-lite"
-          temperature: 0.0 # 낮은 창의성, 정확한 답변 요구
-        completions-path: "/chat/completions" # 구글 서버에 데이터 요청 시 사용하는 엔드포인트
+          temperature: 0.0
+        completions-path: "/chat/completions"
 
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+            redirect-uri: "${BASE_URL}/login/oauth2/code/google"
+            scope:
+              - profile
+              - email
+          kakao:
+            client-id: ${KAKAO_CLIENT_ID}
+            client-secret: ${KAKAO_CLIENT_SECRET}
+            client-authentication-method: client_secret_post
+            authorization-grant-type: authorization_code
+            redirect-uri: "${BASE_URL}/login/oauth2/code/kakao"
+            scope:
+              - profile_nickname
+              - account_email
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
 
+jwt:
+  secret: ${JWT_SECRET}
+  access-expiration: 1800000 # 30분
+  refresh-expiration: 1209600000 # 14일
+
+logging:
+  level:
+    # 보안을 위해선 나중엔 warn 등으로 전환 필요
+    org.springframework.security: DEBUG
+  secret: "this-is-remu-project-local-secret-key-for-jwt-testing-12345678"
+
+google:
+  api:
+    key: ${GOOGLE_API_KEY:dummy_key}
+    url: https://maps.googleapis.com/maps/api/place/queryautocomplete/json # Query Autocomplete API
+
+cloud:
+  aws:
+    s3:
+      bucket: ${S3_BUCKET_NAME} # 환경 변수에서 읽어옴
+    region:
+      static: ap-northeast-2
+    credentials:
+      access-key: ${AWS_ACCESS_KEY_ID:}
+      secret-key: ${AWS_SECRET_ACCESS_KEY:}
+    stack:
+      auto: false

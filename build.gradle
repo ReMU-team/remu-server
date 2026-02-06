@@ -70,19 +70,23 @@ dependencies {
 
 	// Firebase (FCM)
 	implementation 'com.google.firebase:firebase-admin:9.2.0'
-    // Oauth
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    
+  // Oauth
+  implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 
-    // Jwt
-    implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
-    implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
-    implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
-    implementation 'org.springframework.boot:spring-boot-configuration-processor'
+  // Jwt
+  implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
+  implementation 'io.jsonwebtoken:jjwt-impl:0.12.3'
+  implementation 'io.jsonwebtoken:jjwt-jackson:0.12.3'
+  implementation 'org.springframework.boot:spring-boot-configuration-processor'
 
-    // 구글 로그인
-    // 구글 토큰 검증을 위한 라이브러리
-    implementation 'com.google.api-client:google-api-client:2.2.0'
-    implementation 'com.google.http-client:google-http-client-gson:1.43.3'
+  
+  // 구글 토큰 검증을 위한 라이브러리
+  implementation 'com.google.api-client:google-api-client:2.2.0'
+  implementation 'com.google.http-client:google-http-client-gson:1.43.3'
+	
+  // aws S3
+	implementation 'software.amazon.awssdk:s3:2.20.0'
 }
 
 tasks.named('test') {

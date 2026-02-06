@@ -25,13 +25,9 @@ public class GalaxyCommandService {
     1. 은하 생성
      */
     public GalaxyResDTO.GalaxyCreateDTO createGalaxy(GalaxyReqDTO.GalaxyCreateDTO request, User user) {
-        // arrivalDate가 null이면 startDate를 기본값으로 사용
-        LocalDate actualArrivalDate = (request.arrivalDate() != null)
-                ? request.arrivalDate()
-                : request.startDate();
 
         // 1) 날짜 논리 검증 (Start <= Arrival <= End)
-        validateTravelDates(request.startDate(), request.arrivalDate(), request.endDate());
+        validateTravelDates(request.startDate(), request.endDate());
 
 
         // 2) 장소 처리: 기존 장소면 가져오고, 없으면 새로 저장 (googlePlaceId 기준)
@@ -45,14 +41,14 @@ public class GalaxyCommandService {
 
 
         // 3) 은하 생성 및 저장
-        Galaxy galaxy = GalaxyConverter.toGalaxy(request, actualArrivalDate, place, user);
+        Galaxy galaxy = GalaxyConverter.toGalaxy(request, place, user);
         Galaxy savedGalaxy = galaxyRepository.save(galaxy);
 
         return GalaxyConverter.toCreateDTO(savedGalaxy);
 
     }
-    private void validateTravelDates(LocalDate start, LocalDate arrival, LocalDate end) {
-        if (start.isAfter(arrival) || arrival.isAfter(end)) {
+    private void validateTravelDates(LocalDate start, LocalDate end) {
+        if (start.isAfter(end)) {
             throw new GalaxyException(GalaxyErrorCode.INVALID_DATE_SEQUENCE);
         }
     }
@@ -94,7 +90,6 @@ public class GalaxyCommandService {
                 request.name(),
                 request.emojiResourceName(),
                 request.startDate(),
-                request.arrivalDate(),
                 request.endDate()
         );
         // 3) 장소 정보 업데이트
