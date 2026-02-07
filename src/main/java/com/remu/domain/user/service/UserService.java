@@ -4,6 +4,8 @@ import com.remu.domain.user.converter.UserConverter;
 import com.remu.domain.user.dto.req.UserReqDTO;
 import com.remu.domain.user.dto.res.UserResDTO;
 import com.remu.domain.user.entity.User;
+import com.remu.domain.user.enums.Role;
+import com.remu.domain.user.enums.SocialType;
 import com.remu.domain.user.exception.UserException;
 import com.remu.domain.user.exception.code.UserErrorCode;
 import com.remu.domain.user.repository.UserRepository;
@@ -98,6 +100,29 @@ public class UserService {
         userRepository.delete(user);
 
         return null;
+    }
+
+    public record UserResult(User user, boolean isNewUser) {}
+
+    @Transactional
+    public UserResult findOrCreateUser(String socialId, SocialType socialType, String email, String name, String imageUrl) {
+        // 1. DB에서 유저를 찾기
+        return userRepository.findBySocialTypeAndSocialId(socialType, socialId)
+                .map(user -> new UserResult(user, false)) // 있으면 기존 유저 (false)
+                .orElseGet(() -> {
+                    // 없으면 새로 생성하고 신규 유저 (true) 반환
+                    User newUser = userRepository.save(
+                            User.builder()
+                                    .socialId(socialId)
+                                    .socialType(socialType)
+                                    .email(email)
+                                    .name(name)
+                                    .imageUrl(imageUrl)
+                                    .role(Role.USER)
+                                    .build()
+                    );
+                    return new UserResult(newUser, true);
+                });
     }
 
     // 알림 설정 변경 (ON/OFF)
