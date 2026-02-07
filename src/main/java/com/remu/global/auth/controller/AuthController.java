@@ -9,6 +9,7 @@ import com.remu.global.auth.dto.AuthResDTO;
 import com.remu.global.auth.exception.AuthException;
 import com.remu.global.auth.exception.code.AuthErrorCode;
 import com.remu.global.auth.exception.code.AuthSuccessCode;
+import com.remu.global.auth.service.AppleAuthService;
 import com.remu.global.auth.service.AuthService;
 import com.remu.global.auth.service.GoogleAuthService;
 import com.remu.global.auth.service.KakaoAuthService;
@@ -28,6 +29,7 @@ public class AuthController implements AuthControllerDocs{
     private final AuthService authService;
     private final KakaoAuthService kakaoAuthService;
     private final GoogleAuthService googleAuthService;
+    private final AppleAuthService appleAuthService;
     private final JwtTokenProvider tokenProvider;
     private final UserService userService;
 
@@ -63,8 +65,14 @@ public class AuthController implements AuthControllerDocs{
 
         } else if ("apple".equalsIgnoreCase(provider)) {
             socialType = SocialType.APPLE;
-            socialId = "apple_test_id";
 
+            // 애플 토큰 검증 및 정보 추출
+            Map<String, String> appleUserInfo = appleAuthService.getAppleUserInfo(request.token());
+
+            socialId = appleUserInfo.get("sub");
+            email = appleUserInfo.get("email");
+
+            nickname = "Apple User";
         } else {
             throw new AuthException(AuthErrorCode.INVALID_PROVIDER);
         }
