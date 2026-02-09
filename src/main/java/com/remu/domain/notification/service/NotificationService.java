@@ -47,8 +47,8 @@ public class NotificationService {
                 break;
 
             case RECORD:
-                // 여행 첫날인지 확인
-                if (today.isEqual(galaxy.getArrivalDate())) {
+                // 여행 첫날인지 확인 (startDate 기준)
+                if (today.isEqual(galaxy.getStartDate())) {
                     // 첫날은 기록 여부 상관없이 무조건 발송
                     content = "여행지에 잘 도착하셨나요? 첫 기록을 남겨보세요! 📝";
                 } else {
@@ -61,6 +61,11 @@ public class NotificationService {
                 break;
 
             case QUESTION:
+                // 여행 첫날에는 랜덤 질문 발송 안 함 (2일차부터 발송)
+                if (today.isEqual(galaxy.getStartDate())) {
+                    return;
+                }
+
                 // 별 개수에 따라 난이도 결정
                 QuestionDifficulty difficulty = (starCount == 0) ? QuestionDifficulty.EASY : QuestionDifficulty.HARD;
                 
