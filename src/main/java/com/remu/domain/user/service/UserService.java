@@ -1,6 +1,5 @@
 package com.remu.domain.user.service;
 
-import com.remu.domain.user.converter.UserConverter;
 import com.remu.domain.user.dto.req.UserReqDTO;
 import com.remu.domain.user.dto.res.UserResDTO;
 import com.remu.domain.user.entity.User;
@@ -9,9 +8,12 @@ import com.remu.domain.user.enums.SocialType;
 import com.remu.domain.user.exception.UserException;
 import com.remu.domain.user.exception.code.UserErrorCode;
 import com.remu.domain.user.repository.UserRepository;
+import com.remu.global.s3.S3Directory;
+import com.remu.global.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Service
@@ -19,10 +21,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final S3Service s3Service;
 
     // 프로필 업데이트
     @Transactional
-    public Void updateProfile(Long userId, UserReqDTO.ProfileDTO dto){
+    public Void updateProfile(Long userId, UserReqDTO.ProfileDTO dto, MultipartFile image){
 
         // 1. 유저 존재 여부 검증
         User user = userRepository.findById(userId)
@@ -34,8 +37,23 @@ public class UserService {
         // 3. 한 줄 소개 업데이트
         updateIntroduction(user, dto.introduction());
 
-        // 4. 프로필 이미지 업데이트
-        updateImageUrl(user, dto.imageUrl());
+        // 4. 프로필 이미지 업로드
+        String newFileName = null;
+        if (image != null && !image.isEmpty()) {
+            S3Service.S3TotalResponse response = s3Service.uploadFile(image, S3Directory.PROFILE, userId);
+            newFileName = response.fileName();
+        }
+
+        // 5. 이미지가 새로 들어온 경우 교체 + 기존 S3 삭제
+        if (newFileName != null) {
+            String oldFileName = user.getFileName();
+
+            user.updateFileName(newFileName);
+
+            if (isS3Key(oldFileName)) {
+                safeDelete(oldFileName);
+            }
+        }
 
         return null;
     }
@@ -83,8 +101,16 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
+        // 2. 이미지 url 받아오기
+        String key = user.getFileName();
+        String imageUrl = isS3Key(key) ? s3Service.getPresignedUrl(key) : key;
+
         // 2. 컨버터를 이용한 DTO 반환
-        return UserConverter.toProfileDTO(user);
+        return UserResDTO.ProfileDTO.builder()
+                .name(user.getName())
+                .introduction(user.getIntroduction())
+                .imageUrl(imageUrl)
+                .build();
     }
 
     // 회원 탈퇴
@@ -117,7 +143,7 @@ public class UserService {
                                     .socialType(socialType)
                                     .email(email)
                                     .name(name)
-                                    .imageUrl(imageUrl)
+                                    .fileName(imageUrl)
                                     .role(Role.USER)
                                     .build()
                     );
@@ -158,6 +184,22 @@ public class UserService {
         }
     }
 
+    // S3 키가 맞는지 검증
+    private boolean isS3Key(String value) {
+        if(value == null || value.isBlank()) return false;
+        String v = value.trim();
+        return !(v.startsWith("http://") || v.startsWith("https://"));
+    }
+
+    // 기존 이미지 삭제
+    private void safeDelete(String key) {
+        try {
+            s3Service.deleteFile(key);
+        } catch (Exception ignored) {
+
+        }
+    }
+
     // 한 줄 소개 업데이트
     private void updateIntroduction(User user, String rawIntro) {
         if (rawIntro != null) {
@@ -167,13 +209,4 @@ public class UserService {
             );
         }
     }
-
-    // 이미지 업데이트
-    private void updateImageUrl(User user, String imageUrl) {
-        if (imageUrl != null) {
-            String url = imageUrl.trim();
-            user.updateImageUrl(url.isEmpty() ? null : url);
-        }
-    }
-
 }

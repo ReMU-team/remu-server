@@ -43,8 +43,8 @@ public class User extends BaseEntity {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "image_url")
-    private String imageUrl;
+    @Column(name = "file_name")
+    private String fileName;
 
     @Column(name = "introduction")
     private String introduction;
@@ -73,8 +73,8 @@ public class User extends BaseEntity {
         this.name = name;
     }
 
-    public void updateImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void updateFileName(String fileName) {
+        this.fileName = fileName;
     }
 
     public void updateIntroduction(String introduction) {

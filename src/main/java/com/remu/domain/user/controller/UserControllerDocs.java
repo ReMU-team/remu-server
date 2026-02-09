@@ -1,13 +1,13 @@
 package com.remu.domain.user.controller;
 
-import com.remu.domain.user.dto.req.UserReqDTO;
 import com.remu.domain.user.dto.res.UserResDTO;
 import com.remu.global.apiPayload.ApiResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface UserControllerDocs {
 
@@ -20,7 +20,12 @@ public interface UserControllerDocs {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
 
     })
-    ApiResponse<Void> updateProfile(Long userId, @RequestBody @Valid UserReqDTO.ProfileDTO dto);
+    ApiResponse<Void> updateProfile(
+            @AuthenticationPrincipal(expression = "id") Long userId,
+            @RequestPart("name") String name,
+            @RequestPart(value = "introduction", required = false) String introduction,
+            @RequestPart(value = "image", required = false) MultipartFile image
+    );
 
     @Operation(
             summary = "닉네임 사용 가능 여부 검증 API",

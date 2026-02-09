@@ -115,7 +115,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                             .email(finalEmail)
                             .name(finalName)
                             .role(Role.USER)
-                            .imageUrl(finalPicture)
+                            .fileName(finalPicture)
                             .build()
             );
             isNewUser = true;
