@@ -47,7 +47,10 @@ public enum AuthErrorCode implements BaseErrorCode {
 
     GOOGLE_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR,
             "AUTH500_2",
-            "구글 인증 서버 통신 중 에러가 발생했습니다.");
+            "구글 인증 서버 통신 중 에러가 발생했습니다."),
+    INVALID_APPLE_TOKEN(HttpStatus.UNAUTHORIZED,
+            "AUTH401_6",
+            "유효하지 않은 애플 토큰입니다.");
 
 
     private final HttpStatus status;

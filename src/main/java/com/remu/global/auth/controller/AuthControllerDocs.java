@@ -90,7 +90,7 @@ public interface AuthControllerDocs {
 
     @PostMapping("/api/v1/auth//login/{provider}")
     @Operation(
-            summary = "카카오, 구글 로그인 (소셜 검증 및 ReMU 토큰 발급)",
+            summary = "카카오, 구글, 애플 로그인 (소셜 검증 및 ReMU 토큰 발급)",
             description = """
     provider = "{kakao, google, apple} 중 맞는 소셜 타입 소문자로 입력"
     
