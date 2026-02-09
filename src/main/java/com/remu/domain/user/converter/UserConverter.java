@@ -10,7 +10,7 @@ public class UserConverter {
             User user
     ){
         return UserResDTO.ProfileDTO.builder()
-                .imageUrl(user.getImageUrl())
+                .imageUrl(user.getFileName())
                 .name(user.getName())
                 .introduction(user.getIntroduction())
                 .build();

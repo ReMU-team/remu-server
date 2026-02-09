@@ -5,10 +5,13 @@ import com.remu.domain.user.dto.res.UserResDTO;
 import com.remu.domain.user.exception.code.UserSuccessCode;
 import com.remu.domain.user.service.UserService;
 import com.remu.global.apiPayload.ApiResponse;
-import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,13 +21,19 @@ public class UserController implements UserControllerDocs{
     private final UserService userService;
 
     @Override
-    @PatchMapping("/profile")
+    @PatchMapping(value = "/profile", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<Void> updateProfile(
             @AuthenticationPrincipal(expression = "id") Long userId,
-            @RequestBody @Valid UserReqDTO.ProfileDTO dto
-    ){
-        UserSuccessCode code = UserSuccessCode.USER_PROFILE_CREATED;
-        return ApiResponse.onSuccess(code, userService.updateProfile(userId, dto));
+
+            @RequestPart("name") String name,
+            @RequestPart(value = "introduction", required = false) String introduction,
+
+            @Parameter(description = "프로필 이미지 파일", schema = @Schema(type = "string", format = "binary"))
+            @RequestPart(value = "image", required = false) MultipartFile image
+    ) {
+        UserReqDTO.ProfileDTO dto = new UserReqDTO.ProfileDTO(name, introduction);
+        userService.updateProfile(userId, dto, image);
+        return ApiResponse.onSuccess(UserSuccessCode.USER_PROFILE_CREATED, null);
     }
 
     @Override
