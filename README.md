@@ -8,7 +8,7 @@
 
 - **Language**: Java 21
 - **Framework**: Spring Boot 3.x
-- **Database**: MySQL, Redis
+- **Database**: MySQL
 - **ORM**: Spring Data JPA
 - **Infrastructure**: AWS (EC2, S3, RDS)
 
