@@ -10,6 +10,9 @@ import com.remu.domain.galaxy.repository.GalaxyRepository;
 import com.remu.domain.place.entity.Place;
 import com.remu.domain.place.repository.PlaceRepository;
 import com.remu.domain.user.entity.User;
+import com.remu.domain.user.exception.UserException;
+import com.remu.domain.user.exception.code.UserErrorCode;
+import com.remu.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,10 +24,14 @@ import java.time.LocalDate;
 public class GalaxyCommandService {
     private final GalaxyRepository galaxyRepository;
     private final PlaceRepository placeRepository;
+    private final UserRepository userRepository;
     /*
     1. 은하 생성
      */
-    public GalaxyResDTO.GalaxyCreateDTO createGalaxy(GalaxyReqDTO.GalaxyCreateDTO request, User user) {
+    public GalaxyResDTO.GalaxyCreateDTO createGalaxy(GalaxyReqDTO.GalaxyCreateDTO request, Long userId) {
+        //유저 조회
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
         // 1) 날짜 논리 검증 (Start <= Arrival <= End)
         validateTravelDates(request.startDate(), request.endDate());
@@ -58,7 +65,11 @@ public class GalaxyCommandService {
     2. 은하 삭제
      */
     @Transactional
-    public void deleteGalaxy(Long galaxyId, User user) {
+    public void deleteGalaxy(Long galaxyId, Long userId) {
+        //유저 조회
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+
         // 1) 삭제할 은하 조회
         Galaxy galaxy = galaxyRepository.findById(galaxyId).orElseThrow(()->new GalaxyException(
                 GalaxyErrorCode.GALAXY_NOT_FOUND));
@@ -76,7 +87,10 @@ public class GalaxyCommandService {
     3. 은하 수정
      */
     @Transactional
-    public void updateGalaxy(Long galaxyId, GalaxyReqDTO.GalaxyUpdateDTO request, User user) {
+    public void updateGalaxy(Long galaxyId, GalaxyReqDTO.GalaxyUpdateDTO request, Long userId) {
+        //유저 조회
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
         // 1) 수정할 은하 조회 및 권한 체크
         Galaxy galaxy = galaxyRepository.findById(galaxyId).orElseThrow(()->new GalaxyException(
                 GalaxyErrorCode.GALAXY_NOT_FOUND));
