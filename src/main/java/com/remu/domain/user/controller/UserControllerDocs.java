@@ -38,7 +38,7 @@ public interface UserControllerDocs {
     })
     UserResDTO.NameCheckDTO checkName(
             @RequestParam(required = false) String name,
-            Long userId
+            @AuthenticationPrincipal(expression = "id") Long userId
     );
 
     @Operation(
@@ -50,7 +50,9 @@ public interface UserControllerDocs {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
 
     })
-    ApiResponse<UserResDTO.ProfileDTO> getProfile(Long userId);
+    ApiResponse<UserResDTO.ProfileDTO> getProfile(
+            @AuthenticationPrincipal(expression = "id") Long userId
+    );
 
     @Operation(
             summary = "회원 탈퇴 API",
@@ -61,7 +63,9 @@ public interface UserControllerDocs {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "실패")
 
     })
-    ApiResponse<Void> deleteAccount(Long userId);
+    ApiResponse<Void> deleteAccount(
+            @AuthenticationPrincipal(expression = "id") Long userId
+    );
 
     @Operation(
             summary = "알림 설정 변경 API",
