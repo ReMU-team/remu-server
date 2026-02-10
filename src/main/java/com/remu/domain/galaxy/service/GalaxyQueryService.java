@@ -7,6 +7,9 @@ import com.remu.domain.galaxy.exception.GalaxyException;
 import com.remu.domain.galaxy.exception.code.GalaxyErrorCode;
 import com.remu.domain.galaxy.repository.GalaxyRepository;
 import com.remu.domain.user.entity.User;
+import com.remu.domain.user.exception.UserException;
+import com.remu.domain.user.exception.code.UserErrorCode;
+import com.remu.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -21,9 +24,14 @@ import java.util.List;
 @RequiredArgsConstructor
 public class GalaxyQueryService {
     private final GalaxyRepository galaxyRepository;
+    private final UserRepository userRepository;
 
     // 은하 상세 조회
-    public GalaxyResDTO.GalaxyDetailDTO getGalaxyDetail(Long galaxyId, User user) {
+    public GalaxyResDTO.GalaxyDetailDTO getGalaxyDetail(Long galaxyId, Long userId) {
+        //유저 조회
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
+
         // 1. 은하 조회 및 권한 확인
         Galaxy galaxy = galaxyRepository.findById(galaxyId)
                 .orElseThrow(()->new GalaxyException(GalaxyErrorCode.GALAXY_NOT_FOUND));
@@ -46,7 +54,10 @@ public class GalaxyQueryService {
 
     //
     @Transactional(readOnly = true)
-    public GalaxyResDTO.SummaryListDTO getGalaxyList(User user, Pageable pageable) {
+    public GalaxyResDTO.SummaryListDTO getGalaxyList(Long userId, Pageable pageable) {
+        //유저 조회
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
         // 1. 해당 유저의 모든 은하 조회
         Slice<Galaxy> galaxyList = galaxyRepository.findAllByUserId(user.getId(), pageable);
         // 2. 전체 개수 조회
