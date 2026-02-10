@@ -1,4 +1,4 @@
-package com.remu.global.s3.exception;
+package com.remu.global.s3.exception.code;
 
 import com.remu.global.apiPayload.code.BaseSuccessCode;
 import lombok.AllArgsConstructor;
