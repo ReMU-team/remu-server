@@ -10,6 +10,8 @@ import com.remu.domain.star.entity.Star;
 import com.remu.domain.star.exception.StarException;
 import com.remu.domain.star.exception.code.StarErrorCode;
 import com.remu.domain.star.repository.StarRepository;
+import com.remu.global.s3.S3Directory;
+import com.remu.global.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +27,7 @@ public class StarService {
 
     private final StarRepository starRepository;
     private final GalaxyRepository galaxyRepository;
-    // private final S3Service s3Service; // 나중에 추가될 S3 업로드 서비스
+    private final S3Service s3Service;
 
     @Transactional
     public Long createStar(StarCreateRequest request) {
@@ -34,18 +36,19 @@ public class StarService {
                 .orElseThrow(() -> new StarException(StarErrorCode.GALAXY_NOT_FOUND));
 
         // 2. 이미지 업로드
-        String imageUrl = null;
+        String fileName = null;
         if (request.getImage() != null && !request.getImage().isEmpty()) {
-            // imageUrl = s3Service.upload(request.getImage());
-            imageUrl = "https://dummy-s3-url.com/image.jpg"; // 임시
+            // S3 업로드 후 파일명 반환
+            S3Service.S3TotalResponse response = s3Service.uploadFile(request.getImage(), S3Directory.STAR, galaxy.getUser().getId());
+            fileName = response.fileName();
         }
 
         // 3. Star 엔티티 생성 및 저장 (Converter 사용)
-        Star star = StarConverter.toStar(request, galaxy, imageUrl);
+        Star star = StarConverter.toStar(request, galaxy, fileName);
         
-        Star savedStar = starRepository.save(star); // 저장된 객체 반환받기
+        Star savedStar = starRepository.save(star);
 
-        return savedStar.getId(); // 저장된 객체의 ID 반환
+        return savedStar.getId();
     }
 
     // 별 수정
@@ -67,13 +70,19 @@ public class StarService {
         // 3. 이미지 처리 로직
         // Case 1: 새 이미지가 있는 경우 -> 업로드 후 교체
         if (request.getImage() != null && !request.getImage().isEmpty()) {
-            // String newImageUrl = s3Service.upload(request.getImage());
-            String newImageUrl = "https://dummy-s3-url.com/updated_image.jpg"; // 임시
-            star.updateImageUrl(newImageUrl);
+            // 기존 이미지 삭제
+            if (star.getImageUrl() != null) {
+                s3Service.deleteFile(star.getImageUrl());
+            }
+            // 새 이미지 업로드
+            S3Service.S3TotalResponse response = s3Service.uploadFile(request.getImage(), S3Directory.STAR, star.getGalaxy().getUser().getId());
+            star.updateImageUrl(response.fileName());
         }
         // Case 2: 이미지는 없는데 삭제 요청이 있는 경우 -> 삭제 (null 처리)
         else if (Boolean.TRUE.equals(request.getIsImageDeleted())) {
-            // s3Service.delete(star.getImageUrl()); // 기존 S3 파일 삭제 로직 필요 시 추가
+            if (star.getImageUrl() != null) {
+                s3Service.deleteFile(star.getImageUrl());
+            }
             star.updateImageUrl(null);
         }
         // Case 3: 둘 다 아니면 기존 이미지 유지 (아무것도 안 함)
@@ -90,7 +99,7 @@ public class StarService {
 
         // 2. 이미지 삭제 (S3)
         if (star.getImageUrl() != null) {
-            // s3Service.delete(star.getImageUrl());
+            s3Service.deleteFile(star.getImageUrl());
         }
 
         // 3. DB 삭제
@@ -107,6 +116,7 @@ public class StarService {
         List<Star> stars = starRepository.findAllByGalaxyId(galaxyId);
 
         // 3. DTO 변환 (Converter 사용)
+        // 목록 조회에는 이미지 URL이 필요 없으므로 S3 변환 로직 제외
         return stars.stream()
                 .map(star -> {
                     int dDay = (int) ChronoUnit.DAYS.between(galaxy.getStartDate(), star.getRecordDate()) + 1;
@@ -121,8 +131,22 @@ public class StarService {
         Star star = starRepository.findByIdFetchJoin(starId)
                 .orElseThrow(() -> new StarException(StarErrorCode.STAR_NOT_FOUND));
 
-        // 2. DTO 변환 (Converter 사용)
+        // 2. D-Day 계산
         int dDay = (int) ChronoUnit.DAYS.between(star.getGalaxy().getStartDate(), star.getRecordDate()) + 1;
-        return StarConverter.toStarDetail(star, dDay);
+        
+        // 3. 파일명을 URL로 변환
+        String imageUrl = s3Service.getPresignedUrl(star.getImageUrl());
+        
+        // 4. DTO 생성 (Builder 사용)
+        return StarResponseDto.StarDetail.builder()
+                .starId(star.getId())
+                .title(star.getTitle())
+                .content(star.getContent())
+                .recordDate(star.getRecordDate())
+                .dDay(dDay)
+                .imageUrl(imageUrl) // 변환된 URL 주입
+                .cardColor(star.getCardColor())
+                .emojis(star.getEmojis())
+                .build();
     }
 }

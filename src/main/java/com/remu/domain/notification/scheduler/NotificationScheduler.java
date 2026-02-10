@@ -38,7 +38,7 @@ public class NotificationScheduler {
     @Scheduled(cron = "0 0 23 * * *")
     public void sendRecordNotification() {
         LocalDate today = LocalDate.now();
-        // 여행 기간 중인 모든 은하 대상 (도착일 포함)
+        // 여행 기간 중인 모든 은하 대상 (시작일 포함)
         List<Galaxy> galaxies = galaxyRepository.findAllByDateBetween(today);
 
         log.info("Sending RECORD notifications for {} galaxies", galaxies.size());
@@ -47,9 +47,9 @@ public class NotificationScheduler {
         }
     }
 
-    // 3. 랜덤 질문 알림 (매일 14:00, 20:00)
-    // 조건: 별 개수에 따라 난이도 다름 (Service에서 체크)
-    @Scheduled(cron = "0 0 14 * * *")
+    // 3. 랜덤 질문 알림 (매일 15:00, 20:00)
+    // 조건: 2일차부터 발송, 별 개수에 따라 난이도 다름 (Service에서 체크)
+    @Scheduled(cron = "0 0 15 * * *")
     public void sendQuestionNotificationAfterLunch() {
         sendQuestionNotification();
     }
