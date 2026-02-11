@@ -1,7 +1,10 @@
 package com.remu.global.config.sercurity.jwt;
 
 import com.remu.domain.user.enums.Role;
+import com.remu.global.auth.exception.AuthException;
+import com.remu.global.auth.exception.code.AuthErrorCode;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -77,6 +80,17 @@ public class JwtTokenProvider {
         } catch (JwtException | IllegalArgumentException exception) {
             log.warn("Invalid JWT token: {}", exception.getMessage());
             return false;
+        }
+    }
+
+    // Access Token 검증
+    public void validateAccessTokenOrThrow(String token) {
+        try {
+            parseClaims(token);
+        } catch (ExpiredJwtException e) {
+            throw new AuthException(AuthErrorCode.ACCESS_TOKEN_EXPIRED);
+        } catch (JwtException | IllegalArgumentException e) {
+            throw new AuthException(AuthErrorCode.ACCESS_TOKEN_INVALID);
         }
     }
 
