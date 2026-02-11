@@ -35,7 +35,4 @@ public class StarCreateRequest {
 
     @NotNull(message = "은하 식별자는 필수입니다.")
     private Long galaxyId; // 이 별이 어느 여행(은하)에 저장될지
-
-    // 사진 업로드
-    private MultipartFile image;
 }
