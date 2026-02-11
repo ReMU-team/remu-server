@@ -3,6 +3,17 @@
 
 여행 감정 기반 기록 서비스 REMU의 백엔드 서버입니다.
 
+<br>
+
+## 👥 Team
+
+| <a href="https://github.com/hyunjun2001"><img src="https://github.com/hyunjun2001.png" width="80"/></a> | <a href="https://github.com/hesseo"><img src="https://github.com/hesseo.png" width="80"/></a> | <a href="https://github.com/woong-ja"><img src="https://github.com/woong-ja.png" width="80"/></a> | <a href="https://github.com/Hanharam"><img src="https://github.com/Hanharam.png" width="80"/></a> |
+|:--:|:--:|:--:|:--:|
+| [매튜 / 진현준](https://github.com/hyunjun2001) | [요시 / 김희서](https://github.com/hesseo) | [웅표빠잉 / 이웅재](https://github.com/woong-ja) | [요시 / 한하람](https://github.com/Hanharam) |
+| Backend Developer | Backend Developer | Backend Developer | Backend Developer |
+
+<br>
+
 ## 🛠 Tech Stack
 
 
@@ -11,6 +22,8 @@
 - **Database**: MySQL
 - **ORM**: Spring Data JPA
 - **Infrastructure**: AWS (EC2, S3, RDS)
+
+<br>
 
 ## 🌿Branch Strategy
 
@@ -55,6 +68,7 @@ git checkout -b feature/12-user-login
     - 작업 완료 후 PR → `develop`
 
 <br>
+<br>
 
 ## 📝 Commit Convention
 
@@ -98,20 +112,28 @@ Issue 생성
 ```
 src/main/java/com/remu-server
 ├── domain
-│   ├── user            # 유저 도메인 (A)
+│   ├── user            # 유저 도메인 
 │   │   ├── controller
 │   │   ├── service
 │   │   ├── repository
+│   │   ├── dto
+│   │   ├── exception
 │   │   └── entity
-│   ├── galaxy          # 은하/여행 도메인 (B)
-│   ├── resolution_card # 다짐 도메인 (C)
-│   ├── star            # 기록/별 도메인 (D)
-│   ├── review_card     # 회고 도메인 (C)
-│   └── alarm           # 알림 도메인 (B)
+│   ├── galaxy          # 은하/여행 도메인 
+│   ├── resolution_card # 다짐 도메인 
+│   ├── star            # 기록/별 도메인
+│   ├── review_card     # 회고 도메인
+│   ├── feedback        # 피드백 도메인
+│   ├── place           # 장소 도메인 
+│   └── alarm           # 알림 도메인 
 ├── global              # 공통 설정 및 유틸리티
+│   ├── apiPayload      # 예외 처리 (Exception Handler)
+│   ├── auth            # 인증/인가 관련 로직 (JWT, OAuth, 토큰 필터 등)
+│   ├── common          # 공통 유틸 클래스
 │   ├── config          # Security, Swagger 등 설정
 │   ├── entity          # 공통 BaseEntity
+│   ├── fcm             # Firebase Cloud Messaging 설정 및 푸시 알림 전송
 │   ├── apiPayload      # 예외 처리 (Exception Handler)
-│   └── code            # 공통 에러코드
+│   └── s3              # AWS S3 파일 업로드/다운로드 관리
 
 ```
