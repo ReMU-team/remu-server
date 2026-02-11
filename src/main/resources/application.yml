@@ -68,7 +68,7 @@ spring:
 
 jwt:
   secret: ${JWT_SECRET}
-  access-expiration: 1800000 # 30분
+  access-expiration: 18000000 # 300분 임시로
   refresh-expiration: 1209600000 # 14일
 
 logging:
