@@ -6,6 +6,8 @@ import com.remu.domain.star.dto.response.StarResponseDto;
 import com.remu.domain.star.exception.code.StarSuccessCode;
 import com.remu.domain.star.service.StarService;
 import com.remu.global.apiPayload.ApiResponse;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -24,6 +26,7 @@ public class StarController {
     // 별 생성
     @PostMapping(value = "/stars", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResponse<Long> createStar(
+            @Parameter(content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE))
             @Valid @RequestPart("request") StarCreateRequest request,
             @RequestPart(value = "image", required = false) MultipartFile image
     ) {
