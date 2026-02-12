@@ -40,10 +40,14 @@ public class GalaxyQueryService {
 
         // 2. 실시간 데이터 계산
         LocalDate today = LocalDate.now();
-        Long dDay = ChronoUnit.DAYS.between(today, galaxy.getStartDate());
+        long daysBetween = ChronoUnit.DAYS.between(galaxy.getStartDate(), today);
+
+        // 여행 전(음수)이면 그대로 쓰고, 당일 포함 이후면 +1
+        long dDay = (daysBetween < 0) ? daysBetween : daysBetween + 1;
 
         // 3. DTO로 변환하여 반환
         return GalaxyConverter.toDetailDTO(galaxy, dDay);
+
     }
     private void validateOwner(Galaxy galaxy, User user) {
         if (!galaxy.getUser().getId().equals(user.getId())) {
