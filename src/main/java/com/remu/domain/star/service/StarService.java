@@ -15,6 +15,7 @@ import com.remu.global.s3.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.temporal.ChronoUnit;
 import java.util.List;
@@ -30,16 +31,16 @@ public class StarService {
     private final S3Service s3Service;
 
     @Transactional
-    public Long createStar(StarCreateRequest request) {
+    public Long createStar(StarCreateRequest request, MultipartFile image) {
         // 1. 은하 조회
         Galaxy galaxy = galaxyRepository.findById(request.getGalaxyId())
                 .orElseThrow(() -> new StarException(StarErrorCode.GALAXY_NOT_FOUND));
 
         // 2. 이미지 업로드
         String fileName = null;
-        if (request.getImage() != null && !request.getImage().isEmpty()) {
+        if (image != null && !image.isEmpty()) {
             // S3 업로드 후 파일명 반환
-            S3Service.S3TotalResponse response = s3Service.uploadFile(request.getImage(), S3Directory.STAR, galaxy.getUser().getId());
+            S3Service.S3TotalResponse response = s3Service.uploadFile(image, S3Directory.STAR, galaxy.getUser().getId());
             fileName = response.fileName();
         }
 
@@ -53,7 +54,7 @@ public class StarService {
 
     // 별 수정
     @Transactional
-    public Long updateStar(Long starId, StarUpdateRequest request) {
+    public Long updateStar(Long starId, StarUpdateRequest request, MultipartFile image) {
         // 1. 별 조회
         Star star = starRepository.findById(starId)
                 .orElseThrow(() -> new StarException(StarErrorCode.STAR_NOT_FOUND));
@@ -69,13 +70,13 @@ public class StarService {
 
         // 3. 이미지 처리 로직
         // Case 1: 새 이미지가 있는 경우 -> 업로드 후 교체
-        if (request.getImage() != null && !request.getImage().isEmpty()) {
+        if (image != null && !image.isEmpty()) {
             // 기존 이미지 삭제
             if (star.getImageUrl() != null) {
                 s3Service.deleteFile(star.getImageUrl());
             }
             // 새 이미지 업로드
-            S3Service.S3TotalResponse response = s3Service.uploadFile(request.getImage(), S3Directory.STAR, star.getGalaxy().getUser().getId());
+            S3Service.S3TotalResponse response = s3Service.uploadFile(image, S3Directory.STAR, star.getGalaxy().getUser().getId());
             star.updateImageUrl(response.fileName());
         }
         // Case 2: 이미지는 없는데 삭제 요청이 있는 경우 -> 삭제 (null 처리)

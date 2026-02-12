@@ -1,8 +1,7 @@
 package com.remu.global.s3;
 
-import com.remu.global.apiPayload.code.GeneralErrorCode;
 import com.remu.global.apiPayload.exception.GeneralException;
-import com.remu.global.s3.exception.S3ErrorCode;
+import com.remu.global.s3.exception.code.S3ErrorCode;
 import com.remu.global.s3.exception.S3Exception;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;

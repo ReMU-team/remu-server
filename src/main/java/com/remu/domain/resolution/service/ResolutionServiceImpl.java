@@ -1,6 +1,7 @@
 package com.remu.domain.resolution.service;
 
 import com.remu.domain.galaxy.entity.Galaxy;
+import com.remu.domain.galaxy.exception.code.GalaxyErrorCode;
 import com.remu.domain.galaxy.repository.GalaxyRepository;
 import com.remu.domain.resolution.converter.ResolutionConverter;
 import com.remu.domain.resolution.dto.ResolutionReqDTO;
@@ -36,7 +37,7 @@ public class ResolutionServiceImpl implements ResolutionService {
         // 1. 은하 조회
 
         Galaxy galaxy = galaxyRepository.findById(galaxyId)
-                .orElseThrow(() -> new ResolutionException(GeneralErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new ResolutionException(GalaxyErrorCode.GALAXY_NOT_FOUND));
 
         // 2. 권한 검증(유저 ID 대조)
         if (!galaxy.getUser().getId().equals(userId)) {
@@ -68,7 +69,7 @@ public class ResolutionServiceImpl implements ResolutionService {
     ) {
         // 1. 은하 조회
         Galaxy galaxy = galaxyRepository.findById(galaxyId)
-                .orElseThrow(() -> new ResolutionException(GeneralErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new ResolutionException(GalaxyErrorCode.GALAXY_NOT_FOUND));
 
         // 2. 권한 검증(유저 ID 대조)
         if (!galaxy.getUser().getId().equals(userId)) {
@@ -104,7 +105,7 @@ public class ResolutionServiceImpl implements ResolutionService {
     ) {
         // 1. galaxy 존재 여부 확인 및 소유권 조회
         Galaxy galaxy = galaxyRepository.findById(galaxyId)
-                .orElseThrow(() -> new ResolutionException(GeneralErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new ResolutionException(GalaxyErrorCode.GALAXY_NOT_FOUND));
 
         if (!galaxy.getUser().getId().equals(userId)) {
             throw new ResolutionException(GeneralErrorCode.FORBIDDEN);

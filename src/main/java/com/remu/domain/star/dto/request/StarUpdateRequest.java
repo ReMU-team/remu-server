@@ -33,9 +33,6 @@ public class StarUpdateRequest {
     @Size(max = 3, message = "이모지는 최대 3개까지 선택 가능합니다.")
     private List<String> emojis; // 선택한 이모지 이름 리스트 (String)
 
-    // 사진 업로드 (수정 시 새로운 파일이 넘어올 수 있음)
-    private MultipartFile image;
-
     // 기존 이미지를 삭제할지 여부 (true면 삭제)
     private Boolean isImageDeleted;
 }
