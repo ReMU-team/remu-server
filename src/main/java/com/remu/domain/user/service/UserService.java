@@ -116,7 +116,6 @@ public class UserService {
     // 회원 탈퇴
     @Transactional
     public Void deleteAccount(Long userId) {
-        //TODO 소셜 로그인 구현 후 소셜 로그인 연동 해제 기능 추가하기
 
         // 1. 유저 존재 여부 검증 및 조회
         User user = userRepository.findById(userId)
