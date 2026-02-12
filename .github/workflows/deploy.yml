@@ -3,7 +3,7 @@ name: Deploy To EC2
 on:
   push:
     branches:
-      - "feat/#49-cicd-setup"
+      - "main"
 
 jobs:
   Deploy:

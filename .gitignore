@@ -53,3 +53,6 @@ src/main/resources/firebase/serviceAccountKey.json
 ### OS 별 임시 파일 ###
 .DS_Store
 Thumbs.db
+
+# 테스트 코드 소스 전체 제외
+src/test/
