@@ -2,6 +2,7 @@ package com.remu.domain.review.service;
 
 import com.remu.domain.galaxy.entity.Galaxy;
 import com.remu.domain.galaxy.exception.GalaxyException;
+import com.remu.domain.galaxy.exception.code.GalaxyErrorCode;
 import com.remu.domain.galaxy.repository.GalaxyRepository;
 import com.remu.domain.resolution.entity.Resolution;
 import com.remu.domain.resolution.exception.ResolutionException;
@@ -43,7 +44,7 @@ public class ReviewServiceImpl implements ReviewService{
         // 1. 은하 조회
 
         Galaxy galaxy = galaxyRepository.findById(galaxyId)
-                .orElseThrow(() -> new ResolutionException(GeneralErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new ResolutionException(GalaxyErrorCode.GALAXY_NOT_FOUND));
 
         // 2. 권한 검증(유저 ID 대조)
         if (!galaxy.getUser().getId().equals(userId)) {
@@ -88,7 +89,7 @@ public class ReviewServiceImpl implements ReviewService{
         // 1. 은하 조회
 
         Galaxy galaxy = galaxyRepository.findById(galaxyId)
-                .orElseThrow(() -> new ResolutionException(GeneralErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new ResolutionException(GalaxyErrorCode.GALAXY_NOT_FOUND));
 
         // 2. 권한 검증(유저 ID 대조)
         if (!galaxy.getUser().getId().equals(userId)) {
@@ -128,9 +129,8 @@ public class ReviewServiceImpl implements ReviewService{
             Long galaxyId
     ) {
         // 1. 은하 존재 여부 확인
-        // TODO: 향후 에러 코드 수정 필요
         Galaxy galaxy = galaxyRepository.findById(galaxyId)
-                .orElseThrow(() -> new GalaxyException(GeneralErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new GalaxyException(GalaxyErrorCode.GALAXY_NOT_FOUND));
 
         // 2. 본인 확인
         if (!galaxy.getUser().getId().equals(userId)) {

@@ -19,13 +19,13 @@ spring:
     hibernate:
       # [운영 시 변경] ddl-auto: update는 운영 DB 구조를 망칠 위험이 큼.
       # 실서버 배포 시에는 'none' 또는 'validate'로 변경 권장
-      ddl-auto: update
+      ddl-auto: validate
     properties:
       hibernate:
         # [운영 시 변경] show_sql 및 format_sql은 로그 양이 너무 많아 성능을 저하시킴.
         # 실서버 배포 시에는 'false'로 변경 권장
-        show_sql: true
-        format_sql: true
+        show_sql: false
+        format_sql: false
         default_batch_fetch_size: 100
     defer-datasource-initialization: true
 
@@ -68,7 +68,7 @@ spring:
 
 jwt:
   secret: ${JWT_SECRET}
-  access-expiration: 18000000 # 300분 임시로
+  access-expiration: 1800000 # 30분
   refresh-expiration: 1209600000 # 14일
 
 logging:
