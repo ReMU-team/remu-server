@@ -1,5 +1,10 @@
 package com.remu.global.config.sercurity.jwt;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.remu.global.apiPayload.ApiResponse;
+import com.remu.global.apiPayload.code.BaseErrorCode;
+import com.remu.global.auth.exception.AuthException;
+import com.remu.global.auth.exception.code.AuthErrorCode;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,6 +24,7 @@ import java.io.IOException;
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
+    private final ObjectMapper objectMapper;
 
     private static final String AUTHORIZATION_HEADER = "Authorization";
     private static final String BEARER_PREFIX = "Bearer ";
@@ -35,15 +41,36 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
         // 2. 토큰 유효성 검사 및 인증 객체 설정
         try {
-            if (StringUtils.hasText(jwt) && jwtTokenProvider.validateToken(jwt)) {
-                Authentication authentication = jwtTokenProvider.getAuthentication(jwt);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+            if (!StringUtils.hasText(jwt)) {
+                filterChain.doFilter(request, response);
+                return;
             }
+
+            jwtTokenProvider.validateAccessTokenOrThrow(jwt);
+            Authentication authentication = jwtTokenProvider.getAuthentication(jwt);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            filterChain.doFilter(request, response);
+
+        } catch (AuthException e) {
+            SecurityContextHolder.clearContext();
+            sendErrorResponse(response, e.getCode());
         } catch (Exception e) {
             SecurityContextHolder.clearContext();
-            log.debug("JWT 처리 실패: {}", e.getMessage());
+            log.error("JWT 처리 중 오류 발생: {}", e.getMessage());
+
+            sendErrorResponse(response, AuthErrorCode.ACCESS_TOKEN_INVALID);
         }
-        filterChain.doFilter(request, response);
+    }
+
+    private void sendErrorResponse(HttpServletResponse response, BaseErrorCode errorCode) throws IOException {
+        response.setStatus(errorCode.getStatus().value());
+        response.setContentType("application/json;charset=UTF-8");
+
+        // ApiResponse.onFailure를 사용하여 규격 통일
+        ApiResponse<Object> errorBody = ApiResponse.onFailure(errorCode, null);
+
+        response.getWriter().write(objectMapper.writeValueAsString(errorBody));
     }
 
     // Request Header에서 토큰 정보를 꺼내오는 메서드

@@ -1,5 +1,6 @@
 package com.remu.global.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.remu.global.config.sercurity.jwt.JwtAuthFilter;
 import com.remu.global.config.sercurity.jwt.JwtAuthenticationEntryPoint;
 import com.remu.global.config.sercurity.jwt.JwtTokenProvider;
@@ -26,11 +27,12 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;  // OAuth2 로그인 시 사용자 정보 로드
     private final OAuth2SuccessHandler oAuth2SuccessHandler;    // OAuth2 로그인 성공 후 처리 (JWT 발급)
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint; // 인증 실패 처리
+    private final ObjectMapper objectMapper;
 
     // JWT 인증 필터
     @Bean
     public JwtAuthFilter jwtAuthFilter() {
-        return new JwtAuthFilter(jwtTokenProvider);
+        return new JwtAuthFilter(jwtTokenProvider, objectMapper);
     }
 
     @Bean
