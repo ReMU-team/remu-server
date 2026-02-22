@@ -123,7 +123,7 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
-        // 2. 카카오 연겨 끊기 API 호출
+        // 2. 카카오 연결 끊기 API 호출
         if (user.getSocialType() == SocialType.KAKAO) {
             kakaoAuthService.unlinkKakao(user.getSocialId());
         }
