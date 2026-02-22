@@ -8,6 +8,7 @@ import com.remu.domain.user.enums.SocialType;
 import com.remu.domain.user.exception.UserException;
 import com.remu.domain.user.exception.code.UserErrorCode;
 import com.remu.domain.user.repository.UserRepository;
+import com.remu.global.auth.service.KakaoAuthService;
 import com.remu.global.s3.S3Directory;
 import com.remu.global.s3.S3Service;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final S3Service s3Service;
+    private final KakaoAuthService kakaoAuthService;
 
     // 프로필 업데이트
     @Transactional
@@ -121,7 +123,12 @@ public class UserService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserException(UserErrorCode.USER_NOT_FOUND));
 
-        // 2. 유저 삭제 : CascadeType.ALL 설정으로 연관된 엔티티 데이터 자동으로 삭제
+        // 2. 카카오 연겨 끊기 API 호출
+        if (user.getSocialType() == SocialType.KAKAO) {
+            kakaoAuthService.unlinkKakao(user.getSocialId());
+        }
+
+        // 3. 유저 삭제 : CascadeType.ALL 설정으로 연관된 엔티티 데이터 자동으로 삭제
         userRepository.delete(user);
 
         return null;
