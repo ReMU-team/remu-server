@@ -21,10 +21,6 @@ import java.util.List;
                 @UniqueConstraint(
                         name = "uk_user_social",
                         columnNames = {"social_type", "social_id"}
-                ),
-                @UniqueConstraint(
-                        name = "uk_user_name",
-                        columnNames = {"name"}
                 )
         }
 )

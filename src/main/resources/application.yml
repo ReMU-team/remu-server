@@ -93,3 +93,6 @@ cloud:
       secret-key: ${AWS_SECRET_ACCESS_KEY:}
     stack:
       auto: false
+
+kakao:
+  admin-key: ${KAKAO_ADMIN_KEY}
