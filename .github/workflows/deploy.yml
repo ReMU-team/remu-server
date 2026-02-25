@@ -63,7 +63,7 @@ jobs:
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop: true
           # SSH 환경으로 GitHub Secrets에 변수 전달
-          envs: ECR_REGISTRY,DB_URL,DB_USER,DB_PW,GEMINI_API_KEY,GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,KAKAO_CLIENT_ID,KAKAO_CLIENT_SECRET,JWT_SECRET,BASE_URL,GOOGLE_API_KEY,S3_BUCKET_NAME
+          envs: ECR_REGISTRY,DB_URL,DB_USER,DB_PW,GEMINI_API_KEY,GOOGLE_CLIENT_ID,GOOGLE_CLIENT_SECRET,KAKAO_CLIENT_ID,KAKAO_CLIENT_SECRET,JWT_SECRET,BASE_URL,GOOGLE_API_KEY,S3_BUCKET_NAME,KAKAO_ADMIN_KEY
           script: |
             # EC2 내 도커가 ECR에서 이미지를 당겨올 수 있도록 로그인
             aws ecr get-login-password --region ap-northeast-2 | docker login --username AWS --password-stdin $ECR_REGISTRY
@@ -104,3 +104,4 @@ jobs:
           BASE_URL: ${{ secrets.BASE_URL }}
           GOOGLE_API_KEY: ${{ secrets.GOOGLE_API_KEY }}
           S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+          KAKAO_ADMIN_KEY: ${{ secrets.KAKAO_ADMIN_KEY }}
