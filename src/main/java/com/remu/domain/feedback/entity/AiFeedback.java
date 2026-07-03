@@ -1,5 +1,6 @@
 package com.remu.domain.feedback.entity;
 
+import com.remu.domain.feedback.enums.AiFeedbackStatus;
 import com.remu.domain.galaxy.entity.Galaxy;
 import com.remu.global.entity.BaseEntity;
 import jakarta.persistence.*;
@@ -20,11 +21,20 @@ public class AiFeedback extends BaseEntity {
     @Column(columnDefinition = "TEXT")
     private String content;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private AiFeedbackStatus status;
+
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "galaxy_id", nullable = false)
     private Galaxy galaxy;
 
     public void updateContent(String content) {
         this.content = content;
+    }
+
+    public void completeAnalysis(String content) {
+        this.content = content;
+        this.status = AiFeedbackStatus.SUCCESS;
     }
 }

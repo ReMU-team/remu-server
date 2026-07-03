@@ -3,6 +3,7 @@ package com.remu.domain.feedback.service;
 import com.remu.domain.feedback.converter.AiFeedbackConverter;
 import com.remu.domain.feedback.dto.response.AiFeedbackResDTO;
 import com.remu.domain.feedback.entity.AiFeedback;
+import com.remu.domain.feedback.enums.AiFeedbackStatus;
 import com.remu.domain.feedback.exception.AiFeedbackException;
 import com.remu.domain.feedback.exception.code.AiFeedbackErrorCode;
 import com.remu.domain.feedback.repository.AiFeedbackRepository;
@@ -14,6 +15,8 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -22,47 +25,76 @@ public class AiFeedbackServiceImpl implements AiFeedbackService{
     private final ChatClient chatClient;
     private final AiFeedbackRepository aiFeedbackRepository;
     private final GalaxyRepository galaxyRepository;
+    private final AiFeedbackAsyncService aiFeedbackAsyncService;
+
+//    @Override
+//    public AiFeedbackResDTO.AiFeedbackCreateDTO createFeedback(
+//            Long galaxyId
+//    ) {
+//        // 1. 은하 찾기
+//        Galaxy galaxy = galaxyRepository.findByIdWithAllDetails(galaxyId)
+//                .orElseThrow(() -> new AiFeedbackException(GalaxyErrorCode.GALAXY_NOT_FOUND));
+//
+//        // 2. 사용자 정보 추출
+//        String combinedInfo = buildPromptContext(galaxy);
+//
+//        // 2. 피드백 존재 여부 검증
+//        if (aiFeedbackRepository.existsByGalaxy(galaxy)) {
+//            throw new AiFeedbackException(AiFeedbackErrorCode.ALREADY_EXISTS);
+//        }
+//
+//        // 3. AI 호츌(String으로 결과 반환)
+//        String aiResponse = chatClient.prompt()
+//                .system(s -> s.text("너는 유저의 기록을 분석해주는 다정한 가이드야. " +
+//                        "제공된 정보를 바탕으로 유저의 성장을 따뜻하게 격려해줘. " +
+//                        "답변은 3 문장으로, 존댓말로 해줘."))
+//                .user(combinedInfo)
+//                .call()
+//                .content();
+//
+//        // 4. AI 응답이 없을 경우
+//        if (aiResponse == null || aiResponse.isBlank()) {
+//            aiResponse = "유저님의 소중한 여행 기록을 잘 읽어보았어요. 정말 멋진 여정을 보내셨네요! 앞으로의 발걸음도 제가 응원할게요.";
+//        }
+//
+//        // 5. 저장 및 후처리
+//        AiFeedback feedback = aiFeedbackRepository.save(
+//                AiFeedback.builder()
+//                        .content(aiResponse)
+//                        .galaxy(galaxy)
+//                        .build()
+//        );
+//
+//        // 6. 응답 반환
+//        return AiFeedbackConverter.toCreateDTO(feedback);
+//    }
 
     @Override
-    public AiFeedbackResDTO.AiFeedbackCreateDTO createFeedback(
-            Long galaxyId
-    ) {
-        // 1. 은하 찾기
+    public AiFeedbackResDTO.AiFeedbackCreateDTO createFeedback(Long galaxyId) {
         Galaxy galaxy = galaxyRepository.findByIdWithAllDetails(galaxyId)
                 .orElseThrow(() -> new AiFeedbackException(GalaxyErrorCode.GALAXY_NOT_FOUND));
 
-        // 2. 사용자 정보 추출
-        String combinedInfo = buildPromptContext(galaxy);
-
-        // 2. 피드백 존재 여부 검증
-        if (aiFeedbackRepository.existsByGalaxy(galaxy)) {
+        Optional<AiFeedback> existingFeedback = aiFeedbackRepository.findByGalaxyId(galaxyId);
+        if (existingFeedback.isPresent()) {
+            if (existingFeedback.get().getStatus() == AiFeedbackStatus.PROCESSING) {
+                throw new AiFeedbackException(AiFeedbackErrorCode.PROCESSING);
+            }
             throw new AiFeedbackException(AiFeedbackErrorCode.ALREADY_EXISTS);
         }
 
-        // 3. AI 호츌(String으로 결과 반환)
-        String aiResponse = chatClient.prompt()
-                .system(s -> s.text("너는 유저의 기록을 분석해주는 다정한 가이드야. " +
-                        "제공된 정보를 바탕으로 유저의 성장을 따뜻하게 격려해줘. " +
-                        "답변은 3 문장으로, 존댓말로 해줘."))
-                .user(combinedInfo)
-                .call()
-                .content();
+        String combinedInfo = buildPromptContext(galaxy);
 
-        // 4. AI 응답이 없을 경우
-        if (aiResponse == null || aiResponse.isBlank()) {
-            aiResponse = "유저님의 소중한 여행 기록을 잘 읽어보았어요. 정말 멋진 여정을 보내셨네요! 앞으로의 발걸음도 제가 응원할게요.";
-        }
-
-        // 5. 저장 및 후처리
-        AiFeedback feedback = aiFeedbackRepository.save(
+        // 비동기 전환 전 레코드 먼저 생성
+        AiFeedback pendingFeedback = aiFeedbackRepository.save(
                 AiFeedback.builder()
-                        .content(aiResponse)
+                        .status(AiFeedbackStatus.PROCESSING)
                         .galaxy(galaxy)
                         .build()
         );
 
-        // 6. 응답 반환
-        return AiFeedbackConverter.toCreateDTO(feedback);
+        aiFeedbackAsyncService.executeAiCallAndSave(pendingFeedback.getId(), combinedInfo);
+
+        return AiFeedbackConverter.toCreateDTO(pendingFeedback);
     }
 
     @Transactional(readOnly = true)

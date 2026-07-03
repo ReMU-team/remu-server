@@ -24,8 +24,8 @@ spring:
       hibernate:
         # [운영 시 변경] show_sql 및 format_sql은 로그 양이 너무 많아 성능을 저하시킴.
         # 실서버 배포 시에는 'false'로 변경 권장
-        show_sql: false
-        format_sql: false
+        show_sql: true
+        format_sql: true
         default_batch_fetch_size: 100
     defer-datasource-initialization: true
 

@@ -15,7 +15,11 @@ public enum AiFeedbackErrorCode implements BaseErrorCode {
 
     ALREADY_EXISTS(HttpStatus.BAD_REQUEST,
             "AiFeedback400_1",
-            "이미 해당 여행에 대한 피드백이 존재합니다.");
+            "이미 해당 여행에 대한 피드백이 존재합니다."),
+
+    PROCESSING(HttpStatus.BAD_REQUEST,
+            "AiFeedback400_2",
+            "이미 해당 여행에 대한 피드백을 만들고 있습니다.");
 
     private final HttpStatus status;
     private final String code;
