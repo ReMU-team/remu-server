@@ -5,21 +5,29 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.gson.GsonFactory;
+import com.remu.domain.user.enums.SocialType;
 import com.remu.global.auth.exception.AuthException;
 import com.remu.global.auth.exception.code.AuthErrorCode;
+import com.remu.global.auth.strategy.SocialLoginStrategy;
+import com.remu.global.auth.strategy.SocialUserInfo;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
-import java.util.Map;
 
 @Service
-public class GoogleAuthService {
+public class GoogleAuthService implements SocialLoginStrategy {
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
     private String googleClientId;
 
-    public Map<String, Object> verifyGoogleToken(String idTokenString) throws Exception {
+    @Override
+    public SocialType supports() {
+        return SocialType.GOOGLE;
+    }
+
+    @Override
+    public SocialUserInfo verify(String idTokenString) {
         GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(new NetHttpTransport(), new GsonFactory())
                 .setAudience(Collections.singletonList(googleClientId))
                 .build();
@@ -31,11 +39,11 @@ public class GoogleAuthService {
                 Payload payload = idToken.getPayload();
 
                 // 구글 페이로드에서 정보 추출
-                return Map.of(
-                        "id", payload.getSubject(),
-                        "email", payload.getEmail(),
-                        "nickname", payload.get("name") != null ? payload.get("name") : "구글 사용자",
-                        "profile_image", payload.get("picture") != null ? payload.get("picture") : ""
+                return new SocialUserInfo(
+                        payload.getSubject(),
+                        payload.getEmail(),
+                        payload.get("name") != null ? payload.get("name").toString() : "구글 사용자",
+                        payload.get("picture") != null ? payload.get("picture").toString() : ""
                 );
             } else {
                 throw new AuthException(AuthErrorCode.INVALID_GOOGLE_TOKEN);

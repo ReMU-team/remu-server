@@ -88,7 +88,7 @@ public interface AuthControllerDocs {
     )
     default void kakaoLoginInfo(){}
 
-    @PostMapping("/api/v1/auth//login/{provider}")
+    @PostMapping("/api/v1/auth/login/{provider}")
     @Operation(
             summary = "카카오, 구글, 애플 로그인 (소셜 검증 및 ReMU 토큰 발급)",
             description = """
@@ -97,8 +97,8 @@ public interface AuthControllerDocs {
     token = "소셜 토큰 입력"
     """
     )
-    ResponseEntity<?> login(
+    ResponseEntity<ApiResponse<AuthResDTO.Token>> login(
             @PathVariable String provider,
             @RequestBody AuthReqDTO.SocialLoginDTO request
-    )throws Exception;
+    );
 }
