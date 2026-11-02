@@ -1,7 +1,10 @@
 package com.remu.global.auth.service;
 
+import com.remu.domain.user.enums.SocialType;
 import com.remu.global.auth.exception.AuthException;
 import com.remu.global.auth.exception.code.AuthErrorCode;
+import com.remu.global.auth.strategy.SocialLoginStrategy;
+import com.remu.global.auth.strategy.SocialUserInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -15,12 +18,18 @@ import java.util.Map;
 
 @Slf4j
 @Service
-public class KakaoAuthService {
+public class KakaoAuthService implements SocialLoginStrategy {
 
     @Value("${kakao.admin-key")
     private String adminKey;
 
-    public Map<String, Object> getKakaoUserInfo(String accessToken) {
+    @Override
+    public SocialType supports() {
+        return SocialType.KAKAO;
+    }
+
+    @Override
+    public SocialUserInfo verify(String accessToken) {
         RestTemplate restTemplate = new RestTemplate();
 
         HttpHeaders headers = new HttpHeaders();
@@ -52,11 +61,11 @@ public class KakaoAuthService {
             String email = (kakaoAccount != null && kakaoAccount.get("email") != null)
                     ? kakaoAccount.get("email").toString() : "no-email@kakao.com";
 
-            return Map.of(
-                    "id", body.get("id").toString(),
-                    "email", email,
-                    "nickname", nickname,
-                    "profile_image", profileImage
+            return new SocialUserInfo(
+                    body.get("id").toString(),
+                    email,
+                    nickname,
+                    profileImage
             );
 
         } catch (HttpClientErrorException e) {

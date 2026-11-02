@@ -1,9 +1,12 @@
 package com.remu.global.auth.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.remu.domain.user.enums.SocialType;
 import com.remu.global.auth.dto.ApplePublicKeyResponse;
 import com.remu.global.auth.exception.AuthException;
 import com.remu.global.auth.exception.code.AuthErrorCode;
+import com.remu.global.auth.strategy.SocialLoginStrategy;
+import com.remu.global.auth.strategy.SocialUserInfo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
@@ -19,11 +22,17 @@ import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
-public class AppleAuthService {
+public class AppleAuthService implements SocialLoginStrategy {
 
     private final ObjectMapper objectMapper;
 
-    public Map<String, String> getAppleUserInfo(String identityToken) {
+    @Override
+    public SocialType supports() {
+        return SocialType.APPLE;
+    }
+
+    @Override
+    public SocialUserInfo verify(String identityToken) {
         try {
             // 1. identityToken의 헤더를 디코딩하여 kid와 alg 추출
             String headerJson = new String(Base64.getDecoder().decode(identityToken.split("\\.")[0]));
@@ -57,9 +66,11 @@ public class AppleAuthService {
                     .getPayload();
 
             // 6. 결과 반환
-            return Map.of(
-                    "sub", claims.getSubject(),
-                    "email", claims.get("email", String.class) != null ? claims.get("email", String.class) : ""
+            return new SocialUserInfo(
+                    claims.getSubject(),
+                    claims.get("email", String.class) != null ? claims.get("email", String.class) : "",
+                    "Apple User",
+                    ""
             );
 
         } catch (Exception e) {
